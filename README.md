@@ -1,4 +1,18 @@
-# 🔎 화장실을 찾아서 (Find Toilet) 
+# 🔎 화장실을 찾아서 (Find Toilet) 리팩토링
+
+### 진행 일정 : 2026.04.09 (목) ~ 2026.04.15 (수)
+
+| 목표 | 진행 방식 | 사용 툴 |
+| :--- | :--- | :--- |
+| AI 도구 활용 능력 향상 | **[깃허브 이슈](https://github.com/hitriee/Find_Toilet_refactoring_with_ai/issues)** - 날짜별 세부 계획 작성 및 확인 | **Cursor (Sonnet 4.5)**  |
+| 유지/보수 역량 발전 | **[티스토리 블로그](https://ilwol-developer.tistory.com/)** - 날짜별 진행 상황 정리| **Claude Code**  |
+| 리팩토링/클린코드 학습 | * 깃허브 이슈에 티스토리 블로그 링크 첨부 |  |
+| 프로젝트 설계 관련 노하우 습득 | * 매일 커밋 1회 이상 진행 |  |
+| 개발 구현 속도 향상 노하우 습득 |  |  |
+
+---
+
+## 기존 README 내용
 
 ![https://user-images.githubusercontent.com/97578425/218648379-bfe508d9-21f5-4271-b230-7a97d52954ea.png](https://user-images.githubusercontent.com/97578425/218648379-bfe508d9-21f5-4271-b230-7a97d52954ea.png)
 
