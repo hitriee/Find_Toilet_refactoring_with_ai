@@ -1,22 +1,14 @@
-# find_toilet
+# 화장실을 찾아서 (find_toilet) 리팩토링 - FE
 
-A new Flutter project.
+## 의존성 설치
 
-## Getting Started
+- pubspec.yaml 파일에 있는 패키지가 설치됨
 
-This project is a starting point for a Flutter application.
+```bash
+flutter pub get
+```
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-
-----
+---
 
 ## [FE] convention & file structure
 
@@ -44,7 +36,38 @@ ex) 파일명: login_screen.dart , 클래스명: LoginScreen
 
 ## 파일 구조
 
-### 1. assets
+```python
+lib/
+  core/                          # 프레임워크·앱 전역 횡단 관심사
+    config/                      # env, 상수
+    network/                     # Dio BaseOptions, 인터셉터(401 refresh), 공통 에러 타입
+    di/                          # (선택) 수동 생성자 주입 헬퍼, 나중에 get_it 등으로 확장 가능
+  domain/                        # 비즈니스 규칙의 “경계”
+    entities/                    # (선택) 지금의 model과 동일하게 시작해도 됨
+    repositories/                # 추상 Repository 인터페이스만 (예: ToiletRepository)
+  data/                          # 데이터 출처 구현
+    datasources/
+      remote/                    # Dio 호출 단위 (ToiletRemoteDataSource 등)
+      local/                     # SecureStorage, SharedPreferences 래퍼
+    repositories/                # domain 인터페이스 구현체 (Remote + Local 조합)
+    mappers/                     # (선택) JSON ↔ entity 매핑이 복잡해지면 분리
+  presentation/                  # MVVM의 VM + View
+    view_models/                 # ChangeNotifier / AsyncNotifier 등 (기존 *Provider 역할)
+      auth_session_view_model.dart
+      toilet_list_view_model.dart
+      ...
+    views/                       # Screen 위젯 (기존 screens/)
+    widgets/                     # 화면 전용 위젯이 많아지면 여기로, 공통은 아래 shared로
+  shared/                        # 레이어에 속하지 않는 순수 UI·유틸
+    widgets/                     # 기존 lib/widgets/
+    theme/                       # style 등 (기존 utilities 중 UI 관련)
+    utils/                       # 기존 utilities 중 순수 함수
+  main.dart
+```
+
+## 이전 구조와 비교
+
+### 1. assets (변화 X)
 
 ```c
 프로젝트 수준에 위치
@@ -54,7 +77,35 @@ ex) 파일명: login_screen.dart , 클래스명: LoginScreen
 
 ⇒ assets 폴더에 저장되면, pubspec.yaml에 등록해야 함
 
-### 2. lib/screens
+---
+
+(수정 중!!!!)
+
+### 2. lib/core
+
+```markdown
+앱 전역 인프라/공통 기술 요소 (여러 feature가 공통으로 쓰는 기술 코드)
+
+**core/network/**
+
+- Dio 생성, 공통 interceptor, 에러 변환, 인증 헤더 처리
+- “기술적 공통부”만 둠 (도메인 로직 X)
+
+**core/config/**
+
+- 환경변수 키, 상수, 앱 전역 설정
+
+**core/di/ (선택)**
+
+- 객체 조립(의존성 주입) 위치
+- main.dart가 비대해지는 걸 방지
+```
+
+### 3. lib/domain
+
+### 4. lib/data
+
+### 5. lib/presentation/views (<- lib/screens)
 
 ```c
 화면의 UI들을 보관하는 폴더 (화면 전반 담당)
@@ -70,13 +121,15 @@ UI를 담당하는 위젯들을 모아두는 폴더
 화면의 부분부분의 요소들 중 재사용되는 UI들을 모아둔 곳
 ```
 
-### 4. lib/utilities
+### 3. lib/shared/widgets (<- lib/widgets)
+
+### 4. lib/shared/utils (<- lib/utilities)
 
 ```c
 앱에서 사용하는 function, logic을 모아두는 폴더
 ```
 
-### 5. lib/providers
+### 5. lib/presentation/view_models (<- lib/providers)
 
 ```c
 앱 외부의 다른 서비스들과 앱을 연결할때 사용하는 내용들을 정리
@@ -94,4 +147,3 @@ UI를 담당하는 위젯들을 모아두는 폴더
 앱 전체에서 사용되는 데이터들을 저장하는 데 사용
 global 구조
 ```
-

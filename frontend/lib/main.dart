@@ -1,4 +1,4 @@
-import 'package:find_toilet/providers/state_provider.dart';
+import 'package:find_toilet/presentation/view_models/state_provider.dart';
 import 'package:find_toilet/screens/intro_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';

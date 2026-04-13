@@ -1,4 +1,4 @@
-import 'package:find_toilet/utilities/type_enum.dart';
+import 'package:find_toilet/shared/utils/type_enum.dart';
 
 class FolderModel {
   final int folderId, bookmarkCnt;

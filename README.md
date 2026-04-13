@@ -2,13 +2,13 @@
 
 ### 진행 일정 : 2026.04.09 (목) ~ 2026.04.15 (수)
 
-| 목표 | 진행 방식 | 사용 툴 |
-| :--- | :--- | :--- |
-| AI 도구 활용 능력 향상 | **[깃허브 이슈](https://github.com/hitriee/Find_Toilet_refactoring_with_ai/issues)** - 날짜별 세부 계획 작성 및 확인 | **Cursor (Sonnet 4.5)**  |
-| 유지/보수 역량 발전 | **[티스토리 블로그](https://ilwol-developer.tistory.com/)** - 날짜별 진행 상황 정리| **Claude Code**  |
-| 리팩토링/클린코드 학습 | * 깃허브 이슈에 티스토리 블로그 링크 첨부 |  |
-| 프로젝트 설계 관련 노하우 습득 | * 매일 커밋 1회 이상 진행 |  |
-| 개발 구현 속도 향상 노하우 습득 |  |  |
+| 목표                            | 진행 방식                                                                                                            | 사용 툴                  |
+| :------------------------------ | :------------------------------------------------------------------------------------------------------------------- | :----------------------- |
+| AI 도구 활용 능력 향상          | **[깃허브 이슈](https://github.com/hitriee/Find_Toilet_refactoring_with_ai/issues)** - 날짜별 세부 계획 작성 및 확인 | **Cursor 3.0.16 (Auto)** |
+| 유지/보수 역량 발전             | **[티스토리 블로그](https://ilwol-developer.tistory.com/)** - 날짜별 진행 상황 정리                                  | **Claude Code 2.1.100**  |
+| 리팩토링/클린코드 학습          | \* 깃허브 이슈에 티스토리 블로그 링크 첨부                                                                           |                          |
+| 프로젝트 설계 관련 노하우 습득  | \* 매일 커밋 1회 이상 진행                                                                                           |                          |
+| 개발 구현 속도 향상 노하우 습득 |                                                                                                                      |                          |
 
 ---
 
@@ -17,7 +17,8 @@
 ![https://user-images.githubusercontent.com/97578425/218648379-bfe508d9-21f5-4271-b230-7a97d52954ea.png](https://user-images.githubusercontent.com/97578425/218648379-bfe508d9-21f5-4271-b230-7a97d52954ea.png)
 
 ## 목차
-[1. 소개](#1️⃣-소개) 
+
+[1. 소개](#1️⃣-소개)
 
 [2. 일정](#2️⃣-일정)
 
@@ -34,6 +35,7 @@
 ---
 
 ## 1️⃣ 소개
+
 - 낯선 곳에서, 혹은 급한 상황에서 화장실을 찾지 못해 당황스러웠던 적이 있진 않으신가요?
 - **화장실을 찾아서**는 그런 상황에서 유용하게 활용할 수 있도록 **공공화장실 정보**를 제공하는 애플리케이션입니다.
 - 24시간 운영 유무, 장애인용 화장실 유무 등 **필터링 기능**을 제공하여 현재 필요한 화장실을 정확하게 찾을 수 있습니다.
@@ -46,6 +48,7 @@
 ## 2️⃣ 일정
 
 > 총 개발 기간 : 2023.01.25 ~ 2023.08.03 <br />
+
 - 2023.01.25 ~ 2023.02.12 : 기획 및 UI 디자인
 - 2023.02.13 ~ 2023.07.03 : FE/BE 개발
 - 2023.07.04 ~ 2023.08.03 : QA & 구글 플레이스토어 등록 & 버전 업데이트
@@ -53,24 +56,29 @@
 <br>
 
 ## 3️⃣ 시스템 아키텍처
+
 ![시스템 아키텍처](./assets/system_architecture.jpeg)
 
 <br>
 
 ## 4️⃣ 기능
+
 ### 설정
+
 <img src="https://github.com/4ilet/Find_Toilet/assets/97578425/2b05705a-7778-4e93-a104-7d6aa43434b7" width=700 />
 
 - 큰 글씨 모드와 반경 설정 기능을 제공합니다.
 - 문의하기를 통해 개발팀 포일렛에 관련 문의를 남길 수 있습니다.
 
 ### 내 주변 화장실 찾기
+
 <img src="https://github.com/4ilet/Find_Toilet/assets/97578425/135f70a2-07a4-49ba-9dc3-258dd928f259" width=700 />
 
 - 나의 GPS를 기반으로 주변 화장실을 찾아볼 수 있습니다.
 - 필터링 기능을 제공합니다. ( 24시간 / 장애인용 / 어린이용 / 기저귀 교환대 )
 
 ### 검색
+
 <img src="https://github.com/4ilet/Find_Toilet/assets/97578425/e1c65f27-8adf-4b26-b2f5-f54d31942948" width=700 />
 
 - 검색을 통해 화장실을 찾아볼 수 있습니다.
@@ -78,35 +86,40 @@
 - 검색 결과의 정렬 기준을 선택할 수 있습니다. ( 거리순 / 평점순 / 리뷰순 )
 
 ### 즐겨찾기
+
 <img src="https://github.com/4ilet/Find_Toilet/assets/97578425/b680dee5-b24a-41ac-8507-d5d26095defe" width=700 />
 
 - 자주 가는 곳을 즐겨찾기할 수 있습니다.
 - 폴더를 만들어 즐겨찾기를 관리할 수 있습니다.
 
-
-
 <br>
 
 ## 5️⃣ 개발 환경
-| Part | Tech |
-| :--: | :--: |
-| **Front-End** | <img src="https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white"> <img src="https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white"> <img src="https://img.shields.io/badge/Dart-02569B?style=for-the-badge&logo=flutter&logoColor=white">|
-| **Back-End** | <img src="https://img.shields.io/badge/spring_boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/spring_Data_JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/spring_Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white"> <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white"> <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white">|
-| **Deployment** | <img src="https://img.shields.io/badge/amazon_ec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"> <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"> <img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white">|
-|**Communication**|<img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white"> <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white"> <img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=Slack&logoColor=white"> <img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=Discord&logoColor=white"> |
+
+|       Part        |                                                                                                                                                                                                                                                                                  Tech                                                                                                                                                                                                                                                                                   |
+| :---------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|   **Front-End**   |                                                                                                                            <img src="https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white"> <img src="https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white"> <img src="https://img.shields.io/badge/Dart-02569B?style=for-the-badge&logo=flutter&logoColor=white">                                                                                                                            |
+|   **Back-End**    | <img src="https://img.shields.io/badge/spring_boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/spring_Data_JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/spring_Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white"> <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white"> <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> |
+|  **Deployment**   |                                                                                                                      <img src="https://img.shields.io/badge/amazon_ec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"> <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"> <img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white">                                                                                                                      |
+| **Communication** |                                                                        <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white"> <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white"> <img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=Slack&logoColor=white"> <img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=Discord&logoColor=white">                                                                        |
 
 <br>
 
 ## 6️⃣ 참고 자료
+
 #### 1️⃣ ERD 다이어그램
+
 ![](./assets/erd.jpeg)
+
 #### 2️⃣ 와이어프레임
+
 ![](./assets/figma.png)
+
 #### 3️⃣ Swagger 🔗 [Link](http://43.201.124.70:8080/swagger-ui/)
 
+## 7️⃣ 개발팀 소개
 
-## 7️⃣ 개발팀 소개 
-|<img src="https://avatars.githubusercontent.com/u/97578425?v=4" width="100" height="100"/>|<img src="https://avatars.githubusercontent.com/u/61959111?v=4" width="100" height="100"/>|<img src="https://avatars.githubusercontent.com/u/97578485?v=4" width="100" height="100"/>|<img src="https://avatars.githubusercontent.com/u/97578460?v=4" width="100" height="100"/>|
-|:---:|:---:|:---:|:---:|
-|**Backend**|**Backend**|**Frontend**|**Frontend**|
-|[김윤주](https://github.com/gimewn)|[나장엽](https://github.com/kaydenna92)|[나원경](https://github.com/hitriee)|[박한](https://github.com/Hanpark04)|
+| <img src="https://avatars.githubusercontent.com/u/97578425?v=4" width="100" height="100"/> | <img src="https://avatars.githubusercontent.com/u/61959111?v=4" width="100" height="100"/> | <img src="https://avatars.githubusercontent.com/u/97578485?v=4" width="100" height="100"/> | <img src="https://avatars.githubusercontent.com/u/97578460?v=4" width="100" height="100"/> |
+| :----------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: |
+|                                        **Backend**                                         |                                        **Backend**                                         |                                        **Frontend**                                        |                                        **Frontend**                                        |
+|                            [김윤주](https://github.com/gimewn)                             |                          [나장엽](https://github.com/kaydenna92)                           |                            [나원경](https://github.com/hitriee)                            |                            [박한](https://github.com/Hanpark04)                            |
