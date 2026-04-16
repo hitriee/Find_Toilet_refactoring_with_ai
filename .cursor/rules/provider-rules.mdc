@@ -1,0 +1,20 @@
+---
+description: Provider 상태 관리 라이브러리 사용 규칙입니다.
+globs: lib/**/*.dart
+---
+
+# State Management (Provider) Rules
+
+## 🛠️ Usage
+
+- 모든 ViewModel은 `ChangeNotifier`를 상속하거나 mixin으로 사용합니다.
+- ViewModel에서 상태 변경 시점만 `notifyListeners()`를 호출합니다.
+- UI에서 뷰모델에 접근할 때는 `context.watch<T>()`, `context.read<T>()`, `context.select<T>()`를 적절히 구분하여 사용합니다.
+  - **watch:** 데이터 변화에 따라 UI 리빌드가 필요할 때.
+  - **read:** 함수 호출 등 리빌드가 필요 없는 일회성 접근 시.
+  - **select:** 특정 필드 변화만 감지하고 싶을 때.
+
+## 🚀 Optimization
+
+- `Consumer` 위젯을 사용하여 리빌드 범위를 최소화하세요.
+- 불필요한 전체 페이지 리빌드를 피하세요.

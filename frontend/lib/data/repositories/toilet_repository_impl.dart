@@ -31,7 +31,7 @@ class ToiletRepositoryImpl extends ToiletRepository {
   @override
   FutureToiletList searchToilet(DynamicMap queryData) async {
     try {
-      final ((ToiletList, int?) toilets, totalPages) = await remote.searchToilet(queryData);
+      final (toilets, totalPages) = await remote.searchToilet(queryData);
       if (totalPages != null) {
         ScrollProvider().setTotal(totalPages);
       }

@@ -1,0 +1,23 @@
+---
+description: Flutter 및 Dart 코딩 스타일과 성능 최적화 규칙입니다.
+globs: lib/**/*.dart
+---
+
+# Flutter Expert Coding Standards
+
+## 💎 Coding Style
+
+- 모든 위젯 생성자 앞에는 `const`를 붙이는 것을 우선으로 합니다.
+- 파일명은 `snake_case`, 클래스명은 `PascalCase`, 변수명과 함수명에는 `camelCase`를 사용합니다.
+- 비즈니스 로직에는 `dart:async`와 최신 Dart 기능을 적극 활용하세요.
+
+## ⚡ Performance
+
+- 거대한 `build()` 메서드는 작은 `StatelessWidget`으로 분리하세요.
+- 리스트 렌더링 시 반드시 `ListView.builder`를 사용하여 메모리를 최적화하세요.
+- 이미지 리소스는 항상 적절한 캐싱 전략을 고려합니다.
+
+## Error Handling
+
+- `throw Error()` 대신 의미 있는 `Exception`를 사용합니다.
+- catch에서 원인 메시지/컨텍스트를 유지합니다.
