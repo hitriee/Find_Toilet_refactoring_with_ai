@@ -1,4 +1,4 @@
-import 'package:find_toilet/providers/api_provider.dart';
+import 'package:find_toilet/core/network/api_provider.dart';
 import 'package:find_toilet/shared/utils/type_enum.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';

@@ -2,7 +2,7 @@
 
 import 'dart:async';
 import 'package:find_toilet/presentation/view_models/state_provider.dart';
-import 'package:find_toilet/providers/user_provider.dart';
+import 'package:find_toilet/presentation/view_models/intro_view_model.dart';
 import 'package:find_toilet/screens/main_screen.dart';
 import 'package:find_toilet/screens/select_theme_screen.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
@@ -21,18 +21,7 @@ class Intro extends StatefulWidget {
 }
 
 class _IntroState extends State<Intro> {
-  void preparation() async {
-    try {
-      await context.read<UserInfoProvider>().initVar();
-      await UserProvider().autoLogin();
-    } catch (error) {
-      changeToken(
-        context,
-        token: null,
-        refresh: null,
-      );
-    }
-  }
+  late final IntroViewModel _viewModel;
 
   Future<Position> userLocation() async {
     try {
@@ -50,7 +39,12 @@ class _IntroState extends State<Intro> {
   @override
   void initState() {
     super.initState();
-    preparation();
+
+    _viewModel = IntroViewModel(
+      userInfoProvider: context.read<UserInfoProvider>(),
+    );
+    _viewModel.preparation();
+
     context.read<SettingsProvider>().initSettings();
     userLocation().then((_) {
       Future.delayed(const Duration(seconds: 2), () {

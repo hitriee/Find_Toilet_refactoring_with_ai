@@ -1,6 +1,6 @@
 import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/presentation/view_models/state_provider.dart';
-import 'package:find_toilet/providers/user_provider.dart';
+import 'package:find_toilet/core/network/user_provider.dart';
 import 'package:find_toilet/shared/utils/type_enum.dart';
 import 'package:find_toilet/shared/widgets/modal.dart';
 import 'package:flutter/material.dart';

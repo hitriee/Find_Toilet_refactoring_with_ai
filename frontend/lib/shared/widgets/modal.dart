@@ -1,7 +1,7 @@
-import 'package:find_toilet/providers/bookmark_provider.dart';
-import 'package:find_toilet/providers/review_provider.dart';
-import 'package:find_toilet/providers/toilet_provider.dart';
-import 'package:find_toilet/providers/user_provider.dart';
+import 'package:find_toilet/core/network/bookmark_provider.dart';
+import 'package:find_toilet/core/network/review_provider.dart';
+import 'package:find_toilet/core/network/toilet_provider.dart';
+import 'package:find_toilet/core/network/user_provider.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
 import 'package:find_toilet/shared/utils/icon_image.dart';
 import 'package:find_toilet/shared/utils/settings_utils.dart';

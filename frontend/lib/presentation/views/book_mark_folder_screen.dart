@@ -1,5 +1,4 @@
 //* 즐겨찾기 메인 화면 (폴더 존재)
-import 'package:find_toilet/providers/bookmark_provider.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
 import 'package:find_toilet/shared/utils/icon_image.dart';
 import 'package:find_toilet/shared/utils/style.dart';
@@ -7,10 +6,26 @@ import 'package:find_toilet/shared/utils/type_enum.dart';
 import 'package:find_toilet/shared/widgets/box_container.dart';
 import 'package:find_toilet/shared/widgets/button.dart';
 import 'package:find_toilet/shared/widgets/text_widget.dart';
+import 'package:find_toilet/presentation/view_models/bookmark_folder_view_model.dart';
 import 'package:flutter/material.dart';
 
-class BookMarkFolderList extends StatelessWidget {
+class BookMarkFolderList extends StatefulWidget {
   const BookMarkFolderList({super.key});
+
+  @override
+  State<BookMarkFolderList> createState() => _BookMarkFolderListState();
+}
+
+class _BookMarkFolderListState extends State<BookMarkFolderList> {
+  late final BookmarkFolderViewModel _viewModel;
+  late final Future<FolderList> _foldersFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _viewModel = BookmarkFolderViewModel();
+    _foldersFuture = _viewModel.loadFolders();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,14 +75,11 @@ class BookMarkFolderList extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
         child: SingleChildScrollView(
           child: FutureBuilder(
-            future: FolderProvider().getFolderList(),
+            future: _foldersFuture,
             builder: (context, snapshot) {
-              // if (snapshot.hasData) {
               return snapshot.hasData
                   ? folderListView(snapshot)
                   : const Center(child: CircularProgressIndicator());
-              // }
-              // return const Center(child: CircularProgressIndicator());
             },
           ),
         ),

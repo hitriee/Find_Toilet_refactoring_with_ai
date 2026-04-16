@@ -1,6 +1,6 @@
-import 'package:find_toilet/providers/bookmark_provider.dart';
-import 'package:find_toilet/providers/review_provider.dart';
-import 'package:find_toilet/providers/toilet_provider.dart';
+import 'package:find_toilet/core/network/bookmark_provider.dart';
+import 'package:find_toilet/core/network/review_provider.dart';
+import 'package:find_toilet/core/network/toilet_provider.dart';
 import 'package:find_toilet/shared/utils/type_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

@@ -1,5 +1,5 @@
 import 'package:find_toilet/models/toilet_model.dart';
-import 'package:find_toilet/providers/toilet_provider.dart';
+import 'package:find_toilet/core/network/toilet_provider.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
 import 'package:find_toilet/shared/utils/icon_image.dart';
 import 'package:find_toilet/shared/utils/style.dart';
