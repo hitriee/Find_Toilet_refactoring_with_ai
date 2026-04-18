@@ -1,161 +1,144 @@
-import 'package:find_toilet/shared/utils/global_utils.dart';
+import 'package:find_toilet/presentation/view_models/bookmark_view_model.dart';
 import 'package:find_toilet/shared/utils/icon_image.dart';
 import 'package:find_toilet/shared/utils/style.dart';
 import 'package:find_toilet/shared/utils/type_enum.dart';
 import 'package:find_toilet/shared/widgets/button.dart';
-import 'package:find_toilet/shared/widgets/silvers.dart';
+import 'package:find_toilet/shared/widgets/box_container.dart';
 import 'package:find_toilet/shared/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 //* 폴더 내 즐겨찾기 목록
-class BookMarkList extends StatefulWidget {
-  final String folderName;
-  final int bookmarkCnt, folderId;
-
-  const BookMarkList({
+class BookmarkView extends StatefulWidget {
+  const BookmarkView({
     super.key,
-    required this.folderName,
-    required this.bookmarkCnt,
-    required this.folderId,
   });
 
   @override
-  State<BookMarkList> createState() => _BookMarkListState();
+  State<BookmarkView> createState() => _BookmarkViewState();
 }
 
-class _BookMarkListState extends State<BookMarkList> {
-  final controller = ScrollController();
-  double appBarHeight = 0;
-  bool refreshState = true;
+class _BookmarkViewState extends State<BookmarkView> {
+  late final ScrollController _controller;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        controller.addListener(
-          () {
-            if (controller.position.pixels >=
-                controller.position.maxScrollExtent * 0.9) {
-              if (getPage(context) < getTotal(context)!) {
-                if (!getWorking(context)) {
-                  setWorking(context, true);
-                  Future.delayed(const Duration(seconds: 3), () {
-                    if (!getAdditional(context)) {
-                      setAdditional(context, true);
-                      moreData();
-                    }
-                  });
-                }
-              }
-            }
-          },
-        );
-      },
-    );
+    _controller = ScrollController()..addListener(_onScroll);
   }
 
-  void initData() {
-    if (readLoading(context)) {
-      getBookmarkList(
-        context,
-        folderId: widget.folderId,
-      ).then((_) {
-        setHeightListSize(context);
-        setLoading(context, false);
-      });
-      increasePage(context);
+  @override
+  void dispose() {
+    _controller
+      ..removeListener(_onScroll)
+      ..dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (!_controller.hasClients) {
+      return;
+    }
+    final viewModel = context.read<BookmarkViewModel>();
+    if (_controller.position.pixels >= _controller.position.maxScrollExtent * 0.9) {
+      viewModel.loadMore();
     }
   }
 
-  void moreData() {
-    if (getAdditional(context)) {
-      getBookmarkList(
-        context,
-        folderId: widget.folderId,
-      ).then((_) {
-        setHeightListSize(context);
-        setWorking(context, false);
-        setAdditional(context, false);
-      });
-      increasePage(context);
-    }
+  FutureVoid _refresh() async {
+    await context.read<BookmarkViewModel>().refresh();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (refreshState) {
-      WidgetsBinding.instance.addPostFrameCallback(
-        (_) {
-          initLoadingData(context);
-          initBookmarkList(context);
-          initHeightList(context);
-          initData();
-          setState(() {
-            refreshState = false;
-          });
-        },
-      );
-    }
+    final folderName = context.select<BookmarkViewModel, String>(
+      (viewModel) => viewModel.folderName,
+    );
+    final bookmarkCnt = context.select<BookmarkViewModel, int>(
+      (viewModel) => viewModel.bookmarkCnt,
+    );
+    final bookmarkList = context.select<BookmarkViewModel, ToiletList>(
+      (viewModel) => viewModel.bookmarkList,
+    );
+    final isLoading = context.select<BookmarkViewModel, bool>(
+      (viewModel) => viewModel.isLoading,
+    );
+    final isLoadingMore = context.select<BookmarkViewModel, bool>(
+      (viewModel) => viewModel.isLoadingMore,
+    );
+    final errorMessage = context.select<BookmarkViewModel, String?>(
+      (viewModel) => viewModel.errorMessage,
+    );
+
     return Scaffold(
       backgroundColor: mainColor,
-      body: CustomBoxWithScrollView(
-        listScroll: controller,
-        toolbarHeight: 100,
-        backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
-        flexibleSpace: Padding(
-          padding:
-              EdgeInsets.fromLTRB(20, statusBarHeight(context) + 15, 20, 0),
-          child: Row(
-            children: [
-              Flexible(
-                child: CustomIconButton(
-                  icon: exitIcon,
-                  color: CustomColors.whiteColor,
-                  onPressed: routerPop(context),
-                  iconSize: 45,
-                  padding: EdgeInsets.zero,
-                ),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: CustomIconButton(
+          icon: exitIcon,
+          color: CustomColors.whiteColor,
+          onPressed: () => Navigator.pop(context),
+          iconSize: 45,
+          padding: EdgeInsets.zero,
+        ),
+        title: CustomText(
+          title: folderName,
+          fontSize: FontSize.titleSize,
+          color: CustomColors.whiteColor,
+          font: kimm,
+        ),
+        actions: [
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: CustomText(
+                title: '$bookmarkCnt',
+                fontSize: FontSize.defaultSize,
+                color: CustomColors.whiteColor,
               ),
-              Flexible(
-                flex: 5,
-                child: CustomText(
-                  title: widget.folderName,
-                  fontSize: FontSize.titleSize,
-                  color: CustomColors.whiteColor,
-                  font: kimm,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Flexible(
-                child: Row(
-                  children: [
-                    const SizedBox(width: 20),
-                    CustomText(
-                      title: '${widget.bookmarkCnt}',
-                      fontSize: FontSize.defaultSize,
+            ),
+          ),
+        ],
+      ),
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : errorMessage != null && bookmarkList.isEmpty
+                ? Center(
+                    child: CustomText(
+                      title: errorMessage,
                       color: CustomColors.whiteColor,
                     ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        silverChild: [
-          CustomSilverList(
-            folderId: widget.folderId,
-            showReview: false,
-            isMain: false,
-            isSearch: false,
-            data: bookmarkList(context),
-            refreshPage: () {
-              setState(() {
-                refreshState = true;
-              });
-            },
-          )
-        ],
+                  )
+                : ListView.builder(
+                    controller: _controller,
+                    itemCount: bookmarkList.length + (isLoadingMore ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index == bookmarkList.length) {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 20),
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 5,
+                        ),
+                        child: ListItem(
+                          showReview: false,
+                          isMain: false,
+                          toiletModel: bookmarkList[index],
+                          index: index,
+                          refreshPage: () {
+                            context.read<BookmarkViewModel>().refresh();
+                          },
+                        ),
+                      );
+                    },
+                  ),
       ),
     );
   }

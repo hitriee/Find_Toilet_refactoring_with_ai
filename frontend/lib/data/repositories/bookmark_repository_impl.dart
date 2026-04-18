@@ -1,18 +1,25 @@
+import 'package:find_toilet/data/datasources/remote/bookmark_remote_datasource.dart';
+import 'package:find_toilet/domain/repositories/bookmark_repository.dart';
+import 'package:find_toilet/shared/utils/type_enum.dart';
+
 class BookmarkRepositoryImpl extends BookmarkRepository {
   final BookmarkRemoteDatasource remote;
+
   BookmarkRepositoryImpl({required this.remote});
-  //* 즐겨찾기 목록 조회
-  FutureToiletList getToiletList(int folderId, int page) async {
+
+  @override
+  FutureToiletList getToiletList({
+    required int folderId,
+    required int page,
+  }) async {
     try {
-      final toiletList = await remote.getToiletList(folderId, page);
-      ScrollProvider().setTotal(response.data['size']);
-      return toiletList;
+      return await remote.getToiletList(folderId, page);
     } catch (error) {
       throw Exception('Failed to get toilet list');
     }
   }
 
-  //* 즐겨찾기에 추가/삭제
+  @override
   FutureVoid addOrDeleteToilet({
     required List addFolderIdList,
     required List delFolderIdList,
@@ -20,8 +27,10 @@ class BookmarkRepositoryImpl extends BookmarkRepository {
   }) async {
     try {
       await remote.addOrDeleteToilet(
-          addFolderIdList, delFolderIdList, toiletId);
-      return null;
+        addFolderIdList: addFolderIdList,
+        delFolderIdList: delFolderIdList,
+        toiletId: toiletId,
+      );
     } catch (error) {
       final errorMode = addFolderIdList.isEmpty ? 'delete' : 'add';
       throw Exception("Failed to $errorMode near toilet");

@@ -11,16 +11,19 @@ globs: lib/**/*.dart
 
 - **View (lib/presentation/views):** UI 레이아웃만 담당하며 비즈니스 로직을 포함하지 않습니다.
 - **ViewModel (lib/presentation/viewmodels):** UI 상태를 관리하고 Repository와 소통합니다. `ChangeNotifier`를 사용합니다.
+- **Page (lib/pages):** View와 ViewModel을 연결합니다.
 - **Repository (lib/domain/repositories):** 데이터 소스(API, DB)를 추상화합니다.
-- **Data (lib/data):** 데이터 소스와 repository impl 책임만 가집니다.
+- **DataSource (lib/data/datasources):** 데이터 소스 관련 코드가 위치합니다.
+- **Data Repository (lib/data/repositories):** Repository 구현체 관련 코드가 위치합니다.
 - **Model (lib/models):** 순수 데이터 객체(Data Classes)입니다.
 
 ## 📋 규칙
 
 1. 모든 클래스는 단일 책임 원칙(SRP)을 따릅니다.
-2. View는 직접 Repository에 접근할 수 없으며, 항상 ViewModel을 거칩니다.
-3. Repository는 인터페이스(Abstract Class)를 먼저 정의하고 구현체를 만듭니다.
-4. Repository는 구현 의존성(Dio, Provider, storage)을 직접 참조하지 않습니다.
-5. View는 repository interface에 의존합니다.
-6. 모든 비동기 작업은 `Future` 또는 `Stream`을 사용하며 적절한 에러 처리를 포함합니다.
-7. 네트워크 호출은 View에서 직접 수행하지 않고 ViewModel/Repository를 통해 수행합니다.
+2. 데이터를 가져올 때는 DataSource <-> Repository <-> ViewModel <-> View 의 흐름을 따릅니다.
+3. View는 기본적으로 StatelessWidget으로 만들고, UI 전용 상태가 있다면 StatefulWidget으로 선언합니다. BuildContext는 ViewModel에 넘기지 않습니다.
+4. ViewModel에는 비즈니스 로직 관련 상태가 위치합니다.
+5. Repository는 인터페이스(Abstract Class)를 먼저 정의하고 구현체를 만듭니다.
+6. View는 repository interface에 의존합니다.
+7. 모든 비동기 작업은 `Future` 또는 `Stream`을 사용하며 적절한 에러 처리를 포함합니다.
+8. 네트워크 호출은 View에서 직접 수행하지 않고 ViewModel/Repository를 통해 수행합니다.
