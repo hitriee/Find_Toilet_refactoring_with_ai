@@ -1,5 +1,5 @@
+import 'package:find_toilet/pages/intro_page.dart';
 import 'package:find_toilet/presentation/view_models/state_provider.dart';
-import 'package:find_toilet/screens/intro_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
@@ -32,7 +32,7 @@ class App extends StatelessWidget {
           data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
           child: child!,
         ),
-        home: const Intro(),
+        home: const IntroPage(),
       ),
     );
   }

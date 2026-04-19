@@ -2,7 +2,8 @@
 
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:find_toilet/screens/main_screen.dart';
+import 'package:find_toilet/presentation/view_models/main_search_provider.dart';
+import 'package:find_toilet/presentation/views/main_view.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
 import 'package:find_toilet/shared/utils/icon_image.dart';
 import 'package:find_toilet/shared/utils/type_enum.dart';

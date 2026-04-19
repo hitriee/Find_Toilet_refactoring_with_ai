@@ -3,50 +3,29 @@
 import 'dart:async';
 import 'package:find_toilet/presentation/view_models/state_provider.dart';
 import 'package:find_toilet/presentation/view_models/intro_view_model.dart';
-import 'package:find_toilet/screens/main_screen.dart';
-import 'package:find_toilet/screens/select_theme_screen.dart';
+import 'package:find_toilet/presentation/views/main_view.dart';
+import 'package:find_toilet/presentation/views/select_theme_screen.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
 import 'package:find_toilet/shared/utils/icon_image.dart';
 import 'package:find_toilet/shared/utils/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
-class Intro extends StatefulWidget {
-  const Intro({super.key});
+class IntroView extends StatefulWidget {
+  const IntroView({super.key});
 
   @override
-  State<Intro> createState() => _IntroState();
+  State<IntroView> createState() => _IntroViewState();
 }
 
-class _IntroState extends State<Intro> {
-  late final IntroViewModel _viewModel;
-
-  Future<Position> userLocation() async {
-    try {
-      await Geolocator.requestPermission();
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-      setLatLng(context, position.latitude, position.longitude);
-      return position;
-    } catch (error) {
-      throw Error();
-    }
-  }
-
+class _IntroViewState extends State<IntroView> {
   @override
   void initState() {
     super.initState();
-
-    _viewModel = IntroViewModel(
-      userInfoProvider: context.read<UserInfoProvider>(),
-    );
-    _viewModel.preparation();
-
     context.read<SettingsProvider>().initSettings();
-    userLocation().then((_) {
+    context.read<IntroViewModel>().userLocation().then((position) {
+      setLatLng(context, position.latitude, position.longitude);
       Future.delayed(const Duration(seconds: 2), () {
         setRadius(context);
         removedRouterPush(

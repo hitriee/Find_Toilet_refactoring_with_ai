@@ -1,4 +1,5 @@
-import 'package:find_toilet/screens/main_screen.dart';
+import 'package:find_toilet/presentation/view_models/state_provider.dart';
+import 'package:find_toilet/presentation/views/main_view.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
 import 'package:find_toilet/shared/utils/style.dart';
 import 'package:find_toilet/shared/utils/type_enum.dart';

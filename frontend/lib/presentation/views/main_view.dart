@@ -1,3 +1,4 @@
+import 'package:find_toilet/presentation/view_models/main_search_provider.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
 import 'package:find_toilet/shared/utils/type_enum.dart';
 import 'package:find_toilet/shared/widgets/bottom_sheet.dart';

@@ -1,9 +1,12 @@
-import 'package:find_toilet/core/network/bookmark_provider.dart';
-import 'package:find_toilet/core/network/review_provider.dart';
-import 'package:find_toilet/core/network/toilet_provider.dart';
+import 'package:find_toilet/presentation/view_models/settings_view_model.dart';
 import 'package:find_toilet/shared/utils/type_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+export 'main_search_provider.dart';
+export 'review_bookmark_view_model.dart';
+export 'scroll_provider.dart';
+export 'settings_view_model.dart';
 
 //* user info
 class UserInfoProvider with ChangeNotifier {
@@ -84,10 +87,14 @@ class ApplyChangeProvider with ChangeNotifier {
       _pressedOnce = true;
       notifyListeners();
       Future.delayed(
-          Duration(seconds: SettingsProvider().fontState == '기본' ? 2 : 3), () {
-        _pressedOnce = false;
-        notifyListeners();
-      });
+        Duration(
+          seconds: SettingsProvider().fontState == '기본' ? 2 : 3,
+        ),
+        () {
+          _pressedOnce = false;
+          notifyListeners();
+        },
+      );
       return Future.value(false);
     }
     return Future.value(true);

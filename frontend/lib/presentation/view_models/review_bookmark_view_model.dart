@@ -1,5 +1,11 @@
-//* review, book mark
-class ReviewBookMarkViewModel with ChangeNotifier {
+//* review, bookmark
+import 'package:find_toilet/core/network/bookmark_provider.dart';
+import 'package:find_toilet/core/network/review_provider.dart';
+import 'package:find_toilet/models/toilet_model.dart';
+import 'package:find_toilet/shared/utils/type_enum.dart';
+import 'package:flutter/foundation.dart';
+
+class ReviewBookMarkProvider extends ChangeNotifier {
   static ToiletModel? _toiletInfo;
   static int? _toiletId;
   static double? _itemHeight;
@@ -7,26 +13,19 @@ class ReviewBookMarkViewModel with ChangeNotifier {
   static final ToiletList _bookmarkList = [];
   static final List<double> _heightList = [];
 
-  //* get
   ToiletModel? get toiletInfo => _toiletInfo;
   int? get toiletId => _toiletId;
   double? get itemHeight => _itemHeight;
-  ReviewList get reviewList => _reviewList;
-  ToiletList get bookmarkList => _bookmarkList;
-  List<double> get heightList => _heightList;
-
-  //* private
-  //* review
-  FutureReviewList _getReviewList(int page) async {
-    final reviewData = await ReviewProvider().getReviewList(_toiletId!, page);
-    _addReviewList(reviewData);
-    notifyListeners();
-    return reviewData;
-  }
+  ReviewList get reviewList => List.unmodifiable(_reviewList);
+  ToiletList get bookmarkList => List.unmodifiable(_bookmarkList);
+  List<double> get heightList => List.unmodifiable(_heightList);
 
   void _addReviewList(ReviewList reviewData) => _reviewList.addAll(reviewData);
+
   void _initReviewList() => _reviewList.clear();
+
   void _setItemHeight(int i) => _itemHeight = _heightList[i];
+
   void _setToiletInfo(ToiletModel toiletData) {
     _toiletInfo = toiletData;
     _toiletId = toiletData.toiletId;
@@ -40,29 +39,39 @@ class ReviewBookMarkViewModel with ChangeNotifier {
   void _initHeightList() => _heightList.clear();
 
   void _setHeightListSize() =>
-      _heightList.addAll(List.generate(20, (index) => 0));
+      _heightList.addAll(List<double>.generate(20, (_) => 0));
 
   void _setHeight(int i, double newHeight) => _heightList[i] = newHeight;
 
-  //* bookmark
-  FutureToiletList _getBookmarkList(int folderId, int page) async {
-    final bookmarkList = await BookMarkProvider().getToiletList(folderId, page);
-    _addBookmarkList(bookmarkList);
-    return bookmarkList;
-  }
-
-  void _addBookmarkList(ToiletList bookmarkList) =>
-      _bookmarkList.addAll(bookmarkList);
+  void _addBookmarkList(ToiletList bookmarkData) =>
+      _bookmarkList.addAll(bookmarkData);
 
   void _initBookmarkList() => _bookmarkList.clear();
 
-  //* public
-  void addReviewList(ReviewList reviewData) => _addReviewList(reviewData);
+  FutureReviewList _getReviewList(int page) async {
+    final reviewData =
+        await ReviewProvider().getReviewList(_toiletId!, page);
+    _addReviewList(reviewData);
+    notifyListeners();
+    return reviewData;
+  }
+
+  FutureToiletList _getBookmarkList(int folderId, int page) async {
+    final list = await BookMarkProvider().getToiletList(folderId, page);
+    _addBookmarkList(list);
+    return list;
+  }
+
+  void addReviewList(ReviewList reviewData) {
+    _addReviewList(reviewData);
+    notifyListeners();
+  }
 
   FutureToiletList getBookmarkList(int folderId, int page) =>
       _getBookmarkList(folderId, page);
 
   void initReviewList() => _initReviewList();
+
   FutureReviewList getReviewList(int page) => _getReviewList(page);
 
   void setItemHeight(int i) {

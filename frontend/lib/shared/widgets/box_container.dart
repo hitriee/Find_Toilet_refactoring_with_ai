@@ -1,9 +1,9 @@
 import 'package:find_toilet/models/bookmark_model.dart';
 import 'package:find_toilet/models/review_model.dart';
 import 'package:find_toilet/models/toilet_model.dart';
-import 'package:find_toilet/screens/book_mark_screen.dart';
-import 'package:find_toilet/screens/main_screen.dart';
-import 'package:find_toilet/screens/review_form_screen.dart';
+import 'package:find_toilet/pages/bookmark_page.dart';
+import 'package:find_toilet/presentation/views/main_view.dart';
+import 'package:find_toilet/presentation/views/review_form_screen.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
 import 'package:find_toilet/shared/utils/icon_image.dart';
 import 'package:find_toilet/shared/utils/style.dart';
@@ -121,7 +121,7 @@ class FolderBox extends StatelessWidget {
     return CustomBox(
       onTap: routerPush(
         context,
-        page: BookMarkList(
+        page: BookmarkPage(
           folderName: folderName,
           bookmarkCnt: bookmarkCnt,
           folderId: folderId,

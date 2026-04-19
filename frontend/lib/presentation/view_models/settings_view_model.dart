@@ -1,5 +1,9 @@
 //* setttings
-class SettingsViewModel with ChangeNotifier {
+import 'package:find_toilet/shared/utils/type_enum.dart';
+import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class SettingsProvider extends ChangeNotifier {
   static late bool _hideModal;
   static late int _magnigyIdx, _radiusIdx;
   static int? _fontIdx;

@@ -351,7 +351,7 @@ void initLoadingData(BuildContext context, {bool? isMain, bool? isSearch}) {
 }
 
 //* key
-void setKey(BuildContext context, GlobalKey key) =>
+void setKey(BuildContext context, GlobalKey<ScaffoldState> key) =>
     context.read<MainSearchProvider>().setKey(key);
 GlobalKey? getKey(BuildContext context) =>
     context.read<MainSearchProvider>().globalKey;

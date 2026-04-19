@@ -1,7 +1,7 @@
-import 'package:find_toilet/screens/book_mark_folder_screen.dart';
-import 'package:find_toilet/screens/main_screen.dart';
-import 'package:find_toilet/screens/search_screen.dart';
-import 'package:find_toilet/screens/settings_screen.dart';
+import 'package:find_toilet/pages/search_page.dart';
+import 'package:find_toilet/presentation/views/book_mark_folder_screen.dart';
+import 'package:find_toilet/presentation/views/main_view.dart';
+import 'package:find_toilet/presentation/views/settings_screen.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
 import 'package:find_toilet/shared/utils/icon_image.dart';
 import 'package:find_toilet/shared/utils/style.dart';
@@ -11,7 +11,6 @@ import 'package:find_toilet/shared/widgets/button.dart';
 import 'package:find_toilet/shared/widgets/modal.dart';
 import 'package:find_toilet/shared/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class CustomSearchBar extends StatefulWidget {
   final bool isMain, showReview;
@@ -94,10 +93,20 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             searchData[filterKeyList[i]] = filterValueList[i];
           }
         }
-        context.read<MainSearchProvider>().setSearchData(searchData);
+        final lat = readLat(context) ?? 35.203;
+        final lng = readLng(context) ?? 126.809;
         routerPush(
           context,
-          page: Search(query: keyword),
+          page: SearchPage(
+            query: keyword as String,
+            latitude: lat,
+            longitude: lng,
+            sortIdx: sortIdx,
+            diaper: filterValueList[0],
+            kids: filterValueList[1],
+            disabled: filterValueList[2],
+            allDay: filterValueList[3],
+          ),
         )();
       }
       setState(() {

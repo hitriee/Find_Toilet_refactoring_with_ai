@@ -3,20 +3,27 @@ import 'package:find_toilet/core/network/api_provider.dart';
 import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/shared/utils/type_enum.dart';
 
+class ToiletQueryResult {
+  ToiletQueryResult({required this.toilets, this.totalPages});
+  final ToiletList toilets;
+  final int? totalPages;
+}
+
 class ToiletRemoteDatasource extends ApiProvider {
-  Future<(ToiletList, int?)> searchToilet(DynamicMap queryData) async {
+  Future<ToiletQueryResult> searchToilet(DynamicMap queryData) async {
     final response = await _getWithAuth(searchToiletUrl, queryData);
     final data = response.data['content'] as List<dynamic>? ?? [];
     final totalPages = response.data['totalPages'] as int?;
     final toilets = data.map((json) => ToiletModel.fromJson(json)).toList();
-    return (toilets, totalPages);
+    return ToiletQueryResult(toilets: toilets, totalPages: totalPages);
   }
-  Future<(ToiletList, int?)> getNearToilet(DynamicMap queryData) async {
+
+  Future<ToiletQueryResult> getNearToilet(DynamicMap queryData) async {
     final response = await _getWithAuth(nearToiletUrl, queryData);
     final data = response.data['content'] as List<dynamic>? ?? [];
     final totalPages = response.data['totalPages'] as int?;
     final toilets = data.map((json) => ToiletModel.fromJson(json)).toList();
-    return (toilets, totalPages);
+    return ToiletQueryResult(toilets: toilets, totalPages: totalPages);
   }
   Future<ToiletModel> getToilet(int toiletId) async {
     final response = await _getWithAuth(eachToiletUrl(toiletId), null);
