@@ -20,7 +20,7 @@ globs: lib/**/*.dart
 ## 📋 규칙
 
 1. 모든 클래스는 단일 책임 원칙(SRP)을 따릅니다.
-2. 데이터를 가져올 때는 DataSource <-> Repository <-> ViewModel <-> View 의 흐름을 따릅니다.
+2. 데이터를 가져올 때는 DataSource <-> Repository <-> Repository impl <-> Page <-> ViewModel <-> View 의 흐름을 따릅니다.
 3. View는 기본적으로 StatelessWidget으로 만들고, UI 전용 상태가 있다면 StatefulWidget으로 선언합니다. BuildContext는 ViewModel에 넘기지 않습니다.
 4. ViewModel에는 비즈니스 로직 관련 상태가 위치합니다.
 5. Repository는 인터페이스(Abstract Class)를 먼저 정의하고 구현체를 만듭니다.

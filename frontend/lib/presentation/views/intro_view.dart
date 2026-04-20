@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:find_toilet/presentation/view_models/state_provider.dart';
 import 'package:find_toilet/presentation/view_models/intro_view_model.dart';
 import 'package:find_toilet/presentation/views/main_view.dart';
-import 'package:find_toilet/presentation/views/select_theme_screen.dart';
+import 'package:find_toilet/pages/select_theme_page.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
 import 'package:find_toilet/shared/utils/icon_image.dart';
 import 'package:find_toilet/shared/utils/style.dart';
@@ -31,7 +31,7 @@ class _IntroViewState extends State<IntroView> {
         removedRouterPush(
           context,
           page: getFontSize(context) == null
-              ? const SelectFontTheme()
+              ? const SelectThemePage()
               : const Main(),
         );
       });

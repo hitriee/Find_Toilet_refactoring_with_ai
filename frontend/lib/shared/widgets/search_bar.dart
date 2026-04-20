@@ -1,5 +1,5 @@
 import 'package:find_toilet/pages/search_page.dart';
-import 'package:find_toilet/presentation/views/book_mark_folder_screen.dart';
+import 'package:find_toilet/pages/bookmark_folder_page.dart';
 import 'package:find_toilet/presentation/views/main_view.dart';
 import 'package:find_toilet/presentation/views/settings_screen.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
@@ -144,7 +144,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
         enabledBookMark = false;
       });
       if (readToken(context) != null) {
-        routerPush(context, page: const BookMarkFolderList())();
+        routerPush(context, page: const BookmarkFolderPage())();
       } else {
         await showModal(
           context,

@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:find_toilet/presentation/view_models/select_theme_view_model.dart';
 import 'package:find_toilet/presentation/view_models/state_provider.dart';
 import 'package:find_toilet/presentation/views/main_view.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
@@ -9,30 +12,8 @@ import 'package:find_toilet/shared/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SelectFontTheme extends StatefulWidget {
-  const SelectFontTheme({super.key});
-
-  @override
-  State<SelectFontTheme> createState() => _SelectFontThemeState();
-}
-
-class _SelectFontThemeState extends State<SelectFontTheme> {
-  bool isLargeSize = true;
-
-  ReturnVoid changeFontSize(bool isLargeTheme) {
-    return () {
-      setState(() {
-        if (isLargeSize != isLargeTheme) {
-          isLargeSize = isLargeTheme;
-        }
-      });
-    };
-  }
-
-  void applyTheme() {
-    context.read<SettingsProvider>().initOption(isLargeSize);
-    removedRouterPush(context, page: const Main());
-  }
+class SelectThemeView extends StatelessWidget {
+  const SelectThemeView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -66,20 +47,34 @@ class _SelectFontThemeState extends State<SelectFontTheme> {
                       ],
                     ),
                   ),
-                  ThemeBox(
-                    text: '큰 글씨',
-                    selected: isLargeSize,
-                    fontSize: FontSize.largeSize,
-                    onTap: changeFontSize(true),
-                    isLarge: true,
+                  Consumer<SelectThemeViewModel>(
+                    builder: (_, vm, __) => ThemeBox(
+                      text: '큰 글씨',
+                      selected: vm.isLargeFont,
+                      fontSize: FontSize.largeSize,
+                      onTap: () => vm.changeFontSize(true),
+                      isLarge: true,
+                    ),
                   ),
-                  ThemeBox(
-                    text: '기본',
-                    selected: !isLargeSize,
-                    onTap: changeFontSize(false),
-                    isLarge: false,
+                  Consumer<SelectThemeViewModel>(
+                    builder: (_, vm, __) => ThemeBox(
+                      text: '기본',
+                      selected: !vm.isLargeFont,
+                      onTap: () => vm.changeFontSize(false),
+                      isLarge: false,
+                    ),
                   ),
-                  CustomButton(onPressed: applyTheme)
+                  CustomButton(
+                    onPressed: () {
+                      final vm = context.read<SelectThemeViewModel>();
+                      vm.applyTheme().then((_) {
+                        context
+                            .read<SettingsProvider>()
+                            .initOption(vm.isLargeFont);
+                        removedRouterPush(context, page: const Main());
+                      });
+                    },
+                  ),
                 ],
               ),
             ),

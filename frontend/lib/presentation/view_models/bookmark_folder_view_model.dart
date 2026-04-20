@@ -1,16 +1,17 @@
-import 'package:flutter/foundation.dart';
-import 'package:find_toilet/core/network/bookmark_provider.dart';
+import 'package:find_toilet/domain/repositories/bookmark_folder_repository.dart';
 import 'package:find_toilet/shared/utils/type_enum.dart';
+import 'package:flutter/foundation.dart';
 
-/// 즐겨찾기 폴더 목록 로딩을 ViewModel로 분리합니다.
 class BookmarkFolderViewModel extends ChangeNotifier {
-  final FolderProvider _folderProvider;
+  final BookmarkFolderRepository _repository;
+  late final Future<FolderList> _foldersFuture;
 
-  BookmarkFolderViewModel({FolderProvider? folderProvider})
-      : _folderProvider = folderProvider ?? FolderProvider();
+  Future<FolderList> get foldersFuture => _foldersFuture;
 
-  Future<FolderList> loadFolders() async {
-    return _folderProvider.getFolderList();
+  BookmarkFolderViewModel({required BookmarkFolderRepository repository})
+      : _repository = repository;
+
+  void loadFolders() {
+    _foldersFuture = _repository.getFolderList();
   }
 }
-
