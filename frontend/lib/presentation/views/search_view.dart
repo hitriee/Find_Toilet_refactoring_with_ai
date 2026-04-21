@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:find_toilet/presentation/view_models/search_view_model.dart';
-import 'package:find_toilet/presentation/views/main_view.dart';
+import 'package:find_toilet/pages/main_page.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
 import 'package:find_toilet/shared/utils/style.dart';
 import 'package:find_toilet/shared/utils/type_enum.dart';
@@ -14,12 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SearchView extends StatefulWidget {
-  final String query;
-
-  const SearchView({
-    super.key,
-    required this.query,
-  });
+  const SearchView({super.key});
 
   @override
   State<SearchView> createState() => _SearchViewState();
@@ -35,9 +30,7 @@ class _SearchViewState extends State<SearchView> {
     super.initState();
     _scrollController.addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) {
-        return;
-      }
+      if (!mounted) return;
       setKey(context, _globalKey);
     });
   }
@@ -51,13 +44,9 @@ class _SearchViewState extends State<SearchView> {
   }
 
   void _onScroll() {
-    if (!_scrollController.hasClients) {
-      return;
-    }
+    if (!_scrollController.hasClients) return;
     final position = _scrollController.position;
-    if (position.pixels < position.maxScrollExtent * 0.9) {
-      return;
-    }
+    if (position.pixels < position.maxScrollExtent * 0.9) return;
     context.read<SearchViewModel>().loadMore();
   }
 
@@ -69,22 +58,25 @@ class _SearchViewState extends State<SearchView> {
 
   @override
   Widget build(BuildContext context) {
+    final keyword = context.select<SearchViewModel, String>(
+      (vm) => vm.keyword,
+    );
     final isLoading = context.select<SearchViewModel, bool>(
-      (viewModel) => viewModel.isLoading,
+      (vm) => vm.isLoading,
     );
     final isLoadingMore = context.select<SearchViewModel, bool>(
-      (viewModel) => viewModel.isLoadingMore,
+      (vm) => vm.isLoadingMore,
     );
     final toiletList = context.select<SearchViewModel, ToiletList>(
-      (viewModel) => viewModel.toiletList,
+      (vm) => vm.toiletList,
     );
     final errorMessage = context.select<SearchViewModel, String?>(
-      (viewModel) => viewModel.errorMessage,
+      (vm) => vm.errorMessage,
     );
 
     return WillPopScope(
       onWillPop: () {
-        removedRouterPush(context, page: const Main(needNear: true));
+        removedRouterPush(context, page: const MainPage(needNear: true));
         return Future.value(false);
       },
       child: GestureDetector(
@@ -108,7 +100,7 @@ class _SearchViewState extends State<SearchView> {
                 children: [
                   CustomSearchBar(
                     isMain: false,
-                    query: widget.query,
+                    query: keyword,
                     onSearchMode: _changeExpandSearch,
                     refreshPage: () {
                       context.read<SearchViewModel>().refresh();
@@ -159,9 +151,8 @@ class _SearchViewState extends State<SearchView> {
                                         );
                                       }
                                       return Padding(
-                                        padding: const EdgeInsets.only(
-                                          bottom: 20,
-                                        ),
+                                        padding:
+                                            const EdgeInsets.only(bottom: 20),
                                         child: ListItem(
                                           showReview: false,
                                           isMain: false,

@@ -37,7 +37,7 @@ class ToiletProvider extends ApiProvider {
         return [];
       }
     } catch (error) {
-      throw Error();
+      throw Exception('주변 화장실 조회 실패: $error');
     }
   }
 
@@ -53,10 +53,10 @@ class ToiletProvider extends ApiProvider {
         ToiletModel toiletModel = ToiletModel.fromJson(data);
         return toiletModel;
       } else {
-        throw Error();
+        throw Exception('화장실 정보가 없습니다 (toiletId: $toiletId)');
       }
     } catch (error) {
-      throw Error();
+      throw Exception('화장실 상세 조회 실패 (toiletId: $toiletId): $error');
     }
   }
 
@@ -78,7 +78,7 @@ class ToiletProvider extends ApiProvider {
       ScrollProvider().setTotal(response.data['totalPages']);
       return toiletList;
     } catch (error) {
-      throw Error();
+      throw Exception('화장실 검색 실패: $error');
     }
   }
 }

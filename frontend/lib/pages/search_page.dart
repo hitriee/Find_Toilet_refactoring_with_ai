@@ -46,7 +46,7 @@ class SearchPage extends StatelessWidget {
         disabled: disabled,
         allDay: allDay,
       )..loadInitial(),
-      child: SearchView(query: query),
+      child: const SearchView(),
     );
   }
 }

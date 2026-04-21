@@ -1,5 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:find_toilet/presentation/view_models/settings_view_model.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
-import 'package:find_toilet/shared/utils/settings_utils.dart';
 import 'package:find_toilet/shared/utils/icon_image.dart';
 import 'package:find_toilet/shared/utils/style.dart';
 import 'package:find_toilet/shared/utils/type_enum.dart';
@@ -8,78 +10,92 @@ import 'package:find_toilet/shared/widgets/modal.dart';
 import 'package:find_toilet/shared/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:provider/provider.dart';
 
-class Settings extends StatefulWidget {
+class SettingsView extends StatelessWidget {
   final bool showReview;
   final int? toiletId;
   final ReturnVoid refreshPage;
-  const Settings({
+
+  const SettingsView({
     super.key,
     required this.showReview,
     this.toiletId,
     required this.refreshPage,
   });
 
-  @override
-  State<Settings> createState() => _SettingsState();
-}
-
-class _SettingsState extends State<Settings> {
-  late bool hasToken;
-  @override
-  void initState() {
-    super.initState();
-    hasToken = readToken(context) != null;
-  }
-
-  //* 모달 목록
-  WidgetList pages = [
-    const PolicyModal(),
-    const HelpModal(isHelpModal: false),
-    const HelpModal()
+  static const _menuList = [
+    '확대/축소 버튼',
+    '글자 크기',
+    '지도 반경',
+    '문의하기',
+    '개인/위치 정보 처리 방침',
+    '라이선스',
+    '도움말',
   ];
 
-  //* 문의하기
-  void sendEmail() async {
-    String? emailBody;
-    try {
-      emailBody = await body();
-      final Email email = Email(
-        subject: '[화장실을 찾아서] 문의사항',
-        recipients: ['team.4ilet@gmail.com'],
-        body: emailBody,
-        isHTML: false,
-      );
-      await FlutterEmailSender.send(email);
-    } catch (error) {
+  static const _iconList = [
+    scaleIcon,
+    fontIcon,
+    gpsIcon,
+    inquiryIcon,
+    policyIcon,
+    licenseIcon,
+    helpIcon,
+  ];
+
+  final _pages = const [
+    PolicyModal(),
+    HelpModal(isHelpModal: false),
+    HelpModal(),
+  ];
+
+  Future<void> _sendEmail(BuildContext context) async {
+    final failureBody =
+        await context.read<SettingsViewModel>().sendEmail();
+    if (failureBody != null && context.mounted) {
       showModal(
         context,
         page: AlertModal(
           title: '문의하기',
-          content: emailBody ?? inquiryBody(),
-          onPressed: () => Clipboard.setData(
-            ClipboardData(text: emailBody ?? inquiryBody()),
-          ),
+          content: failureBody,
+          onPressed: () =>
+              Clipboard.setData(ClipboardData(text: failureBody)),
         ),
       );
     }
   }
 
-  //* 로그인/로그아웃
-  void loginOrLogout() async {
+  Future<void> _loginOrLogout(BuildContext context) async {
     try {
       final token = readToken(context);
       if (token == null || token == '') {
         if (hideModal(context)) {
-          await login(context);
+          final result =
+              await context.read<SettingsViewModel>().login();
+          if (!context.mounted) return;
+          if (result['result'] != false) {
+            changeToken(
+              context,
+              token: result['token'] as String?,
+              refresh: result['refresh'] as String?,
+            );
+            if (result['state'] != 'login' || result['nickname'] == null) {
+              showModal(
+                context,
+                page: const NicknameInputModal(isAlert: true),
+              );
+            } else {
+              changeName(context, result['nickname'] as String?);
+            }
+          }
         } else {
           showModal(
             context,
             page: JoinModal(
-              showReview: widget.showReview,
-              toiletId: widget.toiletId,
-              refreshPage: widget.refreshPage,
+              showReview: showReview,
+              toiletId: toiletId,
+              refreshPage: refreshPage,
               pageContext: context,
             ),
           );
@@ -88,7 +104,8 @@ class _SettingsState extends State<Settings> {
         changeToken(context, token: null, refresh: null);
         changeName(context, null);
       }
-    } catch (error) {
+    } catch (_) {
+      if (!context.mounted) return;
       setLoading(context, false);
       showModal(
         context,
@@ -100,7 +117,7 @@ class _SettingsState extends State<Settings> {
     }
   }
 
-  String optionTitle(int i) {
+  String _optionTitle(BuildContext context, int i) {
     switch (i) {
       case 0:
         return watchMagnify(context);
@@ -111,25 +128,6 @@ class _SettingsState extends State<Settings> {
     }
   }
 
-  final StringList menuList = [
-    '확대/축소 버튼',
-    '글자 크기',
-    '지도 반경',
-    '문의하기',
-    '개인/위치 정보 처리 방침',
-    '라이선스',
-    '도움말'
-  ];
-  final IconDataList iconList = [
-    scaleIcon,
-    fontIcon,
-    gpsIcon,
-    inquiryIcon,
-    policyIcon,
-    licenseIcon,
-    helpIcon,
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -137,9 +135,7 @@ class _SettingsState extends State<Settings> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 35),
         child: GestureDetector(
-          onHorizontalDragEnd: (_) {
-            routerPop(context)();
-          },
+          onHorizontalDragEnd: (_) => routerPop(context)(),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -154,14 +150,12 @@ class _SettingsState extends State<Settings> {
                           ? CustomButton(
                               textColor: CustomColors.blackColor,
                               fontSize: FontSize.smallSize,
-                              onPressed: () {
-                                showModal(
-                                  context,
-                                  page: const NicknameInputModal(
-                                    isAlert: false,
-                                  ),
-                                );
-                              },
+                              onPressed: () => showModal(
+                                context,
+                                page: const NicknameInputModal(
+                                  isAlert: false,
+                                ),
+                              ),
                               buttonText: '닉네임 변경',
                             )
                           : const SizedBox(),
@@ -169,7 +163,7 @@ class _SettingsState extends State<Settings> {
                     Flexible(
                       flex: 5,
                       child: GestureDetector(
-                        onTap: loginOrLogout,
+                        onTap: () => _loginOrLogout(context),
                         child: getToken(context) != null
                             ? TextWithIcon(
                                 icon: logoutIcon,
@@ -205,22 +199,22 @@ class _SettingsState extends State<Settings> {
                 child: Column(
                   children: [
                     for (int i = 0; i < 3; i += 1)
-                      eachMenu(
+                      _eachMenu(
                         index: i,
                         onTap: () => changeOptions(context, i),
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        child: option(i),
+                        child: _option(context, i),
                       ),
-                    eachMenu(
+                    _eachMenu(
                       index: 3,
-                      onTap: sendEmail,
+                      onTap: () => _sendEmail(context),
                     ),
                     for (int i = 4; i < 7; i += 1)
-                      eachMenu(
+                      _eachMenu(
                         index: i,
                         onTap: () => showModal(
                           context,
-                          page: pages[i - 4],
+                          page: _pages[i - 4],
                         ),
                       ),
                   ],
@@ -235,29 +229,27 @@ class _SettingsState extends State<Settings> {
                         ? CustomButton(
                             textColor: CustomColors.blackColor,
                             fontSize: FontSize.smallSize,
-                            onPressed: () {
-                              showModal(
-                                context,
-                                page: DeleteModal(
-                                  deleteMode: 2,
-                                  id: 0,
-                                  reviewContext: context,
-                                ),
-                              );
-                            },
+                            onPressed: () => showModal(
+                              context,
+                              page: DeleteModal(
+                                deleteMode: 2,
+                                id: 0,
+                                reviewContext: context,
+                              ),
+                            ),
                             buttonText: '회원 탈퇴',
                           )
                         : const SizedBox(),
                     ExitPage(
                       color: CustomColors.blackColor,
                       onTap: () {
-                        widget.refreshPage();
+                        refreshPage();
                         routerPop(context)();
                       },
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -265,21 +257,20 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  Widget option(int i) {
+  Widget _option(BuildContext context, int i) {
     return CustomText(
-      title: optionTitle(i),
+      title: _optionTitle(context, i),
       fontSize: FontSize.defaultSize,
       color: CustomColors.mainColor,
       font: kimm,
     );
   }
 
-  GestureDetector eachMenu({
+  GestureDetector _eachMenu({
     required int index,
     Widget? child,
     required ReturnVoid onTap,
     MainAxisAlignment? mainAxisAlignment,
-    int? flex,
   }) {
     return GestureDetector(
       onTap: onTap,
@@ -291,15 +282,15 @@ class _SettingsState extends State<Settings> {
           children: [
             Flexible(
               child: TextWithIcon(
-                icon: iconList[index],
-                text: menuList[index],
+                icon: _iconList[index],
+                text: _menuList[index],
                 iconColor: CustomColors.blackColor,
                 fontSize: FontSize.defaultSize,
                 font: kimm,
                 flex: 15,
               ),
             ),
-            child ?? const SizedBox()
+            child ?? const SizedBox(),
           ],
         ),
       ),

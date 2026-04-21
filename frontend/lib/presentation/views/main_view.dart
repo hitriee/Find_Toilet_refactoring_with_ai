@@ -1,4 +1,5 @@
 import 'package:find_toilet/presentation/view_models/main_search_provider.dart';
+import 'package:find_toilet/presentation/view_models/main_view_model.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
 import 'package:find_toilet/shared/utils/type_enum.dart';
 import 'package:find_toilet/shared/widgets/bottom_sheet.dart';
@@ -9,11 +10,11 @@ import 'package:find_toilet/shared/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Main extends StatefulWidget {
+class MainView extends StatefulWidget {
   final bool showReview, needNear;
   final ReturnVoid? refreshPage;
   final String? beforePage;
-  const Main({
+  const MainView({
     super.key,
     this.showReview = false,
     this.refreshPage,
@@ -22,10 +23,10 @@ class Main extends StatefulWidget {
   });
 
   @override
-  State<Main> createState() => _MainState();
+  State<MainView> createState() => _MainViewState();
 }
 
-class _MainState extends State<Main> {
+class _MainViewState extends State<MainView> {
   final globalKey = GlobalKey<ScaffoldState>();
   double paddingTop = 0;
   bool refreshState = true;
@@ -45,20 +46,8 @@ class _MainState extends State<Main> {
     );
   }
 
-  void refreshMain(int index) {
-    if (readLoading(context)) {
-      initPage(context);
-      initHeightList(context);
-      initMainData(
-        context,
-        showReview: widget.showReview,
-        needClear: true,
-      ).then((data) {
-        setHeightListSize(context);
-        setLoading(context, false);
-      });
-      increasePage(context);
-    }
+  void _refreshMain(int index) {
+    context.read<MainViewModel>().refreshMain(index, widget.showReview);
   }
 
   @override
@@ -66,22 +55,8 @@ class _MainState extends State<Main> {
     if (refreshState) {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) {
-          initLoadingData(context, isMain: true);
-          if (!widget.showReview) {
-            initHeightList(context);
-          }
-          initMainData(
-            context,
-            showReview: widget.showReview,
-            needClear: true,
-          ).then((data) {
-            if (!widget.showReview) {
-              setHeightListSize(context);
-            }
-            setLoading(context, false);
-          });
-          increasePage(context);
-          setKey(context, globalKey);
+          context.read<MainViewModel>().loadInitial(widget.showReview);
+          MainSearchProvider().setKey(globalKey);
           setState(() {
             refreshState = false;
           });
@@ -126,7 +101,7 @@ class _MainState extends State<Main> {
                       child: Column(
                         children: [
                           FilterBox(
-                            onPressed: refreshMain,
+                            onPressed: _refreshMain,
                             applyLong: !isDefaultTheme(context),
                             isMain: true,
                           ),

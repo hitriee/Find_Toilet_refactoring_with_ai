@@ -1,5 +1,6 @@
 import 'package:find_toilet/core/network/api_provider.dart';
 import 'package:find_toilet/shared/utils/type_enum.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
@@ -11,9 +12,9 @@ class UserProvider extends ApiProvider {
       if (token != null && token != '') {
         return _sendOldToken(token!);
       }
-      throw Error();
+      throw Exception('저장된 토큰이 없습니다.');
     } catch (error) {
-      throw Error();
+      throw Exception('자동 로그인 실패: $error');
     }
   }
 
@@ -38,7 +39,7 @@ class UserProvider extends ApiProvider {
       await dioWithToken(url: userInfoUrl, method: 'GET').get(userInfoUrl);
       return {};
     } catch (error) {
-      throw Error();
+      throw Exception('기존 토큰 검증 실패: $error');
     }
   }
 
@@ -48,7 +49,7 @@ class UserProvider extends ApiProvider {
           .post(loginUrl, data: {'token': token});
       return _returnTokens(response);
     } catch (error) {
-      throw Error();
+      throw Exception('카카오 토큰 서버 전송 실패: $error');
     }
   }
 
@@ -68,8 +69,8 @@ class UserProvider extends ApiProvider {
       } else if (error is KakaoAuthException) {
         return {'result': false};
       }
-      print('$error & ${error.runtimeType}');
-      throw Error();
+      debugPrint('카카오 로그인 오류: $error (${error.runtimeType})');
+      throw Exception('카카오 로그인 중 예상치 못한 오류: $error');
     }
   }
 
@@ -91,7 +92,7 @@ class UserProvider extends ApiProvider {
       await deleteApi(deleteUserUrl);
       return Future.value(true);
     } catch (error) {
-      throw Error();
+      throw Exception('회원 탈퇴 실패: $error');
     }
   }
 
@@ -101,7 +102,7 @@ class UserProvider extends ApiProvider {
       final response = await updateApi(changeNameUrl, data: data);
       return response;
     } catch (error) {
-      throw Error();
+      throw Exception('닉네임 변경 실패: $error');
     }
   }
 }

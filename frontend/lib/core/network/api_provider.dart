@@ -118,10 +118,10 @@ class ApiProvider extends UrlClass {
           'refresh': headers['Authorization-refresh']!.first,
         };
       } else {
-        throw Error();
+        throw Exception('토큰 갱신 실패: 상태 코드 ${response.statusCode}');
       }
     } catch (error) {
-      throw Error();
+      throw Exception('토큰 갱신 중 오류 발생: $error');
     }
   }
 
@@ -143,9 +143,9 @@ class ApiProvider extends UrlClass {
       if (response.statusCode == 200) {
         return true;
       }
-      throw Error();
+      throw Exception('POST 요청 실패: 상태 코드 ${response.statusCode}');
     } catch (error) {
-      throw Error();
+      throw Exception('POST 요청 중 오류 발생: $error');
     }
   }
 
@@ -170,9 +170,9 @@ class ApiProvider extends UrlClass {
       if (response.statusCode == 200) {
         return response.data;
       }
-      throw Error();
+      throw Exception('PUT 요청 실패: 상태 코드 ${response.statusCode}');
     } catch (error) {
-      throw Error();
+      throw Exception('PUT 요청 중 오류 발생: $error');
     }
   }
 
@@ -188,9 +188,9 @@ class ApiProvider extends UrlClass {
       if (response.statusCode == 200) {
         return true;
       }
-      throw Error();
+      throw Exception('DELETE 요청 실패: 상태 코드 ${response.statusCode}');
     } catch (error) {
-      throw Error();
+      throw Exception('DELETE 요청 중 오류 발생: $error');
     }
   }
 

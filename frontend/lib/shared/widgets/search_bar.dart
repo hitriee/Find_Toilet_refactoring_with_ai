@@ -1,7 +1,7 @@
 import 'package:find_toilet/pages/search_page.dart';
 import 'package:find_toilet/pages/bookmark_folder_page.dart';
-import 'package:find_toilet/presentation/views/main_view.dart';
-import 'package:find_toilet/presentation/views/settings_screen.dart';
+import 'package:find_toilet/pages/main_page.dart';
+import 'package:find_toilet/pages/settings_page.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
 import 'package:find_toilet/shared/utils/icon_image.dart';
 import 'package:find_toilet/shared/utils/style.dart';
@@ -205,12 +205,12 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                       onPressed: routerPush(
                         context,
                         page: widget.isMain
-                            ? Settings(
+                            ? SettingsPage(
                                 toiletId: getToiletId(context),
                                 showReview: widget.showReview,
                                 refreshPage: widget.refreshPage,
                               )
-                            : const Main(),
+                            : const MainPage(),
                         afterPush: widget.refreshPage,
                       ),
                       color: CustomColors.blackColor,

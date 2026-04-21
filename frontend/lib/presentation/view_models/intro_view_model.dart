@@ -30,7 +30,7 @@ class IntroViewModel extends ChangeNotifier {
           locationAccuracy: LocationAccuracy.high);
       return position;
     } catch (error) {
-      throw Error();
+      throw Exception('위치 정보를 가져오는 데 실패했습니다: $error');
     }
   }
 }

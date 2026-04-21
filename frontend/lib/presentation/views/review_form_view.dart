@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:find_toilet/presentation/view_models/review_form_view_model.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
 import 'package:find_toilet/shared/utils/icon_image.dart';
 import 'package:find_toilet/shared/utils/style.dart';
@@ -5,56 +8,42 @@ import 'package:find_toilet/shared/utils/type_enum.dart';
 import 'package:find_toilet/shared/widgets/button.dart';
 import 'package:find_toilet/shared/widgets/modal.dart';
 import 'package:find_toilet/shared/widgets/text_widget.dart';
-import 'package:find_toilet/presentation/view_models/review_form_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class ReviewForm extends StatefulWidget {
-  final int toiletId;
+class ReviewFormView extends StatelessWidget {
   final String toiletName;
-  final double? preScore;
-  final String? preComment;
   final int reviewId;
   final bool showReview;
   final ReturnVoid afterWork;
-  const ReviewForm({
+
+  const ReviewFormView({
     super.key,
     required this.toiletName,
-    required this.toiletId,
-    this.preComment,
-    this.preScore,
     required this.reviewId,
     required this.showReview,
     required this.afterWork,
   });
 
-  @override
-  State<ReviewForm> createState() => _ReviewFormState();
-}
+  Future<void> _onSubmit(BuildContext context) async {
+    final vm = context.read<ReviewFormViewModel>();
+    final result = await vm.submit();
 
-class _ReviewFormState extends State<ReviewForm> {
-  late final ReviewFormViewModel _viewModel;
-
-  Future<void> onSubmit() async {
-    final result = await _viewModel.submit(
-      reviewId: widget.reviewId,
-      toiletId: widget.toiletId,
-    );
-
-    if (!mounted) return;
+    if (!context.mounted) return;
 
     if (result.success) {
-      final title = widget.reviewId != 0 ? '리뷰 수정' : '리뷰 등록';
+      final title = reviewId != 0 ? '리뷰 수정' : '리뷰 등록';
       showModal(
         context,
         page: AlertModal(
           title: title,
-          content: widget.reviewId != 0
+          content: reviewId != 0
               ? '리뷰가 성공적으로\n 수정되었습니다'
               : '리뷰가 성공적으로\n 등록되었습니다',
         ),
       ).then((_) {
         routerPop(context)();
-        widget.afterWork();
+        afterWork();
       });
       return;
     }
@@ -69,24 +58,9 @@ class _ReviewFormState extends State<ReviewForm> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _viewModel = ReviewFormViewModel();
-    _viewModel.addListener(() {
-      if (!mounted) return;
-      setState(() {});
-    });
-
-    _viewModel.init(
-      reviewId: widget.reviewId,
-      preComment: widget.preComment,
-      preScore: widget.preScore,
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final reviewCommentValue = _viewModel.reviewData['comment'] as String?;
+    final vm = context.watch<ReviewFormViewModel>();
+    final reviewCommentValue = vm.reviewData['comment'] as String?;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -99,7 +73,7 @@ class _ReviewFormState extends State<ReviewForm> {
             Flexible(
               flex: 2,
               child: CustomText(
-                title: widget.toiletName,
+                title: toiletName,
                 fontSize: FontSize.largeSize,
                 color: CustomColors.whiteColor,
                 font: kimm,
@@ -113,22 +87,21 @@ class _ReviewFormState extends State<ReviewForm> {
             ),
             Flexible(
               flex: 2,
-              child: reviewScore(),
+              child: _reviewScore(context, vm),
             ),
             Flexible(
               flex: 5,
               child: CustomTextField(
                 initValue: reviewCommentValue,
-                onChanged: _viewModel.changeComment,
+                onChanged: vm.changeComment,
                 maxLines: 5,
                 height: 200,
-                // textHeight: 1.5,
                 padding: const EdgeInsetsDirectional.all(20),
               ),
             ),
             Flexible(
               flex: 3,
-              child: reviewButtons(context),
+              child: _reviewButtons(context),
             ),
           ],
         ),
@@ -136,8 +109,8 @@ class _ReviewFormState extends State<ReviewForm> {
     );
   }
 
-  SizedBox reviewScore() {
-    final score = (_viewModel.reviewData['score'] as num?)?.toDouble() ?? 0.0;
+  SizedBox _reviewScore(BuildContext context, ReviewFormViewModel vm) {
+    final score = (vm.reviewData['score'] as num?)?.toDouble() ?? 0.0;
     return SizedBox(
       width: screenWidth(context) * 0.7,
       child: Row(
@@ -146,7 +119,7 @@ class _ReviewFormState extends State<ReviewForm> {
           for (int i = 0; i < 5; i += 1)
             Flexible(
               child: CustomIconButton(
-                onPressed: () => _viewModel.changeScore(i),
+                onPressed: () => vm.changeScore(i),
                 icon: starIcon,
                 iconSize: 50,
                 color: i < score
@@ -159,7 +132,7 @@ class _ReviewFormState extends State<ReviewForm> {
     );
   }
 
-  Row reviewButtons(BuildContext context) {
+  Row _reviewButtons(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -169,10 +142,8 @@ class _ReviewFormState extends State<ReviewForm> {
           buttonColor: whiteColor,
         ),
         CustomButton(
-          onPressed: () {
-            onSubmit();
-          },
-          buttonText: widget.reviewId != 0 ? '수정' : '등록',
+          onPressed: () => _onSubmit(context),
+          buttonText: reviewId != 0 ? '수정' : '등록',
           buttonColor: redColor,
           textColor: CustomColors.whiteColor,
         ),

@@ -30,10 +30,10 @@ class ReviewProvider extends ApiProvider {
           ScrollProvider().setTotal(0);
           return [];
         default:
-          throw Error();
+          throw Exception('리뷰 목록 조회 실패: 상태 코드 ${response.statusCode}');
       }
     } catch (error) {
-      throw Error();
+      throw Exception('리뷰 목록 조회 중 오류 발생: $error');
     }
   }
 
@@ -46,7 +46,7 @@ class ReviewProvider extends ApiProvider {
       final data = response.data['data'];
       return ReviewModel.fromJson(data);
     } catch (error) {
-      throw Error();
+      throw Exception('리뷰 조회 실패 (reviewId: $reviewId): $error');
     }
   }
 

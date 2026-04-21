@@ -3,7 +3,7 @@
 import 'dart:async';
 import 'package:find_toilet/presentation/view_models/state_provider.dart';
 import 'package:find_toilet/presentation/view_models/intro_view_model.dart';
-import 'package:find_toilet/presentation/views/main_view.dart';
+import 'package:find_toilet/pages/main_page.dart';
 import 'package:find_toilet/pages/select_theme_page.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
 import 'package:find_toilet/shared/utils/icon_image.dart';
@@ -32,7 +32,7 @@ class _IntroViewState extends State<IntroView> {
           context,
           page: getFontSize(context) == null
               ? const SelectThemePage()
-              : const Main(),
+              : const MainPage(),
         );
       });
     }).catchError((_) {

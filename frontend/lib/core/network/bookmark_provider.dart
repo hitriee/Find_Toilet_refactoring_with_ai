@@ -17,7 +17,7 @@ class FolderProvider extends ApiProvider {
       }).toList();
       return folderList;
     } catch (error) {
-      throw Error();
+      throw Exception('폴더 목록 조회 실패: $error');
     }
   }
 
@@ -69,7 +69,7 @@ class BookMarkProvider extends ApiProvider {
       ScrollProvider().setTotal(response.data['size']);
       return toiletList;
     } catch (error) {
-      throw Error();
+      throw Exception('즐겨찾기 목록 조회 실패: $error');
     }
   }
 

@@ -2055,6 +2055,6 @@ OS 버전: Android ${version['release']} (SDK ${version['sdkInt']})
 화장실을 찾아서 개발팀 (team.4ilet@gmail.com)
 ''';
   } catch (error) {
-    throw Error();
+    throw Exception('기기 정보 수집 실패: $error');
   }
 }

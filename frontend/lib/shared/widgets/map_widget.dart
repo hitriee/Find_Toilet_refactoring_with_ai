@@ -3,7 +3,7 @@
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:find_toilet/presentation/view_models/main_search_provider.dart';
-import 'package:find_toilet/presentation/views/main_view.dart';
+import 'package:find_toilet/pages/main_page.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
 import 'package:find_toilet/shared/utils/icon_image.dart';
 import 'package:find_toilet/shared/utils/type_enum.dart';
@@ -105,7 +105,7 @@ class MapScreenState extends State<MapScreen> {
       setToilet(context, toiletData);
       routerPush(
         context,
-        page: Main(
+        page: MainPage(
           showReview: true,
           refreshPage: widget.refreshPage,
           needNear: widget.needNear,

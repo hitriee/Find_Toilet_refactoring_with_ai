@@ -1,4 +1,6 @@
 //* setttings
+import 'package:find_toilet/domain/repositories/settings_repository.dart';
+import 'package:find_toilet/shared/utils/settings_utils.dart';
 import 'package:find_toilet/shared/utils/type_enum.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -116,5 +118,29 @@ class SettingsProvider extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('join', true);
     _hideModal = true;
+  }
+}
+
+/// Settings 화면 전용 ViewModel — 로그인·이메일 비즈니스 로직을 담당합니다.
+class SettingsViewModel extends ChangeNotifier {
+  final SettingsRepository _repository;
+
+  SettingsViewModel({required SettingsRepository repository})
+      : _repository = repository;
+
+  /// 카카오 로그인을 시도하고 결과 Map을 반환합니다.
+  FutureDynamicMap login() => _repository.login();
+
+  /// 이메일 앱 전송을 시도합니다.
+  /// 성공 시 null, 실패 시 모달에 표시할 본문 문자열을 반환합니다.
+  Future<String?> sendEmail() async {
+    String? emailBody;
+    try {
+      emailBody = await _repository.buildEmailBody();
+      await _repository.sendEmail(emailBody);
+      return null;
+    } catch (_) {
+      return emailBody ?? inquiryBody();
+    }
   }
 }

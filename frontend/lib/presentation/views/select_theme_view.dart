@@ -2,7 +2,7 @@
 
 import 'package:find_toilet/presentation/view_models/select_theme_view_model.dart';
 import 'package:find_toilet/presentation/view_models/state_provider.dart';
-import 'package:find_toilet/presentation/views/main_view.dart';
+import 'package:find_toilet/pages/main_page.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
 import 'package:find_toilet/shared/utils/style.dart';
 import 'package:find_toilet/shared/utils/type_enum.dart';
@@ -71,7 +71,7 @@ class SelectThemeView extends StatelessWidget {
                         context
                             .read<SettingsProvider>()
                             .initOption(vm.isLargeFont);
-                        removedRouterPush(context, page: const Main());
+                        removedRouterPush(context, page: const MainPage());
                       });
                     },
                   ),

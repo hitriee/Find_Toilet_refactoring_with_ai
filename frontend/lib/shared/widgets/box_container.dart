@@ -2,8 +2,8 @@ import 'package:find_toilet/models/bookmark_model.dart';
 import 'package:find_toilet/models/review_model.dart';
 import 'package:find_toilet/models/toilet_model.dart';
 import 'package:find_toilet/pages/bookmark_page.dart';
-import 'package:find_toilet/presentation/views/main_view.dart';
-import 'package:find_toilet/presentation/views/review_form_screen.dart';
+import 'package:find_toilet/pages/main_page.dart';
+import 'package:find_toilet/pages/review_form_page.dart';
 import 'package:find_toilet/shared/utils/global_utils.dart';
 import 'package:find_toilet/shared/utils/icon_image.dart';
 import 'package:find_toilet/shared/utils/style.dart';
@@ -295,7 +295,7 @@ class ListItem extends StatelessWidget {
       final token = readToken(context);
       if (token != null && token != '') {
         routerPush(context,
-            page: ReviewForm(
+            page: ReviewFormPage(
               toiletName: data.toiletName,
               toiletId: data.toiletId,
               reviewId: data.reviewId,
@@ -356,7 +356,7 @@ class ListItem extends StatelessWidget {
         setToilet(context, data);
         routerPush(
           context,
-          page: Main(
+          page: MainPage(
             showReview: true,
             refreshPage: refreshPage,
             needNear: isMain,
@@ -794,7 +794,7 @@ class ReviewBox extends StatelessWidget {
                                   iconSize: 20,
                                   onPressed: routerPush(
                                     context,
-                                    page: ReviewForm(
+                                    page: ReviewFormPage(
                                       toiletName: toiletName,
                                       toiletId: toiletId,
                                       reviewId: review.id,
