@@ -1,4 +1,4 @@
-import 'package:find_toilet/data/datasources/remote/toilet_remote_datasource.dart';
+import 'package:find_toilet/data/datasources/remote/toilet_remote_data_source.dart';
 import 'package:find_toilet/data/repositories/toilet_repository_impl.dart';
 import 'package:find_toilet/domain/repositories/toilet_repository.dart';
 import 'package:find_toilet/presentation/view_models/main_view_model.dart';
@@ -23,7 +23,7 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ToiletRepository repository = ToiletRepositoryImpl(
-      remote: ToiletRemoteDatasource(),
+      remote: ToiletRemoteDataSource(),
     );
 
     return ChangeNotifierProvider(

@@ -9,7 +9,7 @@ class ToiletQueryResult {
   final int? totalPages;
 }
 
-class ToiletRemoteDatasource extends ApiProvider {
+class ToiletRemoteDataSource extends ApiProvider {
   Future<ToiletQueryResult> searchToilet(DynamicMap queryData) async {
     final response = await _getWithAuth(searchToiletUrl, queryData);
     final data = response.data['content'] as List<dynamic>? ?? [];
@@ -25,6 +25,7 @@ class ToiletRemoteDatasource extends ApiProvider {
     final toilets = data.map((json) => ToiletModel.fromJson(json)).toList();
     return ToiletQueryResult(toilets: toilets, totalPages: totalPages);
   }
+
   Future<ToiletModel> getToilet(int toiletId) async {
     final response = await _getWithAuth(eachToiletUrl(toiletId), null);
     final data = response.data['content'];
@@ -33,6 +34,7 @@ class ToiletRemoteDatasource extends ApiProvider {
     }
     return ToiletModel.fromJson(data);
   }
+
   Future<Response<dynamic>> _getWithAuth(
     String url,
     DynamicMap? queryParameters,
@@ -43,5 +45,4 @@ class ToiletRemoteDatasource extends ApiProvider {
     return dioWithToken(url: url, method: 'GET')
         .get(url, queryParameters: queryParameters);
   }
-
 }

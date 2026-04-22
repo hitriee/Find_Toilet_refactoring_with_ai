@@ -1,4 +1,6 @@
-import 'package:find_toilet/data/datasources/remote/bookmark_remote_datasource.dart';
+import 'package:find_toilet/core/config/app_config.dart';
+import 'package:find_toilet/data/datasources/remote/bookmark_remote_data_source.dart';
+import 'package:find_toilet/data/repositories/bookmark_mock_repository_impl.dart';
 import 'package:find_toilet/data/repositories/bookmark_repository_impl.dart';
 import 'package:find_toilet/domain/repositories/bookmark_repository.dart';
 import 'package:find_toilet/presentation/view_models/bookmark_view_model.dart';
@@ -20,9 +22,9 @@ class BookmarkPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BookmarkRepository bookmarkRepository = BookmarkRepositoryImpl(
-      remote: BookmarkRemoteDatasource(),
-    );
+    final BookmarkRepository bookmarkRepository = kMockMode
+        ? BookmarkMockRepositoryImpl()
+        : BookmarkRepositoryImpl(remote: BookmarkRemoteDataSource());
 
     return ChangeNotifierProvider(
       create: (_) => BookmarkViewModel(
