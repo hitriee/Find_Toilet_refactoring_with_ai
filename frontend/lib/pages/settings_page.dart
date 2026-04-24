@@ -1,4 +1,6 @@
+import 'package:find_toilet/core/config/app_config.dart';
 import 'package:find_toilet/data/datasources/remote/settings_remote_data_source.dart';
+import 'package:find_toilet/data/repositories/settings_mock_repository_impl.dart';
 import 'package:find_toilet/data/repositories/settings_repository_impl.dart';
 import 'package:find_toilet/domain/repositories/settings_repository.dart';
 import 'package:find_toilet/presentation/view_models/settings_view_model.dart';
@@ -21,9 +23,9 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SettingsRepository repository = SettingsRepositoryImpl(
-      remote: SettingsRemoteDataSource(),
-    );
+    final SettingsRepository repository = kMockMode
+        ? SettingsMockRepositoryImpl()
+        : SettingsRepositoryImpl(remote: SettingsRemoteDataSource());
 
     return ChangeNotifierProvider(
       create: (_) => SettingsViewModel(repository: repository),
