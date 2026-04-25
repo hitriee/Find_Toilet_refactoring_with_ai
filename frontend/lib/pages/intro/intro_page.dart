@@ -1,8 +1,8 @@
-import 'package:find_toilet/data/datasources/remote/intro_remote_data_source.dart';
-import 'package:find_toilet/data/repositories/intro_repository_impl.dart';
-import 'package:find_toilet/domain/repositories/intro_repository.dart';
-import 'package:find_toilet/presentation/view_models/intro_view_model.dart';
-import 'package:find_toilet/presentation/views/intro_view.dart';
+import 'package:find_toilet/datasources/remote/intro_remote_data_source.dart';
+import 'package:find_toilet/pages/intro/data/intro_repository_impl.dart';
+import 'package:find_toilet/pages/intro/domain/intro_repository.dart';
+import 'package:find_toilet/pages/intro/presentation/intro_view_model.dart';
+import 'package:find_toilet/pages/intro/presentation/intro_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

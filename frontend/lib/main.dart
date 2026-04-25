@@ -1,4 +1,4 @@
-import 'package:find_toilet/pages/intro_page.dart';
+import 'package:find_toilet/pages/intro/intro_page.dart';
 import 'package:find_toilet/presentation/view_models/state_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -29,7 +29,8 @@ class App extends StatelessWidget {
         title: 'Find Toilet',
         theme: ThemeData(fontFamily: 'Noto Sans'),
         builder: (context, child) => MediaQuery(
-          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: const TextScaler.linear(1.0)),
           child: child!,
         ),
         home: const IntroPage(),
