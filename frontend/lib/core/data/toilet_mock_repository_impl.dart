@@ -1,7 +1,7 @@
-import 'package:find_toilet/data/datasources/mock/toilet_mock_data_source.dart';
-import 'package:find_toilet/domain/repositories/toilet_repository.dart';
-import 'package:find_toilet/models/toilet_model.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
+import 'package:find_toilet/core/domain/toilet_model.dart';
+import 'package:find_toilet/core/domain/toilet_repository.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/datasources/mock/toilet_mock_data_source.dart';
 
 class ToiletMockRepositoryImpl extends ToiletRepository {
   final _dataSource = ToiletMockDataSource();

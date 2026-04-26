@@ -1,8 +1,9 @@
 //* review, bookmark
+import 'package:find_toilet/core/domain/toilet_model.dart';
 import 'package:find_toilet/core/network/bookmark_provider.dart';
 import 'package:find_toilet/core/network/review_provider.dart';
-import 'package:find_toilet/models/toilet_model.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
+
 import 'package:flutter/foundation.dart';
 
 class ReviewBookMarkProvider extends ChangeNotifier {
@@ -49,8 +50,7 @@ class ReviewBookMarkProvider extends ChangeNotifier {
   void _initBookmarkList() => _bookmarkList.clear();
 
   FutureReviewList _getReviewList(int page) async {
-    final reviewData =
-        await ReviewProvider().getReviewList(_toiletId!, page);
+    final reviewData = await ReviewProvider().getReviewList(_toiletId!, page);
     _addReviewList(reviewData);
     notifyListeners();
     return reviewData;

@@ -1,10 +1,10 @@
 import 'package:find_toilet/core/config/app_config.dart';
-import 'package:find_toilet/data/datasources/remote/toilet_remote_data_source.dart';
-import 'package:find_toilet/data/repositories/toilet_mock_repository_impl.dart';
-import 'package:find_toilet/data/repositories/toilet_repository_impl.dart';
-import 'package:find_toilet/domain/repositories/toilet_repository.dart';
-import 'package:find_toilet/presentation/view_models/search_view_model.dart';
-import 'package:find_toilet/presentation/views/search_view.dart';
+import 'package:find_toilet/core/data/toilet_mock_repository_impl.dart';
+import 'package:find_toilet/core/data/toilet_repository_impl.dart';
+import 'package:find_toilet/core/domain/toilet_repository.dart';
+import 'package:find_toilet/datasources/remote/toilet_remote_data_source.dart';
+import 'package:find_toilet/pages/search/presentation/search_view.dart';
+import 'package:find_toilet/pages/search/presentation/search_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

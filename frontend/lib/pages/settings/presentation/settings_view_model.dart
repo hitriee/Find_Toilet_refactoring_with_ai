@@ -1,7 +1,7 @@
 //* setttings
-import 'package:find_toilet/domain/repositories/settings_repository.dart';
-import 'package:find_toilet/shared/utils/settings_utils.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
+import 'package:find_toilet/core/utils/settings_utils.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/pages/settings/domain/settings_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -1,4 +1,4 @@
-import 'package:find_toilet/shared/utils/style.dart';
+import 'package:find_toilet/core/utils/style.dart';
 import 'package:flutter/material.dart';
 
 class CustomIcon extends StatelessWidget {

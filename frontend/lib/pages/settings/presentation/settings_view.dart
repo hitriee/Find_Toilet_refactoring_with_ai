@@ -1,13 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:find_toilet/presentation/view_models/settings_view_model.dart';
-import 'package:find_toilet/shared/utils/global_utils.dart';
-import 'package:find_toilet/shared/utils/icon_image.dart';
-import 'package:find_toilet/shared/utils/style.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
-import 'package:find_toilet/shared/widgets/button.dart';
-import 'package:find_toilet/shared/widgets/modal.dart';
-import 'package:find_toilet/shared/widgets/text_widget.dart';
+import 'package:find_toilet/core/utils/global_utils.dart';
+import 'package:find_toilet/core/utils/icon_image.dart';
+import 'package:find_toilet/core/utils/style.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/core/widgets/button.dart';
+import 'package:find_toilet/core/widgets/modal.dart';
+import 'package:find_toilet/core/widgets/text_widget.dart';
+import 'package:find_toilet/pages/settings/presentation/settings_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -51,16 +51,14 @@ class SettingsView extends StatelessWidget {
   ];
 
   Future<void> _sendEmail(BuildContext context) async {
-    final failureBody =
-        await context.read<SettingsViewModel>().sendEmail();
+    final failureBody = await context.read<SettingsViewModel>().sendEmail();
     if (failureBody != null && context.mounted) {
       showModal(
         context,
         page: AlertModal(
           title: '문의하기',
           content: failureBody,
-          onPressed: () =>
-              Clipboard.setData(ClipboardData(text: failureBody)),
+          onPressed: () => Clipboard.setData(ClipboardData(text: failureBody)),
         ),
       );
     }
@@ -71,8 +69,7 @@ class SettingsView extends StatelessWidget {
       final token = readToken(context);
       if (token == null || token == '') {
         if (hideModal(context)) {
-          final result =
-              await context.read<SettingsViewModel>().login();
+          final result = await context.read<SettingsViewModel>().login();
           if (!context.mounted) return;
           if (result['result'] != false) {
             changeToken(

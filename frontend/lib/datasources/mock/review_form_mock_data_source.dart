@@ -1,6 +1,6 @@
-import 'package:find_toilet/data/datasources/mock/mock_review_db.dart';
-import 'package:find_toilet/models/review_model.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/datasources/mock/mock_review_db.dart';
+import 'package:find_toilet/pages/review_form/domain/review_model.dart';
 
 /// 백엔드 없이 UI 확인용 더미 데이터 소스.
 /// 리뷰 데이터는 [MockReviewDb]에서 가져옵니다.

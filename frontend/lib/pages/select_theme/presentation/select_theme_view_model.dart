@@ -1,4 +1,4 @@
-import 'package:find_toilet/domain/repositories/select_theme_repository.dart';
+import 'package:find_toilet/pages/select_theme/domain/select_theme_repository.dart';
 import 'package:flutter/foundation.dart';
 
 class SelectThemeViewModel extends ChangeNotifier {

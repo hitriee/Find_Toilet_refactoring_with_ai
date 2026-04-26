@@ -1,5 +1,5 @@
-import 'package:find_toilet/models/bookmark_model.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/pages/bookmark/domain/bookmark_model.dart';
 
 /// 백엔드 없이 UI 확인용 더미 데이터 소스.
 /// [BookmarkFolderRemoteDataSource]와 동일한 인터페이스를 제공합니다.

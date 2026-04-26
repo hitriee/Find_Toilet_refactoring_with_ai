@@ -1,7 +1,7 @@
-import 'package:find_toilet/data/datasources/remote/review_form_remote_data_source.dart';
-import 'package:find_toilet/domain/repositories/review_form_repository.dart';
-import 'package:find_toilet/models/review_model.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/datasources/remote/review_form_remote_data_source.dart';
+import 'package:find_toilet/pages/review_form/domain/review_form_repository.dart';
+import 'package:find_toilet/pages/review_form/domain/review_model.dart';
 
 class ReviewFormRepositoryImpl implements ReviewFormRepository {
   final ReviewFormRemoteDataSource remote;

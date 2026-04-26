@@ -1,8 +1,9 @@
-import 'package:find_toilet/models/toilet_model.dart';
-import 'package:find_toilet/presentation/view_models/state_provider.dart';
+import 'package:find_toilet/core/config/state_provider.dart';
+import 'package:find_toilet/core/domain/toilet_model.dart';
 import 'package:find_toilet/core/network/user_provider.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
-import 'package:find_toilet/shared/widgets/modal.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/core/widgets/modal.dart';
+import 'package:find_toilet/pages/settings/presentation/settings_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

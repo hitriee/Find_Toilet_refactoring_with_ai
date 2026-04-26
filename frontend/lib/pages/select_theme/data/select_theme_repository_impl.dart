@@ -1,5 +1,5 @@
-import 'package:find_toilet/data/datasources/local/select_theme_local_data_source.dart';
-import 'package:find_toilet/domain/repositories/select_theme_repository.dart';
+import 'package:find_toilet/datasources/local/select_theme_local_data_source.dart';
+import 'package:find_toilet/pages/select_theme/domain/select_theme_repository.dart';
 
 class SelectThemeRepositoryImpl implements SelectThemeRepository {
   final SelectThemeLocalDataSource remote;

@@ -1,15 +1,15 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:find_toilet/presentation/view_models/search_view_model.dart';
-import 'package:find_toilet/pages/main_page.dart';
-import 'package:find_toilet/shared/utils/global_utils.dart';
-import 'package:find_toilet/shared/utils/style.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
-import 'package:find_toilet/shared/widgets/box_container.dart';
-import 'package:find_toilet/shared/widgets/list_view.dart';
-import 'package:find_toilet/shared/widgets/search_bar.dart';
-import 'package:find_toilet/shared/widgets/silvers.dart';
-import 'package:find_toilet/shared/widgets/text_widget.dart';
+import 'package:find_toilet/core/utils/global_utils.dart';
+import 'package:find_toilet/core/utils/style.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/core/widgets/box_container.dart';
+import 'package:find_toilet/core/widgets/list_view.dart';
+import 'package:find_toilet/core/widgets/search_bar.dart';
+import 'package:find_toilet/core/widgets/silvers.dart';
+import 'package:find_toilet/core/widgets/text_widget.dart';
+import 'package:find_toilet/pages/main/main_page.dart';
+import 'package:find_toilet/pages/search/presentation/search_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

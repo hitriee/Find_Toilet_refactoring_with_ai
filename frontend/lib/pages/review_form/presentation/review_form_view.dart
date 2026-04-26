@@ -1,13 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:find_toilet/presentation/view_models/review_form_view_model.dart';
-import 'package:find_toilet/shared/utils/global_utils.dart';
-import 'package:find_toilet/shared/utils/icon_image.dart';
-import 'package:find_toilet/shared/utils/style.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
-import 'package:find_toilet/shared/widgets/button.dart';
-import 'package:find_toilet/shared/widgets/modal.dart';
-import 'package:find_toilet/shared/widgets/text_widget.dart';
+import 'package:find_toilet/core/utils/global_utils.dart';
+import 'package:find_toilet/core/utils/icon_image.dart';
+import 'package:find_toilet/core/utils/style.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/core/widgets/button.dart';
+import 'package:find_toilet/core/widgets/modal.dart';
+import 'package:find_toilet/core/widgets/text_widget.dart';
+import 'package:find_toilet/pages/review_form/presentation/review_form_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -37,9 +37,8 @@ class ReviewFormView extends StatelessWidget {
         context,
         page: AlertModal(
           title: title,
-          content: reviewId != 0
-              ? '리뷰가 성공적으로\n 수정되었습니다'
-              : '리뷰가 성공적으로\n 등록되었습니다',
+          content:
+              reviewId != 0 ? '리뷰가 성공적으로\n 수정되었습니다' : '리뷰가 성공적으로\n 등록되었습니다',
         ),
       ).then((_) {
         routerPop(context)();

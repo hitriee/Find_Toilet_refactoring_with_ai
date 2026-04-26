@@ -1,7 +1,7 @@
-import 'package:find_toilet/models/toilet_model.dart';
+import 'package:find_toilet/core/config/state_provider.dart';
+import 'package:find_toilet/core/domain/toilet_model.dart';
 import 'package:find_toilet/core/network/api_provider.dart';
-import 'package:find_toilet/presentation/view_models/scroll_provider.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
 
 // 홈 화면 화장실
 class ToiletProvider extends ApiProvider {

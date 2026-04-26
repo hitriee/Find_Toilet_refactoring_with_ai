@@ -1,11 +1,11 @@
 import 'package:find_toilet/core/config/app_config.dart';
-import 'package:find_toilet/data/datasources/remote/review_form_remote_data_source.dart';
-import 'package:find_toilet/data/repositories/review_form_mock_repository_impl.dart';
-import 'package:find_toilet/data/repositories/review_form_repository_impl.dart';
-import 'package:find_toilet/domain/repositories/review_form_repository.dart';
-import 'package:find_toilet/presentation/view_models/review_form_view_model.dart';
-import 'package:find_toilet/presentation/views/review_form_view.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/datasources/remote/review_form_remote_data_source.dart';
+import 'package:find_toilet/pages/review_form/data/review_form_mock_repository_impl.dart';
+import 'package:find_toilet/pages/review_form/data/review_form_repository_impl.dart';
+import 'package:find_toilet/pages/review_form/domain/review_form_repository.dart';
+import 'package:find_toilet/pages/review_form/presentation/review_form_view.dart';
+import 'package:find_toilet/pages/review_form/presentation/review_form_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

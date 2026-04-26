@@ -1,17 +1,17 @@
-import 'package:find_toilet/models/bookmark_model.dart';
-import 'package:find_toilet/models/review_model.dart';
-import 'package:find_toilet/models/toilet_model.dart';
-import 'package:find_toilet/pages/bookmark_page.dart';
-import 'package:find_toilet/pages/main_page.dart';
-import 'package:find_toilet/pages/review_form_page.dart';
-import 'package:find_toilet/shared/utils/global_utils.dart';
-import 'package:find_toilet/shared/utils/icon_image.dart';
-import 'package:find_toilet/shared/utils/style.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
-import 'package:find_toilet/shared/widgets/button.dart';
-import 'package:find_toilet/shared/widgets/icon.dart';
-import 'package:find_toilet/shared/widgets/modal.dart';
-import 'package:find_toilet/shared/widgets/text_widget.dart';
+import 'package:find_toilet/core/domain/toilet_model.dart';
+import 'package:find_toilet/core/utils/global_utils.dart';
+import 'package:find_toilet/core/utils/icon_image.dart';
+import 'package:find_toilet/core/utils/style.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/core/widgets/button.dart';
+import 'package:find_toilet/core/widgets/icon.dart';
+import 'package:find_toilet/core/widgets/modal.dart';
+import 'package:find_toilet/core/widgets/text_widget.dart';
+import 'package:find_toilet/pages/bookmark/bookmark_page.dart';
+import 'package:find_toilet/pages/bookmark/domain/bookmark_model.dart';
+import 'package:find_toilet/pages/main/main_page.dart';
+import 'package:find_toilet/pages/review_form/domain/review_model.dart';
+import 'package:find_toilet/pages/review_form/review_form_page.dart';
 import 'package:flutter/material.dart';
 
 //* 테마 선택 시의 상자

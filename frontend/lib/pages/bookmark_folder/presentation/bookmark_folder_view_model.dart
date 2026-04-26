@@ -1,5 +1,5 @@
-import 'package:find_toilet/domain/repositories/bookmark_folder_repository.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/pages/bookmark_folder/domain/bookmark_folder_repository.dart';
 import 'package:flutter/foundation.dart';
 
 class BookmarkFolderViewModel extends ChangeNotifier {

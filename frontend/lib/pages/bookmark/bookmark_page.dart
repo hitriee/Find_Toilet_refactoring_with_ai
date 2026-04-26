@@ -1,10 +1,10 @@
 import 'package:find_toilet/core/config/app_config.dart';
-import 'package:find_toilet/data/datasources/remote/bookmark_remote_data_source.dart';
-import 'package:find_toilet/data/repositories/bookmark_mock_repository_impl.dart';
-import 'package:find_toilet/data/repositories/bookmark_repository_impl.dart';
-import 'package:find_toilet/domain/repositories/bookmark_repository.dart';
-import 'package:find_toilet/presentation/view_models/bookmark_view_model.dart';
-import 'package:find_toilet/presentation/views/bookmark_view.dart';
+import 'package:find_toilet/datasources/remote/bookmark_remote_data_source.dart';
+import 'package:find_toilet/pages/bookmark/data/bookmark_mock_repository_impl.dart';
+import 'package:find_toilet/pages/bookmark/data/bookmark_repository_impl.dart';
+import 'package:find_toilet/pages/bookmark/domain/bookmark_repository.dart';
+import 'package:find_toilet/pages/bookmark/presentation/bookmark_view.dart';
+import 'package:find_toilet/pages/bookmark/presentation/bookmark_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

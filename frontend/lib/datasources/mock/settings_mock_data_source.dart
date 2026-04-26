@@ -1,4 +1,4 @@
-import 'package:find_toilet/shared/utils/type_enum.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
 
 /// 백엔드·카카오 SDK 없이 Settings 화면을 확인하기 위한 더미 데이터 소스.
 ///

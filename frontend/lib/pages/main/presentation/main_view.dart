@@ -1,12 +1,12 @@
-import 'package:find_toilet/presentation/view_models/main_search_provider.dart';
-import 'package:find_toilet/presentation/view_models/main_view_model.dart';
-import 'package:find_toilet/shared/utils/global_utils.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
-import 'package:find_toilet/shared/widgets/bottom_sheet.dart';
-import 'package:find_toilet/shared/widgets/box_container.dart';
-import 'package:find_toilet/shared/widgets/search_bar.dart';
-import 'package:find_toilet/shared/widgets/map_widget.dart';
-import 'package:find_toilet/shared/widgets/text_widget.dart';
+import 'package:find_toilet/core/config/state_provider.dart';
+import 'package:find_toilet/core/utils/global_utils.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/core/widgets/bottom_sheet.dart';
+import 'package:find_toilet/core/widgets/box_container.dart';
+import 'package:find_toilet/core/widgets/map_widget.dart';
+import 'package:find_toilet/core/widgets/search_bar.dart';
+import 'package:find_toilet/core/widgets/text_widget.dart';
+import 'package:find_toilet/pages/main/presentation/main_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,13 +29,14 @@ class MainView extends StatefulWidget {
 class _MainViewState extends State<MainView> {
   final globalKey = GlobalKey<ScaffoldState>();
   double paddingTop = 0;
-  bool refreshState = true;
+  bool refreshState = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
+        context.read<MainViewModel>().setScaffoldKey(globalKey);
         if (widget.showReview && !context.read<MainSearchProvider>().showAll) {
           changeShow(context);
         }
@@ -56,7 +57,6 @@ class _MainViewState extends State<MainView> {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) {
           context.read<MainViewModel>().loadInitial(widget.showReview);
-          MainSearchProvider().setKey(globalKey);
           setState(() {
             refreshState = false;
           });

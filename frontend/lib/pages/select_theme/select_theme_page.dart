@@ -1,8 +1,8 @@
-import 'package:find_toilet/data/datasources/local/select_theme_local_data_source.dart';
-import 'package:find_toilet/data/repositories/select_theme_repository_impl.dart';
-import 'package:find_toilet/domain/repositories/select_theme_repository.dart';
-import 'package:find_toilet/presentation/view_models/select_theme_view_model.dart';
-import 'package:find_toilet/presentation/views/select_theme_view.dart';
+import 'package:find_toilet/datasources/local/select_theme_local_data_source.dart';
+import 'package:find_toilet/pages/select_theme/data/select_theme_repository_impl.dart';
+import 'package:find_toilet/pages/select_theme/domain/select_theme_repository.dart';
+import 'package:find_toilet/pages/select_theme/presentation/select_theme_view.dart';
+import 'package:find_toilet/pages/select_theme/presentation/select_theme_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

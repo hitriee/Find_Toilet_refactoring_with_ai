@@ -2,15 +2,15 @@
 
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:find_toilet/presentation/view_models/main_search_provider.dart';
-import 'package:find_toilet/pages/main_page.dart';
-import 'package:find_toilet/shared/utils/global_utils.dart';
-import 'package:find_toilet/shared/utils/icon_image.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
-import 'package:find_toilet/shared/utils/utils.dart';
-import 'package:find_toilet/shared/utils/tile_servers.dart';
-import 'package:find_toilet/shared/utils/viewport_painter.dart';
-import 'package:find_toilet/shared/utils/style.dart';
+import 'package:find_toilet/core/config/state_provider.dart';
+import 'package:find_toilet/core/utils/global_utils.dart';
+import 'package:find_toilet/core/utils/icon_image.dart';
+import 'package:find_toilet/core/utils/style.dart';
+import 'package:find_toilet/core/utils/tile_servers.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/core/utils/utils.dart';
+import 'package:find_toilet/core/utils/viewport_painter.dart';
+import 'package:find_toilet/pages/main/main_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

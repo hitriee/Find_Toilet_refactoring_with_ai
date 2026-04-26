@@ -1,12 +1,11 @@
 import 'package:find_toilet/core/network/api_provider.dart';
-import 'package:find_toilet/models/review_model.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/pages/review_form/domain/review_model.dart';
 
 class ReviewFormRemoteDataSource extends ApiProvider {
   Future<ReviewModel> getReview(int reviewId) async {
-    final response =
-        await dioWithToken(url: reviewUrl(reviewId), method: 'GET')
-            .get(reviewUrl(reviewId));
+    final response = await dioWithToken(url: reviewUrl(reviewId), method: 'GET')
+        .get(reviewUrl(reviewId));
     return ReviewModel.fromJson(response.data['data']);
   }
 

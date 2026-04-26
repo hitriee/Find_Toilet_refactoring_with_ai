@@ -1,8 +1,6 @@
-import 'package:find_toilet/domain/repositories/toilet_repository.dart';
-import 'package:find_toilet/presentation/view_models/main_search_provider.dart';
-import 'package:find_toilet/presentation/view_models/review_bookmark_view_model.dart';
-import 'package:find_toilet/presentation/view_models/scroll_provider.dart';
-import 'package:flutter/foundation.dart';
+import 'package:find_toilet/core/config/state_provider.dart';
+import 'package:find_toilet/core/domain/toilet_repository.dart';
+import 'package:flutter/material.dart';
 
 class MainViewModel extends ChangeNotifier {
   final ToiletRepository _repository;
@@ -35,7 +33,7 @@ class MainViewModel extends ChangeNotifier {
   }
 
   Future<void> refreshMain(int index, bool showReview) async {
-    if (ScrollProvider().loading) {
+    if (!ScrollProvider().loading) {
       ScrollProvider().initPage();
       ReviewBookMarkProvider().initHeightList();
 
@@ -56,5 +54,9 @@ class MainViewModel extends ChangeNotifier {
       ScrollProvider().increasePage();
       ScrollProvider().setLoading(false);
     }
+  }
+
+  void setScaffoldKey(GlobalKey<ScaffoldState> key) {
+    MainSearchProvider().setKey(key);
   }
 }

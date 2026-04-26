@@ -1,6 +1,6 @@
-import 'package:find_toilet/data/datasources/remote/settings_remote_data_source.dart';
-import 'package:find_toilet/domain/repositories/settings_repository.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/datasources/remote/settings_remote_data_source.dart';
+import 'package:find_toilet/pages/settings/domain/settings_repository.dart';
 
 class SettingsRepositoryImpl implements SettingsRepository {
   final SettingsRemoteDataSource remote;

@@ -1,10 +1,10 @@
-import 'package:find_toilet/presentation/view_models/bookmark_view_model.dart';
-import 'package:find_toilet/shared/utils/icon_image.dart';
-import 'package:find_toilet/shared/utils/style.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
-import 'package:find_toilet/shared/widgets/button.dart';
-import 'package:find_toilet/shared/widgets/box_container.dart';
-import 'package:find_toilet/shared/widgets/text_widget.dart';
+import 'package:find_toilet/core/utils/icon_image.dart';
+import 'package:find_toilet/core/utils/style.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/core/widgets/box_container.dart';
+import 'package:find_toilet/core/widgets/button.dart';
+import 'package:find_toilet/core/widgets/text_widget.dart';
+import 'package:find_toilet/pages/bookmark/presentation/bookmark_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,7 +40,8 @@ class _BookmarkViewState extends State<BookmarkView> {
       return;
     }
     final viewModel = context.read<BookmarkViewModel>();
-    if (_controller.position.pixels >= _controller.position.maxScrollExtent * 0.9) {
+    if (_controller.position.pixels >=
+        _controller.position.maxScrollExtent * 0.9) {
       viewModel.loadMore();
     }
   }

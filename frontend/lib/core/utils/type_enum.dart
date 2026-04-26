@@ -1,7 +1,7 @@
-import 'package:find_toilet/models/bookmark_model.dart';
-import 'package:find_toilet/models/review_model.dart';
-import 'package:find_toilet/models/toilet_model.dart';
-import 'package:find_toilet/shared/utils/style.dart';
+import 'package:find_toilet/core/domain/toilet_model.dart';
+import 'package:find_toilet/core/utils/style.dart';
+import 'package:find_toilet/pages/bookmark/domain/bookmark_model.dart';
+import 'package:find_toilet/pages/review_form/domain/review_model.dart';
 import 'package:flutter/material.dart';
 
 //* types

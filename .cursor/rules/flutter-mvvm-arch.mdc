@@ -9,13 +9,13 @@ globs: lib/**/*.dart
 
 ## 🏗️ Layer Separation
 
-- **View (lib/presentation/views):** UI 레이아웃만 담당하며 비즈니스 로직을 포함하지 않습니다.
-- **ViewModel (lib/presentation/viewmodels):** UI 상태를 관리하고 Repository와 소통합니다. `ChangeNotifier`를 사용합니다.
-- **Page (lib/pages):** View와 ViewModel을 연결합니다.
-- **Repository (lib/domain/repositories):** 데이터 소스(API, DB)를 추상화합니다.
-- **DataSource (lib/data/datasources):** 데이터 소스 관련 코드가 위치합니다.
-- **Data Repository (lib/data/repositories):** Repository 구현체 관련 코드가 위치합니다.
-- **Model (lib/models):** 순수 데이터 객체(Data Classes)입니다.
+- **View (lib/pages/각 기능명/presentation/\*\_view.dart):** UI 레이아웃만 담당하며 비즈니스 로직을 포함하지 않습니다.
+- **ViewModel (lib/pages/각 기능명/presentation/\*\_view_model.dart):** UI 상태를 관리하고 Repository와 소통합니다. `ChangeNotifier`를 사용합니다.
+- **Page (lib/pages/\*\_page.dart):** View와 ViewModel을 연결합니다.
+- **Repository (lib/pages/각 기능명/domain/\*\_repository.dart):** 데이터 소스(API, DB)를 추상화합니다.
+- **DataSource (lib/datasources):** 데이터 소스 관련 코드가 위치합니다.
+- **Repository Implements (lib/pages/각 기능명/data/\*\_repository_impl.dart):** Repository 구현체 관련 코드가 위치합니다.
+- **Model (lib/pages/각 기능명/domain/\*\_model.dart):** 순수 데이터 객체(Data Classes)입니다.
 
 ## 📋 규칙
 

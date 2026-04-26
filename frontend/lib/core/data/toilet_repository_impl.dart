@@ -1,8 +1,8 @@
-import 'package:find_toilet/data/datasources/remote/toilet_remote_data_source.dart';
-import 'package:find_toilet/domain/repositories/toilet_repository.dart';
-import 'package:find_toilet/models/toilet_model.dart';
-import 'package:find_toilet/presentation/view_models/scroll_provider.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
+import 'package:find_toilet/core/config/state_provider.dart';
+import 'package:find_toilet/core/domain/toilet_model.dart';
+import 'package:find_toilet/core/domain/toilet_repository.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/datasources/remote/toilet_remote_data_source.dart';
 
 class ToiletRepositoryImpl extends ToiletRepository {
   final ToiletRemoteDataSource remote;

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:find_toilet/presentation/view_models/state_provider.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
+import 'package:find_toilet/core/config/state_provider.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class UrlClass extends UserInfoProvider {

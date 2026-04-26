@@ -1,6 +1,6 @@
+import 'package:find_toilet/core/domain/toilet_model.dart';
 import 'package:find_toilet/core/network/toilet_provider.dart';
-import 'package:find_toilet/models/toilet_model.dart';
-import 'package:find_toilet/shared/utils/type_enum.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
 import 'package:flutter/material.dart';
 
 /// 지도·주변 목록·필터·좌표 등 메인 화면 상태.
