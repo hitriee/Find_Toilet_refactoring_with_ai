@@ -37,7 +37,7 @@ class _MainViewState extends State<MainView> {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
         context.read<MainViewModel>().setScaffoldKey(globalKey);
-        if (widget.showReview && !context.read<MainSearchProvider>().showAll) {
+        if (widget.showReview && !context.read<MapStateProvider>().showAll) {
           changeShow(context);
         }
         setState(() {
@@ -66,7 +66,7 @@ class _MainViewState extends State<MainView> {
     return WillPopScope(
         onWillPop: widget.showReview
             ? () {
-                context.read<MainSearchProvider>().removeMarker();
+                removeMarker(context);
                 routerPop(context)();
                 return Future.value(false);
               }

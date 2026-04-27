@@ -9,19 +9,19 @@ class MainViewModel extends ChangeNotifier {
       : _repository = repository;
 
   Future<void> loadInitial(bool showReview) async {
-    MainSearchProvider().setMainPage(0);
+    MapStateProvider().setMainPage(0);
     ScrollProvider().setLoading(true);
     ScrollProvider().initPage();
 
     if (!showReview) {
       ReviewBookMarkProvider().initHeightList();
-      MainSearchProvider().initToiletList();
+      MapStateProvider().initToiletList();
       final query =
-          Map<String, dynamic>.from(MainSearchProvider().mainToiletData);
+          Map<String, dynamic>.from(MapStateProvider().mainToiletData);
       query['page'] = ScrollProvider().page;
       query['size'] = 20;
       final list = await _repository.getNearToilet(query);
-      MainSearchProvider().addToiletList(list);
+      MapStateProvider().addToiletList(list);
       ReviewBookMarkProvider().setHeightListSize();
     } else {
       ReviewBookMarkProvider().initReviewList();
@@ -38,13 +38,13 @@ class MainViewModel extends ChangeNotifier {
       ReviewBookMarkProvider().initHeightList();
 
       if (!showReview) {
-        MainSearchProvider().initToiletList();
+        MapStateProvider().initToiletList();
         final query =
-            Map<String, dynamic>.from(MainSearchProvider().mainToiletData);
+            Map<String, dynamic>.from(MapStateProvider().mainToiletData);
         query['page'] = ScrollProvider().page;
         query['size'] = 20;
         final list = await _repository.getNearToilet(query);
-        MainSearchProvider().addToiletList(list);
+        MapStateProvider().addToiletList(list);
         ReviewBookMarkProvider().setHeightListSize();
       } else {
         ReviewBookMarkProvider().initReviewList();
@@ -57,6 +57,6 @@ class MainViewModel extends ChangeNotifier {
   }
 
   void setScaffoldKey(GlobalKey<ScaffoldState> key) {
-    MainSearchProvider().setKey(key);
+    MapStateProvider().setKey(key);
   }
 }

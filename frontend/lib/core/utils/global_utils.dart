@@ -1,5 +1,6 @@
 import 'package:find_toilet/core/config/state_provider.dart';
 import 'package:find_toilet/core/domain/toilet_model.dart';
+import 'package:find_toilet/core/network/toilet_provider.dart';
 import 'package:find_toilet/core/network/user_provider.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
 import 'package:find_toilet/core/widgets/modal.dart';
@@ -161,73 +162,79 @@ void setTotal(BuildContext context, int? newTotal) =>
 
 //* 필터
 void setFilter(BuildContext context, int index, bool value) =>
-    context.read<MainSearchProvider>().setFilter(index, value);
+    context.read<MapStateProvider>().setFilter(index, value);
 
 bool readFilter(BuildContext context, int index) {
   switch (index) {
     case 0:
-      return context.read<MainSearchProvider>().diaper;
+      return context.read<MapStateProvider>().diaper;
     case 1:
-      return context.read<MainSearchProvider>().kids;
+      return context.read<MapStateProvider>().kids;
     case 2:
-      return context.read<MainSearchProvider>().disabled;
+      return context.read<MapStateProvider>().disabled;
     default:
-      return context.read<MainSearchProvider>().allDay;
+      return context.read<MapStateProvider>().allDay;
   }
 }
 
 bool getFilter(BuildContext context, int index) {
   switch (index) {
     case 0:
-      return context.watch<MainSearchProvider>().diaper;
+      return context.watch<MapStateProvider>().diaper;
     case 1:
-      return context.watch<MainSearchProvider>().kids;
+      return context.watch<MapStateProvider>().kids;
     case 2:
-      return context.watch<MainSearchProvider>().disabled;
+      return context.watch<MapStateProvider>().disabled;
     default:
-      return context.watch<MainSearchProvider>().allDay;
+      return context.watch<MapStateProvider>().allDay;
   }
 }
 
 //* 정렬
 void setSortIdx(BuildContext context, int index) =>
-    context.read<MainSearchProvider>().setSortIdx(index);
+    context.read<MapStateProvider>().setSortIdx(index);
 int getSortIdx(BuildContext context) =>
-    context.read<MainSearchProvider>().sortIdx;
+    context.read<MapStateProvider>().sortIdx;
 
 //* 현위치
-double? readLat(BuildContext context) => context.read<MainSearchProvider>().lat;
-double? readLng(BuildContext context) => context.read<MainSearchProvider>().lng;
+double? readLat(BuildContext context) => context.read<MapStateProvider>().lat;
+double? readLng(BuildContext context) => context.read<MapStateProvider>().lng;
 void setLatLng(BuildContext context, double newLat, double newLng) =>
-    context.read<MainSearchProvider>().setLatLng(newLat, newLng);
+    context.read<MapStateProvider>().setLatLng(newLat, newLng);
 
 //* main touch
 void changeShow(BuildContext context) =>
-    context.read<MainSearchProvider>().changeShow();
+    context.read<MapStateProvider>().changeShow();
 bool showAll(BuildContext context) =>
-    context.watch<MainSearchProvider>().showAll;
+    context.watch<MapStateProvider>().showAll;
 
 //* main toilet list
 void setRadius(BuildContext context) =>
-    context.read<MainSearchProvider>().setRadius(getIntRadius(context));
+    context.read<MapStateProvider>().setRadius(getIntRadius(context));
 
 void addToiletList(BuildContext context, ToiletList toiletList) =>
-    context.read<MainSearchProvider>().addToiletList(toiletList);
+    context.read<MapStateProvider>().addToiletList(toiletList);
 
 DynamicMap mainToiletData(BuildContext context) =>
-    context.read<MainSearchProvider>().mainToiletData;
+    context.read<MapStateProvider>().mainToiletData;
 
 ToiletList mainToiletList(BuildContext context) =>
-    context.read<MainSearchProvider>().mainToiletList;
+    context.read<MapStateProvider>().mainToiletList;
 
-FutureToiletList getMainToiletList(BuildContext context) =>
-    context.read<MainSearchProvider>().getMainToiletList(getPage(context));
+FutureToiletList getMainToiletList(BuildContext context) async {
+  final query = Map<String, dynamic>.from(MapStateProvider().mainToiletData);
+  query['page'] = getPage(context);
+  query['size'] = 20;
+  final list = await ToiletProvider().getNearToilet(query);
+  addToiletList(context, list);
+  return list;
+}
 
 void initToiletList(BuildContext context) =>
-    context.read<MainSearchProvider>().initToiletList();
+    context.read<MapStateProvider>().initToiletList();
 
 void setMainPage(BuildContext context, int newVal) =>
-    context.read<MainSearchProvider>().setMainPage(newVal);
+    context.read<MapStateProvider>().setMainPage(newVal);
 
 //* review list
 void addReviewList(BuildContext context, ReviewList reviewData) =>
@@ -285,17 +292,11 @@ FutureToiletList getBookmarkList(
 void initBookmarkList(BuildContext context) =>
     context.read<ReviewBookMarkProvider>().initBookmarkList();
 
-//* search list
-ToiletList searchToiletList(BuildContext context) =>
-    context.read<MainSearchProvider>().searchToiletList;
-FutureToiletList getSearchList(BuildContext context) =>
-    context.read<MainSearchProvider>().getSearchList(getPage(context));
-
-void initSearchList(BuildContext context) =>
-    context.read<MainSearchProvider>().initSearchList();
-
-void setSearchPage(BuildContext context, int newVal) =>
-    context.read<MainSearchProvider>().setSearchPage(newVal);
+//* search list (SearchViewModel이 자체 상태를 관리하므로 전역 유틸은 no-op)
+ToiletList searchToiletList(BuildContext context) => const [];
+FutureToiletList getSearchList(BuildContext context) async => const [];
+void initSearchList(BuildContext context) {}
+void setSearchPage(BuildContext context, int newVal) {}
 
 //* init main data
 FutureList initMainData(
@@ -353,9 +354,9 @@ void initLoadingData(BuildContext context, {bool? isMain, bool? isSearch}) {
 
 //* key
 void setKey(BuildContext context, GlobalKey<ScaffoldState> key) =>
-    context.read<MainSearchProvider>().setKey(key);
+    context.read<MapStateProvider>().setKey(key);
 GlobalKey? getKey(BuildContext context) =>
-    context.read<MainSearchProvider>().globalKey;
+    context.read<MapStateProvider>().globalKey;
 
 //* 회원가입 모달
 bool hideModal(BuildContext context) =>
@@ -366,4 +367,10 @@ void setJoin(BuildContext context) =>
 
 //* map marker
 void setMarker(BuildContext context, int i) =>
-    context.read<MainSearchProvider>().setMarker(i);
+    context.read<MapStateProvider>().setMarker(i);
+
+void removeMarker(BuildContext context) =>
+    context.read<MapStateProvider>().removeMarker();
+
+int? getSelectedMarker(BuildContext context) =>
+    context.read<MapStateProvider>().selectedMarker;

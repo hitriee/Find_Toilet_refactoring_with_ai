@@ -1,4 +1,3 @@
-import 'package:find_toilet/core/config/state_provider.dart';
 import 'package:find_toilet/core/domain/toilet_model.dart';
 import 'package:find_toilet/core/network/toilet_provider.dart';
 import 'package:find_toilet/core/utils/global_utils.dart';
@@ -11,7 +10,6 @@ import 'package:find_toilet/core/widgets/silvers.dart';
 import 'package:find_toilet/core/widgets/text_widget.dart';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ToiletBottomSheet extends StatefulWidget {
   final bool showReview;
@@ -116,9 +114,7 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
                                 color: CustomColors.whiteColor,
                                 icon: exitIcon,
                                 onPressed: () {
-                                  context
-                                      .read<MainSearchProvider>()
-                                      .removeMarker();
+                                  removeMarker(context);
                                   routerPop(context)();
 
                                   // context

@@ -247,7 +247,7 @@ class MapScreenState extends State<MapScreen> {
             final toileMarkerPositions =
                 toiletMarkers.map(transformer.toOffset).toList();
             final selectedMarker =
-                context.read<MainSearchProvider>().selectedMarker;
+                context.read<MapStateProvider>().selectedMarker;
             for (int i = 0; i < toileMarkerPositions.length; i += 1) {
               toiletMarkerWidgets.add(_buildMarkerWidget(
                 toileMarkerPositions[i],

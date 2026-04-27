@@ -3,7 +3,13 @@ import 'package:find_toilet/core/domain/toilet_model.dart';
 import 'package:find_toilet/core/network/api_provider.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
 
-// 홈 화면 화장실
+/// Dio 기반 화장실 HTTP 클라이언트.
+///
+/// - [getNearToilet] — 주변 화장실 조회 (MainViewModel, global_utils.getMainToiletList)
+/// - [searchToilet]  — 키워드 검색 (ToiletRepositoryImpl)
+/// - [getToilet]     — 화장실 상세 조회 (bottom_sheet.dart)
+///
+/// 새 코드에서는 [ToiletRepository]를 통해 접근하세요. 직접 호출은 레거시 호환용입니다.
 class ToiletProvider extends ApiProvider {
   //* public
   FutureToiletList searchToilet(DynamicMap queryData) =>

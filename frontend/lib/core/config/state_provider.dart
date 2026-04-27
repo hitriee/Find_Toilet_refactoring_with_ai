@@ -3,7 +3,7 @@ import 'package:find_toilet/pages/settings/presentation/settings_view_model.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-export 'main_search_provider.dart';
+export 'map_state_provider.dart';
 export 'review_bookmark_view_model.dart';
 export 'scroll_provider.dart';
 
