@@ -74,10 +74,10 @@ class _SearchViewState extends State<SearchView> {
       (vm) => vm.errorMessage,
     );
 
-    return WillPopScope(
-      onWillPop: () {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) {
         removedRouterPush(context, page: const MainPage(needNear: true));
-        return Future.value(false);
       },
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),

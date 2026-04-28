@@ -13,10 +13,24 @@ class BookmarkFolderMockDataSource {
   ];
 
   Future<FolderList> getFolderList() async {
-    // 실제 네트워크 지연을 흉내냅니다.
     await Future.delayed(const Duration(milliseconds: 500));
     return _rawData
         .map((json) => FolderModel.fromJson(json as DynamicMap))
         .toList();
+  }
+
+  Future<bool> createNewFolder(StringMap folderData) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    return true;
+  }
+
+  Future<void> updateFolderName(int folderId,
+      {required StringMap folderData}) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+  }
+
+  Future<bool> deleteFolder(int folderId) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    return true;
   }
 }

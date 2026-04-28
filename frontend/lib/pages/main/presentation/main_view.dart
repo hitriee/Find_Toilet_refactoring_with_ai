@@ -63,14 +63,14 @@ class _MainViewState extends State<MainView> {
         },
       );
     }
-    return WillPopScope(
-        onWillPop: widget.showReview
-            ? () {
-                removeMarker(context);
-                routerPop(context)();
-                return Future.value(false);
-              }
-            : () => exitApp(context),
+    return PopScope(
+        canPop: widget.showReview ? false : exitApp(context),
+        onPopInvokedWithResult: (bool didPop, Object? result) {
+          if (widget.showReview) {
+            removeMarker(context);
+            routerPop(context)();
+          }
+        },
         child: GestureDetector(
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
           child: Scaffold(

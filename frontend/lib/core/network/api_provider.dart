@@ -3,7 +3,9 @@ import 'package:find_toilet/core/config/state_provider.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class UrlClass extends UserInfoProvider {
+/// 모든 API 엔드포인트 URL을 정의하는 순수 상수 클래스.
+/// 상태나 네트워크 로직에 의존하지 않습니다.
+class ApiUrls {
   //* bookmark folder
   static const _bookmarkUrl = '/like';
   final folderListUrl = '$_bookmarkUrl/folder';
@@ -42,9 +44,18 @@ class UrlClass extends UserInfoProvider {
   final userInfoUrl = '$_userUrl/userinfo';
 }
 
-class ApiProvider extends UrlClass {
+/// Dio 기반 공통 HTTP 클라이언트.
+///
+/// - URL 상수: [ApiUrls] 상속
+/// - 토큰: [UserInfoProvider] 싱글톤에서 직접 접근
+/// - 토큰 갱신: 401 응답 시 자동 재발급 후 재요청
+/// - 공통 CRUD: [createApi], [updateApi], [deleteApi]
+class ApiProvider extends ApiUrls {
   static final _baseUrl = dotenv.env['baseUrl'];
   final dio = Dio(BaseOptions(baseUrl: _baseUrl!));
+
+  String? get token => UserInfoProvider().token;
+  String? get refresh => UserInfoProvider().refresh;
 
   Dio dioWithToken({
     required String url,
@@ -69,7 +80,6 @@ class ApiProvider extends UrlClass {
             UserInfoProvider().setStoreToken(response['token']);
             UserInfoProvider().setStoreRefresh(response['refresh']);
             //* 재요청
-
             e.requestOptions.headers['Authorization'] = response['token'];
             final secondRes = await dio.fetch(e.requestOptions);
             return handler.resolve(secondRes);
@@ -103,7 +113,6 @@ class ApiProvider extends UrlClass {
     return tempDio;
   }
 
-  //*
   FutureDynamicMap _refreshToken({
     required String url,
     required String method,
@@ -125,15 +134,8 @@ class ApiProvider extends UrlClass {
     }
   }
 
-  FutureDynamicMap refreshToken({
-    required String url,
-    required String method,
-    dynamic data,
-  }) =>
-      _refreshToken(url: url, method: method, data: data);
-
   //* 생성 전반
-  FutureBool _createApi(String url, {required DynamicMap data}) async {
+  FutureBool createApi(String url, {required DynamicMap data}) async {
     try {
       final response = await dioWithToken(
         url: url,
@@ -149,18 +151,8 @@ class ApiProvider extends UrlClass {
     }
   }
 
-  FutureBool createApi(
-    String url, {
-    required DynamicMap data,
-  }) async {
-    return _createApi(
-      url,
-      data: data,
-    );
-  }
-
   //* 수정 전반
-  FutureDynamicMap _updateApi(String url, {required DynamicMap data}) async {
+  FutureDynamicMap updateApi(String url, {required DynamicMap data}) async {
     try {
       final response = await dioWithToken(
         url: url,
@@ -176,12 +168,8 @@ class ApiProvider extends UrlClass {
     }
   }
 
-  FutureDynamicMap updateApi(String url, {required DynamicMap data}) async {
-    return _updateApi(url, data: data);
-  }
-
   //* 삭제 전반
-  FutureBool _deleteApi(String url) async {
+  FutureBool deleteApi(String url) async {
     try {
       final response =
           await dioWithToken(url: url, method: 'DELETE').delete(url);
@@ -193,6 +181,4 @@ class ApiProvider extends UrlClass {
       throw Exception('DELETE 요청 중 오류 발생: $error');
     }
   }
-
-  FutureBool deleteApi(String url) async => _deleteApi(url);
 }

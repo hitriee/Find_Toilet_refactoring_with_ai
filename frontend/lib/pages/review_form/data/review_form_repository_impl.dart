@@ -9,6 +9,15 @@ class ReviewFormRepositoryImpl implements ReviewFormRepository {
   ReviewFormRepositoryImpl({required this.remote});
 
   @override
+  Future<ReviewList> getReviewList(int toiletId, int page) async {
+    try {
+      return await remote.getReviewList(toiletId, page);
+    } catch (e) {
+      throw Exception('리뷰 목록을 불러오는 데 실패했습니다.');
+    }
+  }
+
+  @override
   Future<ReviewModel> getReview(int reviewId) async {
     try {
       return await remote.getReview(reviewId);
@@ -41,6 +50,15 @@ class ReviewFormRepositoryImpl implements ReviewFormRepository {
       return await remote.updateReview(reviewId, reviewData: reviewData);
     } catch (e) {
       throw Exception('리뷰 수정에 실패했습니다.');
+    }
+  }
+
+  @override
+  FutureBool deleteReview(int reviewId) async {
+    try {
+      return await remote.deleteReview(reviewId);
+    } catch (e) {
+      throw Exception('리뷰 삭제에 실패했습니다.');
     }
   }
 }

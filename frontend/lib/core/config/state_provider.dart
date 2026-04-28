@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 export 'map_state_provider.dart';
-export 'review_bookmark_view_model.dart';
+export 'review_bookmark_state_provider.dart';
 export 'scroll_provider.dart';
 
 //* user info
@@ -79,9 +79,9 @@ class ApplyChangeProvider with ChangeNotifier {
 
   void _spaceToString() => _convertedVar = convertedSpace(_refresh);
 
-  FutureBool changePressed() => _changePressed();
+  bool changePressed() => _changePressed();
 
-  FutureBool _changePressed() {
+  bool _changePressed() {
     if (!_pressedOnce) {
       _pressedOnce = true;
       notifyListeners();
@@ -94,8 +94,8 @@ class ApplyChangeProvider with ChangeNotifier {
           notifyListeners();
         },
       );
-      return Future.value(false);
+      return false;
     }
-    return Future.value(true);
+    return true;
   }
 }

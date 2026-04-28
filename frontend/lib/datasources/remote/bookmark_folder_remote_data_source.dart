@@ -9,4 +9,13 @@ class BookmarkFolderRemoteDataSource extends ApiProvider {
     final data = response.data['data'];
     return data.map<FolderModel>((json) => FolderModel.fromJson(json)).toList();
   }
+
+  FutureBool createNewFolder(StringMap folderData) =>
+      createApi(createFolderUrl, data: folderData);
+
+  FutureVoid updateFolderName(int folderId,
+          {required StringMap folderData}) =>
+      updateApi(updateFolderUrl(folderId), data: folderData);
+
+  FutureBool deleteFolder(int folderId) => deleteApi(deleteFolderUrl(folderId));
 }

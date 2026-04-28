@@ -5,9 +5,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
-class UserProvider extends ApiProvider {
-  //* public function
+/// 카카오 OAuth 로그인 및 회원 관련 DataSource.
+///
+/// - 카카오 SDK에 직접 의존하므로 Mock DataSource를 별도로 만들지 않습니다.
+/// - 로그인 관련 상위 흐름은 [SettingsRemoteDataSource] / [IntroRemoteDataSource]가 담당합니다.
+class UserRemoteDataSource extends ApiProvider {
   FutureDynamicMap login() => _login();
+
   FutureDynamicMap autoLogin() async {
     try {
       if (token != null && token != '') {
@@ -23,7 +27,8 @@ class UserProvider extends ApiProvider {
 
   FutureDynamicMap changeName(String newName) => _changeName(newName);
 
-  //* private function
+  // ── private ───────────────────────────────────────────────────────────────
+
   DynamicMap _returnTokens(dynamic response) {
     final headers = response.headers;
     final data = response.data;
@@ -31,7 +36,7 @@ class UserProvider extends ApiProvider {
       'token': headers['Authorization']!.first,
       'refresh': headers['Authorization-refresh']!.first,
       'state': data['state'],
-      'nickname': data['data']['nickname']
+      'nickname': data['data']['nickname'],
     };
   }
 
@@ -56,14 +61,10 @@ class UserProvider extends ApiProvider {
 
   FutureDynamicMap _kakaoLogin(bool withKakaoTalk) async {
     try {
-      OAuthToken kakaoResponse;
-      if (withKakaoTalk) {
-        kakaoResponse = await UserApi.instance.loginWithKakaoTalk();
-        return _sendToken(kakaoResponse.accessToken);
-      } else {
-        kakaoResponse = await UserApi.instance.loginWithKakaoAccount();
-        return _sendToken(kakaoResponse.accessToken);
-      }
+      final OAuthToken kakaoResponse = withKakaoTalk
+          ? await UserApi.instance.loginWithKakaoTalk()
+          : await UserApi.instance.loginWithKakaoAccount();
+      return _sendToken(kakaoResponse.accessToken);
     } catch (error) {
       if (error is PlatformException && error.code == 'CANCELED') {
         return {'result': false};
@@ -76,22 +77,20 @@ class UserProvider extends ApiProvider {
   }
 
   FutureDynamicMap _login() async {
-    //* 카카오톡 설치 여부 확인
     if (await isKakaoTalkInstalled()) {
       try {
         return _kakaoLogin(true);
-      } catch (error) {
+      } catch (_) {
         return _kakaoLogin(false);
       }
     }
-    //* 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인
     return _kakaoLogin(false);
   }
 
   FutureBool _deleteUser() async {
     try {
       await deleteApi(deleteUserUrl);
-      return Future.value(true);
+      return true;
     } catch (error) {
       throw Exception('회원 탈퇴 실패: $error');
     }
@@ -99,9 +98,7 @@ class UserProvider extends ApiProvider {
 
   FutureDynamicMap _changeName(String newName) async {
     try {
-      final data = {'nickname': newName};
-      final response = await updateApi(changeNameUrl, data: data);
-      return response;
+      return await updateApi(changeNameUrl, data: {'nickname': newName});
     } catch (error) {
       throw Exception('닉네임 변경 실패: $error');
     }

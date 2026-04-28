@@ -15,4 +15,32 @@ class BookmarkFolderRepositoryImpl implements BookmarkFolderRepository {
       throw Exception('폴더 목록을 불러오는 데 실패했습니다.');
     }
   }
+
+  @override
+  FutureBool createNewFolder(StringMap folderData) async {
+    try {
+      return await remote.createNewFolder(folderData);
+    } catch (e) {
+      throw Exception('폴더 생성에 실패했습니다.');
+    }
+  }
+
+  @override
+  FutureVoid updateFolderName(int folderId,
+      {required StringMap folderData}) async {
+    try {
+      await remote.updateFolderName(folderId, folderData: folderData);
+    } catch (e) {
+      throw Exception('폴더 이름 수정에 실패했습니다.');
+    }
+  }
+
+  @override
+  FutureBool deleteFolder(int folderId) async {
+    try {
+      return await remote.deleteFolder(folderId);
+    } catch (e) {
+      throw Exception('폴더 삭제에 실패했습니다.');
+    }
+  }
 }

@@ -1,7 +1,9 @@
 import 'package:find_toilet/core/config/state_provider.dart';
 import 'package:find_toilet/core/domain/toilet_model.dart';
+import 'package:find_toilet/datasources/remote/bookmark_remote_data_source.dart';
+import 'package:find_toilet/datasources/remote/review_form_remote_data_source.dart';
 import 'package:find_toilet/core/network/toilet_provider.dart';
-import 'package:find_toilet/core/network/user_provider.dart';
+import 'package:find_toilet/datasources/remote/user_remote_data_source.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
 import 'package:find_toilet/core/widgets/modal.dart';
 import 'package:find_toilet/pages/settings/presentation/settings_view_model.dart';
@@ -113,7 +115,7 @@ void changeOptions(BuildContext context, int menuIdx) {
 }
 
 //* 뒤로 가기 버튼 눌렀을 경우 (메인, 테마 선택)
-FutureBool exitApp(BuildContext context) =>
+bool exitApp(BuildContext context) =>
     context.read<ApplyChangeProvider>().changePressed();
 
 //* 뒤로 가기 버튼 눌림 여부
@@ -122,7 +124,7 @@ bool watchPressed(BuildContext context) =>
 
 //* 로그인
 FutureDynamicMap login(BuildContext context) async {
-  final DynamicMap result = await UserProvider().login();
+  final DynamicMap result = await UserRemoteDataSource().login();
   if (result['result'] != false) {
     // ignore: use_build_context_synchronously
     changeToken(context, token: result['token'], refresh: result['refresh']);
@@ -205,8 +207,7 @@ void setLatLng(BuildContext context, double newLat, double newLng) =>
 //* main touch
 void changeShow(BuildContext context) =>
     context.read<MapStateProvider>().changeShow();
-bool showAll(BuildContext context) =>
-    context.watch<MapStateProvider>().showAll;
+bool showAll(BuildContext context) => context.watch<MapStateProvider>().showAll;
 
 //* main toilet list
 void setRadius(BuildContext context) =>
@@ -238,59 +239,67 @@ void setMainPage(BuildContext context, int newVal) =>
 
 //* review list
 void addReviewList(BuildContext context, ReviewList reviewData) =>
-    context.read<ReviewBookMarkProvider>().addReviewList(reviewData);
+    context.read<ReviewBookmarkStateProvider>().addReviewList(reviewData);
 
 ReviewList reviewList(BuildContext context) =>
-    context.read<ReviewBookMarkProvider>().reviewList;
+    context.read<ReviewBookmarkStateProvider>().reviewList;
 
 ToiletModel? getToilet(BuildContext context) =>
-    context.read<ReviewBookMarkProvider>().toiletInfo;
+    context.read<ReviewBookmarkStateProvider>().toiletInfo;
 
 void setToilet(BuildContext context, ToiletModel toiletModel) =>
-    context.read<ReviewBookMarkProvider>().setToiletInfo(toiletModel);
+    context.read<ReviewBookmarkStateProvider>().setToiletInfo(toiletModel);
 
 double? getItemHeight(BuildContext context) =>
-    context.read<ReviewBookMarkProvider>().itemHeight;
+    context.read<ReviewBookmarkStateProvider>().itemHeight;
 
 void setItemHeight(BuildContext context, int i) =>
-    context.read<ReviewBookMarkProvider>().setItemHeight(i);
+    context.read<ReviewBookmarkStateProvider>().setItemHeight(i);
 
 int? getToiletId(BuildContext context) =>
-    context.read<ReviewBookMarkProvider>().toiletId;
+    context.read<ReviewBookmarkStateProvider>().toiletId;
 
-FutureReviewList getReviewList(BuildContext context) =>
-    context.read<ReviewBookMarkProvider>().getReviewList(getPage(context));
+FutureReviewList getReviewList(BuildContext context) async {
+  final toiletId = ReviewBookmarkStateProvider().toiletId!;
+  final reviewData =
+      await ReviewFormRemoteDataSource().getReviewList(toiletId, getPage(context));
+  addReviewList(context, reviewData);
+  return reviewData;
+}
 
 void initReviewList(BuildContext context) =>
-    context.read<ReviewBookMarkProvider>().initReviewList();
+    context.read<ReviewBookmarkStateProvider>().initReviewList();
 
 double? getHeight(BuildContext context, int i) =>
-    context.read<ReviewBookMarkProvider>().heightList.length > i
-        ? context.read<ReviewBookMarkProvider>().heightList[i]
+    context.read<ReviewBookmarkStateProvider>().heightList.length > i
+        ? context.read<ReviewBookmarkStateProvider>().heightList[i]
         : null;
 
 void setHeightListSize(BuildContext context) =>
-    context.read<ReviewBookMarkProvider>().setHeightListSize();
+    context.read<ReviewBookmarkStateProvider>().setHeightListSize();
 
 void setHeight(BuildContext context, int i, double newHeight) =>
-    context.read<ReviewBookMarkProvider>().setHeight(i, newHeight);
+    context.read<ReviewBookmarkStateProvider>().setHeight(i, newHeight);
 
 void initHeightList(BuildContext context) =>
-    context.read<ReviewBookMarkProvider>().initHeightList();
+    context.read<ReviewBookmarkStateProvider>().initHeightList();
 
 //* bookmark list
 ToiletList bookmarkList(BuildContext context) =>
-    context.read<ReviewBookMarkProvider>().bookmarkList;
+    context.read<ReviewBookmarkStateProvider>().bookmarkList;
+
 FutureToiletList getBookmarkList(
   BuildContext context, {
   required int folderId,
-}) =>
-    context
-        .read<ReviewBookMarkProvider>()
-        .getBookmarkList(folderId, getPage(context));
+}) async {
+  final list = await BookmarkRemoteDataSource()
+      .getToiletList(folderId, getPage(context));
+  context.read<ReviewBookmarkStateProvider>().addBookmarkList(list);
+  return list;
+}
 
 void initBookmarkList(BuildContext context) =>
-    context.read<ReviewBookMarkProvider>().initBookmarkList();
+    context.read<ReviewBookmarkStateProvider>().initBookmarkList();
 
 //* search list (SearchViewModel이 자체 상태를 관리하므로 전역 유틸은 no-op)
 ToiletList searchToiletList(BuildContext context) => const [];

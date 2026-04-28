@@ -7,4 +7,15 @@ class BookmarkFolderMockRepositoryImpl implements BookmarkFolderRepository {
 
   @override
   Future<FolderList> getFolderList() => _dataSource.getFolderList();
+
+  @override
+  FutureBool createNewFolder(StringMap folderData) =>
+      _dataSource.createNewFolder(folderData);
+
+  @override
+  FutureVoid updateFolderName(int folderId, {required StringMap folderData}) =>
+      _dataSource.updateFolderName(folderId, folderData: folderData);
+
+  @override
+  FutureBool deleteFolder(int folderId) => _dataSource.deleteFolder(folderId);
 }

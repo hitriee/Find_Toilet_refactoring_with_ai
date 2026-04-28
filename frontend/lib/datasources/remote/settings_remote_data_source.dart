@@ -1,10 +1,10 @@
-import 'package:find_toilet/core/network/user_provider.dart';
+import 'package:find_toilet/datasources/remote/user_remote_data_source.dart';
 import 'package:find_toilet/core/utils/settings_utils.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 class SettingsRemoteDataSource {
-  FutureDynamicMap login() => UserProvider().login();
+  FutureDynamicMap login() => UserRemoteDataSource().login();
 
   Future<String> buildEmailBody() => body();
 

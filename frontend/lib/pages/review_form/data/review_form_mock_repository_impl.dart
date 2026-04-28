@@ -7,6 +7,10 @@ class ReviewFormMockRepositoryImpl implements ReviewFormRepository {
   final _dataSource = ReviewFormMockDataSource();
 
   @override
+  Future<ReviewList> getReviewList(int toiletId, int page) =>
+      _dataSource.getReviewList(toiletId, page);
+
+  @override
   Future<ReviewModel> getReview(int reviewId) =>
       _dataSource.getReview(reviewId);
 
@@ -23,4 +27,7 @@ class ReviewFormMockRepositoryImpl implements ReviewFormRepository {
     required DynamicMap reviewData,
   }) =>
       _dataSource.updateReview(reviewId, reviewData: reviewData);
+
+  @override
+  FutureBool deleteReview(int reviewId) => _dataSource.deleteReview(reviewId);
 }

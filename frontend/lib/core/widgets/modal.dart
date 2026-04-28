@@ -1,7 +1,8 @@
-import 'package:find_toilet/core/network/bookmark_provider.dart';
-import 'package:find_toilet/core/network/review_provider.dart';
 import 'package:find_toilet/core/network/toilet_provider.dart';
-import 'package:find_toilet/core/network/user_provider.dart';
+import 'package:find_toilet/datasources/remote/bookmark_folder_remote_data_source.dart';
+import 'package:find_toilet/datasources/remote/bookmark_remote_data_source.dart';
+import 'package:find_toilet/datasources/remote/review_form_remote_data_source.dart';
+import 'package:find_toilet/datasources/remote/user_remote_data_source.dart';
 import 'package:find_toilet/core/utils/global_utils.dart';
 import 'package:find_toilet/core/utils/icon_image.dart';
 import 'package:find_toilet/core/utils/settings_utils.dart';
@@ -192,7 +193,7 @@ class NicknameInputModal extends StatelessWidget {
             ),
           );
         } else {
-          UserProvider().changeName(data).then((result) {
+          UserRemoteDataSource().changeName(data).then((result) {
             if (result['success'] != null) {
               changeName(context, result['success']);
               showModal(
@@ -257,8 +258,9 @@ class CreateOrEditFolderModal extends StatelessWidget {
         try {
           if (data != null && data != '') {
             folderId == null
-                ? await FolderProvider().createNewFolder({'folderName': data})
-                : await FolderProvider().updateFolderName(
+                ? await BookmarkFolderRemoteDataSource()
+                    .createNewFolder({'folderName': data})
+                : await BookmarkFolderRemoteDataSource().updateFolderName(
                     folderId!,
                     folderData: {'folderName': data},
                   );
@@ -419,8 +421,8 @@ class CustomModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () => Future.value(false),
+    return PopScope(
+      canPop: false,
       child: SimpleDialog(
         title: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
@@ -596,7 +598,7 @@ class DeleteModal extends StatelessWidget {
       try {
         switch (deleteMode) {
           case 0:
-            ReviewProvider().deleteReview(id).then((_) {
+            ReviewFormRemoteDataSource().deleteReview(id).then((_) {
               ToiletProvider()
                   .getToilet(getToiletId(reviewContext ?? context)!)
                   .then((data) {
@@ -606,12 +608,12 @@ class DeleteModal extends StatelessWidget {
             });
             break;
           case 1:
-            FolderProvider().deleteFolder(id).then((_) {
+            BookmarkFolderRemoteDataSource().deleteFolder(id).then((_) {
               changeRefresh(context);
             });
             break;
           default:
-            UserProvider().deleteUser().then((_) async {
+            UserRemoteDataSource().deleteUser().then((_) async {
               changeToken(context, token: null, refresh: null);
               changeName(context, null);
               await UserApi.instance.unlink();
@@ -722,7 +724,7 @@ class _AddOrDeleteBookMarkModalState extends State<AddOrDeleteBookMarkModal> {
 
   void addOrDelete() {
     if (initialFolder != selectedFolder) {
-      BookMarkProvider()
+      BookmarkRemoteDataSource()
           .addOrDeleteToilet(
         addFolderIdList: (selectedFolder.difference(initialFolder)).toList(),
         delFolderIdList: (initialFolder.difference(selectedFolder)).toList(),
@@ -794,7 +796,7 @@ class _AddOrDeleteBookMarkModalState extends State<AddOrDeleteBookMarkModal> {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 5),
                   child: FutureBuilder(
-                    future: FolderProvider().getFolderList(),
+                    future: BookmarkFolderRemoteDataSource().getFolderList(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return Flexible(
