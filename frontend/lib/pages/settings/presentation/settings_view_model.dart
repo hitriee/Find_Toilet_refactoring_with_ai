@@ -1,5 +1,5 @@
 //* setttings
-import 'package:find_toilet/core/utils/settings_utils.dart';
+import 'package:find_toilet/pages/settings/domain/settings_constants.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
 import 'package:find_toilet/pages/settings/domain/settings_repository.dart';
 import 'package:flutter/foundation.dart';

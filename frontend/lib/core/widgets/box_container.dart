@@ -1,7 +1,7 @@
 import 'package:find_toilet/core/domain/toilet_model.dart';
+import 'package:find_toilet/core/theme/style.dart';
 import 'package:find_toilet/core/utils/global_utils.dart';
 import 'package:find_toilet/core/utils/icon_image.dart';
-import 'package:find_toilet/core/utils/style.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
 import 'package:find_toilet/core/widgets/button.dart';
 import 'package:find_toilet/core/widgets/icon.dart';

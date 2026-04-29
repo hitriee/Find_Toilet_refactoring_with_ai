@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:find_toilet/core/theme/style.dart';
 import 'package:find_toilet/core/utils/global_utils.dart';
-import 'package:find_toilet/core/utils/style.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
 import 'package:find_toilet/core/widgets/box_container.dart';
 import 'package:find_toilet/core/widgets/list_view.dart';

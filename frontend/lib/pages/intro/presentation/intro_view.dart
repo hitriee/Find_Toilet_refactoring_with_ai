@@ -1,13 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
+import 'package:find_toilet/core/theme/style.dart';
 import 'package:find_toilet/pages/settings/presentation/settings_view_model.dart';
 import 'package:find_toilet/pages/intro/presentation/intro_view_model.dart';
 import 'package:find_toilet/pages/main/main_page.dart';
 import 'package:find_toilet/pages/select_theme/select_theme_page.dart';
 import 'package:find_toilet/core/utils/global_utils.dart';
 import 'package:find_toilet/core/utils/icon_image.dart';
-import 'package:find_toilet/core/utils/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';

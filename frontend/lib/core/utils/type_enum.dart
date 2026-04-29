@@ -1,5 +1,4 @@
 import 'package:find_toilet/core/domain/toilet_model.dart';
-import 'package:find_toilet/core/utils/style.dart';
 import 'package:find_toilet/pages/bookmark/domain/bookmark_model.dart';
 import 'package:find_toilet/pages/review_form/domain/review_model.dart';
 import 'package:flutter/material.dart';
@@ -29,70 +28,9 @@ typedef ToiletList = List<ToiletModel>;
 typedef FutureToiletList = Future<ToiletList>;
 typedef FutureReviewList = Future<ReviewList>;
 
-//* enums
-
-enum FontSize {
-  largeTitleSize,
-  titleSize,
-  largeLargeSize,
-  largeSize,
-  largeDefaultSize,
-  defaultSize,
-  largeSmallSize,
-  smallSize,
-}
-
-enum CustomColors {
-  whiteColor,
-  mainColor,
-  redColor,
-  blackColor,
-  yellowColor,
-  lightBlueColor,
-}
-
 enum MapRadius { three, five, seven }
 
 enum Space { empty, one }
-
-//* enum to Color, double, int, ...
-Color convertedColor(CustomColors color) {
-  switch (color) {
-    case CustomColors.whiteColor:
-      return whiteColor;
-    case CustomColors.mainColor:
-      return mainColor;
-    case CustomColors.blackColor:
-      return blackColor;
-    case CustomColors.redColor:
-      return redColor;
-    case CustomColors.yellowColor:
-      return yellowColor;
-    default:
-      return lightBlueColor;
-  }
-}
-
-double convertedSize(FontSize size) {
-  switch (size) {
-    case FontSize.largeTitleSize:
-      return largeTitleSize;
-    case FontSize.titleSize:
-      return titleSize;
-    case FontSize.largeLargeSize:
-      return largeLargeSize;
-    case FontSize.largeSize:
-      return largeSize;
-    case FontSize.largeSmallSize:
-      return largeSmallSize;
-    case FontSize.smallSize:
-      return smallSize;
-    case FontSize.largeDefaultSize:
-      return largeDefaultSize;
-    default:
-      return defaultSize;
-  }
-}
 
 int convertedRadius(MapRadius radius) {
   switch (radius) {

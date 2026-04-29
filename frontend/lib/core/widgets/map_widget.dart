@@ -3,13 +3,12 @@
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:find_toilet/core/config/state_provider.dart';
+import 'package:find_toilet/core/theme/style.dart';
 import 'package:find_toilet/core/utils/global_utils.dart';
 import 'package:find_toilet/core/utils/icon_image.dart';
-import 'package:find_toilet/core/utils/style.dart';
-import 'package:find_toilet/core/utils/tile_servers.dart';
+import 'package:find_toilet/core/widgets/tile_servers.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
-import 'package:find_toilet/core/utils/utils.dart';
-import 'package:find_toilet/core/utils/viewport_painter.dart';
+import 'package:find_toilet/core/widgets/viewport_painter.dart';
 import 'package:find_toilet/pages/main/main_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +18,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlng/latlng.dart';
 import 'package:map/map.dart';
 import 'package:provider/provider.dart';
+
+double clamp(double x, double min, double max) {
+  if (x < min) x = min;
+  if (x > max) x = max;
+  return x;
+}
 
 class MapScreen extends StatefulWidget {
   final bool showReview, needNear;
