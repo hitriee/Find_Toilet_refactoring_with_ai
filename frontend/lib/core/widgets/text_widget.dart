@@ -4,7 +4,7 @@ import 'package:find_toilet/core/widgets/box_container.dart';
 import 'package:find_toilet/core/widgets/icon.dart';
 import 'package:flutter/material.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatefulWidget {
   final String? initValue, hintText;
   final void Function(String)? onChanged, onSubmitted;
   final int maxLines;
@@ -34,34 +34,54 @@ class CustomTextField extends StatelessWidget {
   });
 
   @override
+  State<CustomTextField> createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.initValue);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return CustomBox(
-      width: width,
-      height: height,
-      border: hasBorder ? Border.all(color: mainColor, width: 2) : null,
-      radius: radius,
+      width: widget.width,
+      height: widget.height,
+      border: widget.hasBorder ? Border.all(color: mainColor, width: 2) : null,
+      radius: widget.radius,
       color: whiteColor,
-      boxShadow: boxShadow,
+      boxShadow: widget.boxShadow,
       child: Padding(
-        padding: padding,
+        padding: widget.padding,
         child: TextField(
-          controller: TextEditingController(text: initValue),
-          onChanged: onChanged,
+          controller: _controller,
+          onChanged: widget.onChanged,
           decoration: InputDecoration(
             contentPadding:
                 EdgeInsets.only(top: isDefaultTheme(context) ? 13 : 12),
             border: InputBorder.none,
-            prefixIcon: prefixIcon,
-            suffixIcon: suffixIcon,
+            prefixIcon: widget.prefixIcon,
+            suffixIcon: widget.suffixIcon,
           ),
-          maxLines: 5,
+          maxLines: widget.maxLines,
           style: TextStyle(
             fontSize: isDefaultTheme(context) ? defaultSize : largeDefaultSize,
-            height: textHeight,
+            height: widget.textHeight,
             letterSpacing: 1,
           ),
-          textInputAction: searchMode ? TextInputAction.search : null,
-          onSubmitted: onSubmitted,
+          textInputAction:
+              widget.searchMode ? TextInputAction.search : null,
+          onSubmitted: widget.onSubmitted,
         ),
       ),
     );

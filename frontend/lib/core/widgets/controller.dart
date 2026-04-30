@@ -19,9 +19,7 @@ class MapController extends ChangeNotifier {
   final Projection projection;
 
   /// Gets current center of the [MapLayout].
-  LatLng get center {
-    return _center;
-  }
+  LatLng get center => _center;
 
   /// Sets current center of the [MapLayout].
   set center(LatLng center) {
@@ -30,9 +28,7 @@ class MapController extends ChangeNotifier {
   }
 
   /// Gets current zoom of the [MapLayout].
-  double get zoom {
-    return _zoom;
-  }
+  double get zoom => _zoom;
 
   /// Sets current zoom of the [MapLayout].
   set zoom(double zoom) {

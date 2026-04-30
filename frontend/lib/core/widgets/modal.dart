@@ -101,6 +101,12 @@ class _PolicyModalState extends State<PolicyModal>
   late TabController tabController;
 
   @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return CustomModalWithClose(
       children: [
@@ -174,7 +180,7 @@ class NicknameInputModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void setNickname(String? data) async {
+    void setNickname(String? data) {
       try {
         if (data == null || data == '') {
           showModal(
@@ -194,6 +200,7 @@ class NicknameInputModal extends StatelessWidget {
           );
         } else {
           UserRemoteDataSource().changeName(data).then((result) {
+            if (!context.mounted) return;
             if (result['success'] != null) {
               changeName(context, result['success']);
               showModal(
@@ -203,6 +210,7 @@ class NicknameInputModal extends StatelessWidget {
                   content: '닉네임이 적용되었습니다.',
                 ),
               ).then((_) {
+                if (!context.mounted) return;
                 routerPop(context)();
               });
               return;
@@ -594,14 +602,16 @@ class DeleteModal extends StatelessWidget {
       }
     }
 
-    void onPressed() async {
+    void onPressed() {
       try {
         switch (deleteMode) {
           case 0:
             ReviewFormRemoteDataSource().deleteReview(id).then((_) {
+              if (!context.mounted) return;
               ToiletProvider()
                   .getToilet(getToiletId(reviewContext ?? context)!)
                   .then((data) {
+                if (!context.mounted) return;
                 setToilet(reviewContext ?? context, data);
                 refreshPage!();
               });
@@ -609,14 +619,17 @@ class DeleteModal extends StatelessWidget {
             break;
           case 1:
             BookmarkFolderRemoteDataSource().deleteFolder(id).then((_) {
+              if (!context.mounted) return;
               changeRefresh(context);
             });
             break;
           default:
             UserRemoteDataSource().deleteUser().then((_) async {
+              if (!context.mounted) return;
               changeToken(context, token: null, refresh: null);
               changeName(context, null);
               await UserApi.instance.unlink();
+              if (!context.mounted) return;
               routerPop(reviewContext ?? context)();
               showModal(
                 reviewContext ?? context,
@@ -626,6 +639,7 @@ class DeleteModal extends StatelessWidget {
                 ),
               );
             }).catchError((_) {
+              if (!context.mounted) return;
               routerPop(context)();
               showModal(
                 context,
@@ -869,24 +883,22 @@ class NavigationModal extends StatelessWidget {
     required this.destination,
   });
 
+  static final List<Image> _imgList = [
+    Image.asset(naverMap, filterQuality: FilterQuality.high),
+    Image.asset(kakaoMap, filterQuality: FilterQuality.high),
+    Image.asset(tMap, filterQuality: FilterQuality.high),
+  ];
+
+  static const StringList _packageNameList = [
+    'com.nhn.android.nmap',
+    'net.daum.android.map',
+    'com.skt.tmap.ku',
+  ];
+
   @override
   Widget build(BuildContext context) {
     final packageNmae = dotenv.env['packageName'];
     const StringList appList = ['네이버맵', '카카오맵', 'T맵'];
-    List<Image> imgList = [
-      Image.asset(
-        naverMap,
-        filterQuality: FilterQuality.high,
-      ),
-      Image.asset(
-        kakaoMap,
-        filterQuality: FilterQuality.high,
-      ),
-      Image.asset(
-        tMap,
-        filterQuality: FilterQuality.high,
-      )
-    ];
     List<Uri> uriList = [
       Uri.parse(
           'nmap://route/car?slat=${startPoint[0]}&slng=${startPoint[1]}&sname=현위치&dlat=${endPoint[0]}&dlng=${endPoint[1]}&dname=$destination&appname=$packageNmae'),
@@ -896,18 +908,13 @@ class NavigationModal extends StatelessWidget {
           'tmap://route?goalname=$destination&goalx=${endPoint[1]}&goaly=${endPoint[0]}')
     ];
 
-    StringList packageNameList = [
-      'com.nhn.android.nmap',
-      'net.daum.android.map',
-      'com.skt.tmap.ku'
-    ];
     ReturnVoid toMapApp(int i) {
       return () async {
         try {
           await launchUrl(uriList[i]);
         } catch (error) {
           await launchUrl(
-            Uri.parse('market://details?id=${packageNameList[i]}'),
+            Uri.parse('market://details?id=${_packageNameList[i]}'),
           );
         }
       };
@@ -924,7 +931,7 @@ class NavigationModal extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: toMapApp(i),
-                    child: imgList[i],
+                    child: _imgList[i],
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
@@ -1059,6 +1066,7 @@ class _JoinModalState extends State<JoinModal> {
     }
     final newContext = widget.pageContext ?? getKey(context)?.currentContext;
     login(newContext ?? context).then((result) {
+      if (!context.mounted) return;
       widget.refreshPage();
     });
     routerPop(context)();

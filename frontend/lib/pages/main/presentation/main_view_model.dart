@@ -67,6 +67,11 @@ class MainViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> refreshToiletDetail(int toiletId) async {
+    final data = await _toiletRepository.getToilet(toiletId);
+    ReviewBookmarkStateProvider().setToiletInfo(data);
+  }
+
   void setScaffoldKey(GlobalKey<ScaffoldState> key) {
     MapStateProvider().setKey(key);
   }

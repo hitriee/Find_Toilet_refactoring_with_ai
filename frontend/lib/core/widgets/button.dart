@@ -59,11 +59,8 @@ class ExitPage extends StatelessWidget {
         children: [
           CustomText(
             title: '나가기',
-            fontSize: getThemeState(context) == '기본'
-                ? FontSize.largeSize
-                : FontSize.largeLargeSize,
+            fontSize: FontSize.largeSize,
             color: color,
-            applyTheme: false,
           ),
           CustomIcon(
             icon: exitIcon,

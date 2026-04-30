@@ -37,7 +37,6 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   final StringList filterKeyList = ['diaper', 'kids', 'disabled', 'allDay'];
   final BoolList filterValueList = [];
   late int sortIdx;
-  late String sortValue;
   bool enabledBookMark = true;
   bool enabledSearch = true;
 
@@ -45,7 +44,6 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   void initState() {
     super.initState();
     sortIdx = getSortIdx(context);
-    sortValue = sortOrder[sortIdx];
     for (int i = 0; i < 4; i += 1) {
       filterValueList.add(readFilter(context, i));
     }
@@ -73,9 +71,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
 
   void onSearchAction() {
     if (enabledSearch) {
-      setState(() {
-        enabledSearch = false;
-      });
+      enabledSearch = false;
       final keyword = searchData['keyword'];
       if (keyword == null || keyword == '') {
         showModal(
@@ -163,6 +159,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                 ),
         );
       }
+      if (!mounted) return;
       setState(() {
         enabledBookMark = true;
       });
@@ -171,9 +168,6 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
 
   void onChange(String? value) {
     searchData['keyword'] = value?.trim();
-    if (value == null) {
-      setState(() {});
-    }
   }
 
   @override

@@ -53,22 +53,23 @@ class CustomSilverList extends StatelessWidget {
     required this.refreshPage,
   });
 
+  String _emptyMessage() {
+    String showedContent = '';
+    if (isSearch) {
+      showedContent = '조건에 맞는 화장실이';
+    } else if (showReview) {
+      showedContent = '이 화장실에 대한 리뷰가';
+    } else if (isMain) {
+      showedContent = '주변에 화장실이';
+    } else {
+      showedContent = '즐겨찾기한 화장실이';
+    }
+    return '$showedContent 없습니다.';
+  }
+
   @override
   Widget build(BuildContext context) {
     int cnt = showReview || (!isMain && !isSearch) ? 10 : 20;
-    String ifEmpty() {
-      String showedContent = '';
-      if (isSearch) {
-        showedContent = '조건에 맞는 화장실이';
-      } else if (showReview) {
-        showedContent = '이 화장실에 대한 리뷰가';
-      } else if (isMain) {
-        showedContent = '주변에 화장실이';
-      } else {
-        showedContent = '즐겨찾기한 화장실이';
-      }
-      return '$showedContent 없습니다.';
-    }
 
     return CustomBox(
       color: mainColor,
@@ -121,7 +122,7 @@ class CustomSilverList extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 40),
                     child: Center(
                       child: CustomText(
-                        title: ifEmpty(),
+                        title: _emptyMessage(),
                         color: CustomColors.whiteColor,
                       ),
                     ),
@@ -132,12 +133,12 @@ class CustomSilverList extends StatelessWidget {
   }
 }
 
-class CustomBoxWithScrollView extends StatefulWidget {
+class CustomBoxWithScrollView extends StatelessWidget {
   final ScrollController? appBarScroll, listScroll;
   final Widget flexibleSpace;
   final double toolbarHeight;
   final Color backgroundColor;
-  final WidgetList? silverChild;
+  final WidgetList silverChild;
 
   const CustomBoxWithScrollView({
     super.key,
@@ -146,19 +147,8 @@ class CustomBoxWithScrollView extends StatefulWidget {
     required this.flexibleSpace,
     this.toolbarHeight = 200,
     this.backgroundColor = mainColor,
-    this.silverChild,
+    this.silverChild = const [],
   });
-
-  @override
-  State<CustomBoxWithScrollView> createState() =>
-      _CustomBoxWithScrollViewState();
-}
-
-class _CustomBoxWithScrollViewState extends State<CustomBoxWithScrollView> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -169,25 +159,25 @@ class _CustomBoxWithScrollViewState extends State<CustomBoxWithScrollView> {
       child: Column(
         children: [
           SizedBox(
-            height: widget.toolbarHeight,
+            height: toolbarHeight,
             child: CustomScrollView(
-              controller: widget.appBarScroll,
+              controller: appBarScroll,
               slivers: [
                 CustomSilverAppBar(
                   elevation: 0,
-                  toolbarHeight: widget.toolbarHeight,
-                  flexibleSpace: widget.flexibleSpace,
-                  backgroundColor: widget.backgroundColor,
+                  toolbarHeight: toolbarHeight,
+                  flexibleSpace: flexibleSpace,
+                  backgroundColor: backgroundColor,
                 ),
               ],
             ),
           ),
           Expanded(
             child: CustomScrollView(
-              controller: widget.listScroll,
+              controller: listScroll,
               slivers: [
                 SliverList(
-                  delegate: SliverChildListDelegate(widget.silverChild!),
+                  delegate: SliverChildListDelegate(silverChild),
                 ),
               ],
             ),

@@ -15,7 +15,7 @@ import 'package:find_toilet/pages/review_form/review_form_page.dart';
 import 'package:flutter/material.dart';
 
 //* 테마 선택 시의 상자
-class ThemeBox extends StatefulWidget {
+class ThemeBox extends StatelessWidget {
   final String text;
   final bool selected, isLarge;
   final ReturnVoid onTap;
@@ -30,18 +30,13 @@ class ThemeBox extends StatefulWidget {
   });
 
   @override
-  State<ThemeBox> createState() => _ThemeBoxState();
-}
-
-class _ThemeBoxState extends State<ThemeBox> {
-  @override
   Widget build(BuildContext context) {
     return CustomBox(
-      onTap: widget.onTap,
+      onTap: onTap,
       height: screenHeight(context) * 0.3,
       width: screenWidth(context) * 0.8,
       color: whiteColor,
-      boxShadow: widget.selected ? [redShadow] : null,
+      boxShadow: selected ? [redShadow] : null,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -56,7 +51,7 @@ class _ThemeBoxState extends State<ThemeBox> {
                     CustomText(
                       title: '제목',
                       color: CustomColors.whiteColor,
-                      fontSize: widget.isLarge
+                      fontSize: isLarge
                           ? FontSize.largeDefaultSize
                           : FontSize.defaultSize,
                       applyTheme: false,
@@ -64,7 +59,7 @@ class _ThemeBoxState extends State<ThemeBox> {
                     CustomText(
                       title: '내용',
                       color: CustomColors.whiteColor,
-                      fontSize: widget.isLarge
+                      fontSize: isLarge
                           ? FontSize.largeSmallSize
                           : FontSize.smallSize,
                       applyTheme: false,
@@ -72,7 +67,7 @@ class _ThemeBoxState extends State<ThemeBox> {
                     CustomText(
                       title: '제목',
                       font: kimm,
-                      fontSize: widget.isLarge
+                      fontSize: isLarge
                           ? FontSize.largeDefaultSize
                           : FontSize.defaultSize,
                       color: CustomColors.whiteColor,
@@ -81,7 +76,7 @@ class _ThemeBoxState extends State<ThemeBox> {
                     CustomText(
                       title: '내용',
                       font: kimm,
-                      fontSize: widget.isLarge
+                      fontSize: isLarge
                           ? FontSize.largeSmallSize
                           : FontSize.smallSize,
                       color: CustomColors.whiteColor,
@@ -91,8 +86,8 @@ class _ThemeBoxState extends State<ThemeBox> {
                 ),
               )),
           CustomText(
-            title: widget.text,
-            fontSize: widget.fontSize,
+            title: text,
+            fontSize: fontSize,
             font: kimm,
           )
         ],
@@ -233,7 +228,7 @@ class _AddBoxState extends State<AddBox> {
 }
 
 //* 화장실, 리뷰 목록 아이템
-class ListItem extends StatelessWidget {
+class ListItem extends StatefulWidget {
   final bool isMain, showReview;
   final ToiletModel? toiletModel;
   final ReturnVoid refreshPage;
@@ -249,9 +244,132 @@ class ListItem extends StatelessWidget {
   });
 
   @override
+  State<ListItem> createState() => _ListItemState();
+}
+
+class _ListItemState extends State<ListItem> {
+  late final GlobalKey _boxKey;
+
+  @override
+  void initState() {
+    super.initState();
+    _boxKey = GlobalKey();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.index != null &&
+          !widget.showReview &&
+          getHeight(context, widget.index!) == 0) {
+        if (_boxKey.currentContext != null) {
+          final renderBox =
+              _boxKey.currentContext!.findRenderObject() as RenderBox;
+          setHeight(context, widget.index!, renderBox.size.height);
+        }
+      }
+    });
+  }
+
+  bool _existState(BoolList availableList) {
+    for (int i = 0; i < 4; i += 1) {
+      if (availableList[i]) return true;
+    }
+    return false;
+  }
+
+  String _available(BoolList availableList, StringList facilityList, int limit) {
+    String result = '';
+    int length = 0;
+    for (int i = 0; i < 4; i += 1) {
+      if (availableList[i]) {
+        final newLength = facilityList[i].length;
+        if (length + newLength < limit) {
+          result += '${facilityList[i]} ';
+          length += newLength;
+        } else {
+          result += '\n${facilityList[i]} ';
+          length = newLength;
+        }
+      }
+    }
+    return result;
+  }
+
+  void _addOrEditReview(ToiletModel data) {
+    final token = readToken(context);
+    if (token != null && token != '') {
+      routerPush(context,
+          page: ReviewFormPage(
+            toiletName: data.toiletName,
+            toiletId: data.toiletId,
+            reviewId: data.reviewId,
+            showReview: widget.showReview,
+            afterWork: widget.refreshPage,
+          ))();
+    } else {
+      showModal(
+        context,
+        page: hideModal(context)
+            ? LoginConfirmModal(
+                showReview: widget.showReview,
+                toiletId: data.toiletId,
+                isMain: widget.isMain,
+                afterLogin: widget.refreshPage,
+              )
+            : JoinModal(
+                showReview: false,
+                refreshPage: widget.refreshPage,
+              ),
+      );
+    }
+  }
+
+  void _pressedHeart(ToiletModel data) {
+    final token = readToken(context);
+    if (token != null && token != '') {
+      showModal(
+        context,
+        page: AddOrDeleteBookMarkModal(
+          toiletId: data.toiletId,
+          folderId: data.folderId,
+          afterWork: widget.refreshPage,
+        ),
+      );
+    } else {
+      showModal(
+        context,
+        page: hideModal(context)
+            ? LoginConfirmModal(
+                showReview: widget.showReview,
+                toiletId: data.toiletId,
+                isMain: widget.isMain,
+                afterLogin: widget.refreshPage,
+              )
+            : JoinModal(
+                showReview: false,
+                refreshPage: widget.refreshPage,
+              ),
+      );
+    }
+  }
+
+  void _toReview(ToiletModel data) {
+    if (!widget.showReview) {
+      setMarker(context, widget.index!);
+      setItemHeight(context, widget.index!);
+      setToilet(context, data);
+      routerPush(
+        context,
+        page: MainPage(
+          showReview: true,
+          refreshPage: widget.refreshPage,
+          needNear: widget.isMain,
+        ),
+      )();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final boxKey = GlobalKey();
-    ToiletModel data = showReview ? getToilet(context)! : toiletModel!;
+    final data =
+        widget.showReview ? getToilet(context)! : widget.toiletModel!;
     BoolList availableList = [
       data.can24hour,
       data.privateDisabledM1 || data.privateDisabledM2 || data.privateDisabledF,
@@ -266,120 +384,11 @@ class ListItem extends StatelessWidget {
       '• 기저귀 교환대',
     ];
 
-    bool existState() {
-      for (int i = 0; i < 4; i += 1) {
-        if (availableList[i]) return true;
-      }
-      return false;
-    }
-
-    String available(int limit) {
-      String result = '';
-      int length = 0;
-      for (int i = 0; i < 4; i += 1) {
-        if (availableList[i]) {
-          final newLength = facilityList[i].length;
-          if (length + newLength < limit) {
-            result += '${facilityList[i]} ';
-            length += newLength;
-          } else {
-            result += '\n${facilityList[i]} ';
-            length = newLength;
-          }
-        }
-      }
-      return result;
-    }
-
-    void addOrEditReview() {
-      final token = readToken(context);
-      if (token != null && token != '') {
-        routerPush(context,
-            page: ReviewFormPage(
-              toiletName: data.toiletName,
-              toiletId: data.toiletId,
-              reviewId: data.reviewId,
-              showReview: showReview,
-              afterWork: refreshPage,
-            ))();
-      } else {
-        showModal(
-          context,
-          page: hideModal(context)
-              ? LoginConfirmModal(
-                  showReview: showReview,
-                  toiletId: data.toiletId,
-                  isMain: isMain,
-                  afterLogin: refreshPage,
-                )
-              : JoinModal(
-                  showReview: false,
-                  refreshPage: refreshPage,
-                ),
-        );
-      }
-    }
-
-    void pressedHeart() {
-      final token = readToken(context);
-      if (token != null && token != '') {
-        showModal(
-          context,
-          page: AddOrDeleteBookMarkModal(
-            toiletId: data.toiletId,
-            folderId: data.folderId,
-            afterWork: refreshPage,
-          ),
-        );
-      } else {
-        showModal(
-          context,
-          page: hideModal(context)
-              ? LoginConfirmModal(
-                  showReview: showReview,
-                  toiletId: data.toiletId,
-                  isMain: isMain,
-                  afterLogin: refreshPage,
-                )
-              : JoinModal(
-                  showReview: false,
-                  refreshPage: refreshPage,
-                ),
-        );
-      }
-    }
-
-    void toReview() {
-      if (!showReview) {
-        setMarker(context, index!);
-        setItemHeight(context, index!);
-        setToilet(context, data);
-        routerPush(
-          context,
-          page: MainPage(
-            showReview: true,
-            refreshPage: refreshPage,
-            needNear: isMain,
-          ),
-        )();
-      }
-    }
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (index != null && !showReview && getHeight(context, index!) == 0) {
-        if (boxKey.currentContext != null) {
-          final renderBox =
-              boxKey.currentContext!.findRenderObject() as RenderBox;
-          setHeight(context, index!, renderBox.size.height);
-        }
-      }
-    });
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: CustomBox(
-        key: boxKey,
-        onTap: toReview,
+        key: _boxKey,
+        onTap: () => _toReview(data),
         color: whiteColor,
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -407,7 +416,7 @@ class ListItem extends StatelessWidget {
                           Stack(
                             children: [
                               IconButton(
-                                onPressed: pressedHeart,
+                                onPressed: () => _pressedHeart(data),
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 10,
                                 ),
@@ -423,7 +432,7 @@ class ListItem extends StatelessWidget {
                               getToken(context) != null &&
                                       data.folderId.isNotEmpty
                                   ? GestureDetector(
-                                      onTap: pressedHeart,
+                                      onTap: () => _pressedHeart(data),
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                             25, 10, 0, 0),
@@ -538,7 +547,7 @@ class ListItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    existState()
+                    _existState(availableList)
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -550,7 +559,7 @@ class ListItem extends StatelessWidget {
                               ),
                               const SizedBox(height: 10),
                               CustomText(
-                                title: available(15),
+                                title: _available(availableList, facilityList, 15),
                                 fontSize: FontSize.smallSize,
                                 height: 1.6,
                               ),
@@ -559,7 +568,7 @@ class ListItem extends StatelessWidget {
                         : const SizedBox(),
                     CustomButton(
                       fontSize: FontSize.smallSize,
-                      onPressed: addOrEditReview,
+                      onPressed: () => _addOrEditReview(data),
                       buttonText:
                           getToken(context) == null || data.reviewId == 0
                               ? '리뷰 남기기'
@@ -596,11 +605,6 @@ class FilterBox extends StatefulWidget {
 class _FilterBoxState extends State<FilterBox> {
   StringList filterList = ['기저귀', '유아용', '장애인', '24시간'];
   StringList longFilterList = ['기저귀 교환대', '어린이용 화장실', '장애인용 화장실', '24시간 운영'];
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   void onTapInMain(int index) {
     setFilter(context, index, !readFilter(context, index));
@@ -862,25 +866,21 @@ class SuccessBox extends StatefulWidget {
 }
 
 class _SuccessBoxState extends State<SuccessBox> {
-  bool isShown = true;
   @override
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 2), () {
-      setState(() {
-        routerPop(context)();
-      });
+      if (mounted) routerPop(context)();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return isShown
-        ? CustomBox(
-            color: whiteColor,
-            child: CustomText(
-                title: '성공적으로 ${widget.page}가 ${widget.feature}되었습니다'))
-        : const SizedBox();
+    return CustomBox(
+      color: whiteColor,
+      child: CustomText(
+          title: '성공적으로 ${widget.page}가 ${widget.feature}되었습니다'),
+    );
   }
 }
 

@@ -119,6 +119,11 @@ class _MainViewState extends State<MainView> {
                           setState(() {
                             refreshState = true;
                           });
+                        },
+                        onRefreshToilet: (toiletId) {
+                          context
+                              .read<MainViewModel>()
+                              .refreshToiletDetail(toiletId);
                         }),
                   if (showAll(context))
                     CustomSearchBar(

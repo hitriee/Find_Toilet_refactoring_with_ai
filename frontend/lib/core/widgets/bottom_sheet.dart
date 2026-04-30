@@ -1,5 +1,3 @@
-import 'package:find_toilet/core/domain/toilet_model.dart';
-import 'package:find_toilet/core/network/toilet_provider.dart';
 import 'package:find_toilet/core/theme/style.dart';
 import 'package:find_toilet/core/utils/global_utils.dart';
 import 'package:find_toilet/core/utils/icon_image.dart';
@@ -14,11 +12,13 @@ import 'package:flutter/material.dart';
 class ToiletBottomSheet extends StatefulWidget {
   final bool showReview;
   final ReturnVoid refreshPage;
+  final void Function(int toiletId)? onRefreshToilet;
 
   const ToiletBottomSheet({
     super.key,
     this.showReview = false,
     required this.refreshPage,
+    this.onRefreshToilet,
   });
 
   @override
@@ -27,16 +27,12 @@ class ToiletBottomSheet extends StatefulWidget {
 
 class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
   final controller = ScrollController();
-  ToiletModel? toiletModel;
-  int? toiletId;
 
   @override
   void initState() {
     super.initState();
-    toiletModel = getToilet(context);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
-        toiletId = getToiletId(context);
         controller.addListener(
           () {
             if (controller.position.pixels >=
@@ -116,10 +112,6 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
                                 onPressed: () {
                                   removeMarker(context);
                                   routerPop(context)();
-
-                                  // context
-                                  //     .read<ReviewBookMarkProvider>()
-                                  //     .initToiletInfo();
                                 },
                                 padding: EdgeInsets.zero,
                                 iconSize: 35,
@@ -144,12 +136,8 @@ class _ToiletBottomSheetState extends State<ToiletBottomSheet> {
                             showReview: true,
                             isMain: true,
                             refreshPage: () {
-                              ToiletProvider()
-                                  .getToilet(getToiletId(context)!)
-                                  .then((data) {
-                                setToilet(context, data);
-                                widget.refreshPage();
-                              });
+                              widget.onRefreshToilet?.call(getToiletId(context)!);
+                              widget.refreshPage();
                             },
                           ),
                         )
