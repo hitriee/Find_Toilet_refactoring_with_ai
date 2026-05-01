@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:find_toilet/core/config/state_provider.dart';
@@ -41,7 +39,7 @@ class MapScreen extends StatefulWidget {
 class MapScreenState extends State<MapScreen> {
   late MapController controller;
   final bool _darkMode = false;
-  bool refreshState = false;
+  bool _initialized = false;
   int? length;
 
   List<LatLng> markers = [];
@@ -51,16 +49,36 @@ class MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
     controller = MapController(
-      location: LatLng(readLat(context)!, readLng(context)!),
+      location: LatLng(
+        Angle.degree(readLat(context)!),
+        Angle.degree(readLng(context)!),
+      ),
       zoom: 15,
     );
   }
 
-  void getOnlyToilet() async {
-    double conLat = getToilet(context)!.lat;
-    double conLng = getToilet(context)!.lng;
-    toiletMarkers.clear();
-    toiletMarkers.add(LatLng(conLat, conLng));
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!getLoading(context) && !_initialized) {
+      _initialized = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        widget.needNear ? getLocation() : getOnlyToilet();
+      });
+    } else if (_initialized && length != mainToiletList(context).length) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        getLocation();
+      });
+    }
+  }
+
+  void getOnlyToilet() {
+    final toilet = getToilet(context)!;
+    toiletMarkers
+      ..clear()
+      ..add(LatLng(Angle.degree(toilet.lat), Angle.degree(toilet.lng)));
     setState(() {});
   }
 
@@ -68,33 +86,33 @@ class MapScreenState extends State<MapScreen> {
     try {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
+      if (!mounted) return;
       if (widget.showReview && mode == true) {
-        double conLat = getToilet(context)!.lat;
-        double conLng = getToilet(context)!.lng;
-        controller.center = LatLng(conLat, conLng);
+        final toilet = getToilet(context)!;
+        controller.center =
+            LatLng(Angle.degree(toilet.lat), Angle.degree(toilet.lng));
       } else {
-        controller.center = LatLng(position.latitude, position.longitude);
+        controller.center = LatLng(
+          Angle.degree(position.latitude),
+          Angle.degree(position.longitude),
+        );
       }
 
       setLatLng(context, position.latitude, position.longitude);
 
-      if (markers.isEmpty) {
-        markers.add(LatLng(position.latitude, position.longitude));
-      } else {
-        markers.clear();
-        markers.add(LatLng(position.latitude, position.longitude));
-      }
+      markers
+        ..clear()
+        ..add(LatLng(
+          Angle.degree(position.latitude),
+          Angle.degree(position.longitude),
+        ));
 
+      final toiletList = mainToiletList(context);
       toiletMarkers.clear();
-      length = mainToiletList(context).length;
+      length = toiletList.length;
       for (int i = 0; i < length!; i++) {
-        toiletMarkers.add(
-          LatLng(
-            mainToiletList(context)[i].lat,
-            mainToiletList(context)[i].lng,
-          ),
-        );
-        // }
+        toiletMarkers
+            .add(LatLng(Angle.degree(toiletList[i].lat), Angle.degree(toiletList[i].lng)));
       }
       setState(() {});
     } catch (error) {
@@ -208,22 +226,6 @@ class MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!getLoading(context)) {
-      if (!refreshState) {
-        WidgetsBinding.instance.addPostFrameCallback(
-          (_) {
-            refreshState = true;
-            widget.needNear ? getLocation() : getOnlyToilet();
-          },
-        );
-      } else if (length != mainToiletList(context).length) {
-        WidgetsBinding.instance.addPostFrameCallback(
-          (_) {
-            getLocation();
-          },
-        );
-      }
-    }
     return Scaffold(
       body: GestureDetector(
         onTap: () => changeShow(context),
@@ -240,7 +242,7 @@ class MapScreenState extends State<MapScreen> {
                 (pos) => _buildMarkerWidget(pos, Colors.red, 48, null, false),
               );
             } else {
-              final markerPositions = [LatLng(lat ?? 35.203, lng ?? 126.809)]
+              final markerPositions = [LatLng(Angle.degree(lat ?? 35.203), Angle.degree(lng ?? 126.809))]
                   .map(transformer.toOffset)
                   .toList();
               markerWidgets = markerPositions.map(

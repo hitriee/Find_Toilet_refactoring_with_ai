@@ -105,9 +105,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
           ),
         )();
       }
-      setState(() {
-        enabledSearch = true;
-      });
+      enabledSearch = true;
     }
   }
 

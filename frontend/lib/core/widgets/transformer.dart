@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/widgets.dart';
 // ignore: depend_on_referenced_packages
 import 'package:latlng/latlng.dart';
-import 'controller.dart';
+import 'package:map/map.dart';
 
 /// Helps with converting map coordinates to XY coordinates and vice-versa.
 class MapTransformer {
@@ -100,7 +100,7 @@ class MapTransformer {
   Rect getViewport() {
     final scale = pow(2.0, controller.zoom).toDouble();
     final size = scale * tileSize;
-    final centerPixels = toOffset(const LatLng(0, 0));
+    final centerPixels = toOffset(LatLng(Angle.degree(0), Angle.degree(0)));
 
     return Rect.fromCenter(center: centerPixels, width: size, height: size);
   }
