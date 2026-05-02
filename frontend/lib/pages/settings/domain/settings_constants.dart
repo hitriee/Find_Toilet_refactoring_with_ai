@@ -2032,7 +2032,7 @@ Future<String> body() async {
   try {
     WidgetsFlutterBinding.ensureInitialized();
     DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-    final deviceInfo = await deviceInfoPlugin.deviceInfo;
+    final deviceInfo = await deviceInfoPlugin.androidInfo;
     final info = deviceInfo.data;
     final version = info['version'];
     final manufacturer = info['manufacturer'];

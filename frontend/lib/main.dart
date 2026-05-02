@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
-  KakaoSdk.init(nativeAppKey: dotenv.env['nativeAppKey']);
+  await KakaoSdk.init(nativeAppKey: dotenv.env['nativeAppKey']);
   runApp(const App());
 }
 

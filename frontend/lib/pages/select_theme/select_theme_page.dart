@@ -12,7 +12,7 @@ class SelectThemePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final SelectThemeRepository repository = SelectThemeRepositoryImpl(
-      remote: SelectThemeLocalDataSource(),
+      local: SelectThemeLocalDataSource(),
     );
 
     return ChangeNotifierProvider(
