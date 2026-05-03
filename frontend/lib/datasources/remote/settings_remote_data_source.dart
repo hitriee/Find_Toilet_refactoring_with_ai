@@ -1,9 +1,10 @@
 import 'package:find_toilet/datasources/remote/user_remote_data_source.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/datasources/repositories/settings_data_source_repository.dart';
 import 'package:find_toilet/pages/settings/domain/settings_constants.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
-class SettingsRemoteDataSource {
+class SettingsRemoteDataSource implements SettingsDataSourceRepository {
   FutureDynamicMap login() => UserRemoteDataSource().login();
 
   Future<String> buildEmailBody() => body();

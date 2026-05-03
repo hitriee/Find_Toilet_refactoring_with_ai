@@ -1,11 +1,12 @@
 import 'package:find_toilet/core/domain/toilet_model.dart';
+import 'package:find_toilet/core/domain/toilet_query_result.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
 import 'package:find_toilet/datasources/mock/mock_toilet_db.dart';
-import 'package:find_toilet/datasources/remote/toilet_remote_data_source.dart';
+import 'package:find_toilet/datasources/repositories/toilet_data_source_repository.dart';
 
 /// 백엔드 없이 UI 확인용 더미 데이터 소스.
 /// 화장실 데이터는 [MockToiletDb]에서 가져옵니다.
-class ToiletMockDataSource {
+class ToiletMockDataSource implements ToiletDataSourceRepository {
   Future<ToiletQueryResult> getNearToilet(DynamicMap queryData) async {
     await Future.delayed(const Duration(milliseconds: 500));
     final page = MockToiletDb.getNearPage(queryData);

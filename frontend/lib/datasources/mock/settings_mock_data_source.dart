@@ -1,4 +1,5 @@
 import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/datasources/repositories/settings_data_source_repository.dart';
 
 /// 백엔드·카카오 SDK 없이 Settings 화면을 확인하기 위한 더미 데이터 소스.
 ///
@@ -7,7 +8,7 @@ import 'package:find_toilet/core/utils/type_enum.dart';
 /// - [buildEmailBody] : device_info_plus / package_info_plus 없이
 ///   하드코딩된 샘플 기기 정보 문자열을 반환합니다.
 /// - [sendEmail] : 실제 이메일을 전송하지 않고 no-op으로 처리합니다.
-class SettingsMockDataSource {
+class SettingsMockDataSource implements SettingsDataSourceRepository {
   FutureDynamicMap login() async {
     await Future.delayed(const Duration(milliseconds: 300));
     return {

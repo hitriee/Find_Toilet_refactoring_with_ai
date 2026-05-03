@@ -1,9 +1,16 @@
+import 'package:find_toilet/core/config/app_config.dart';
 import 'package:find_toilet/core/network/toilet_provider.dart';
 import 'package:find_toilet/core/theme/style.dart';
+import 'package:find_toilet/datasources/mock/bookmark_folder_mock_data_source.dart';
+import 'package:find_toilet/datasources/mock/bookmark_mock_data_source.dart';
+import 'package:find_toilet/datasources/mock/review_form_mock_data_source.dart';
 import 'package:find_toilet/datasources/remote/bookmark_folder_remote_data_source.dart';
 import 'package:find_toilet/datasources/remote/bookmark_remote_data_source.dart';
 import 'package:find_toilet/datasources/remote/review_form_remote_data_source.dart';
 import 'package:find_toilet/datasources/remote/user_remote_data_source.dart';
+import 'package:find_toilet/datasources/repositories/bookmark_data_source_repository.dart';
+import 'package:find_toilet/datasources/repositories/bookmark_folder_data_source_repository.dart';
+import 'package:find_toilet/datasources/repositories/review_form_data_source_repository.dart';
 import 'package:find_toilet/core/utils/global_utils.dart';
 import 'package:find_toilet/core/utils/icon_image.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
@@ -265,10 +272,13 @@ class CreateOrEditFolderModal extends StatelessWidget {
       return (String? data) async {
         try {
           if (data != null && data != '') {
+            final BookmarkFolderDataSourceRepository folderDs =
+                kMockMode
+                    ? BookmarkFolderMockDataSource()
+                    : BookmarkFolderRemoteDataSource();
             folderId == null
-                ? await BookmarkFolderRemoteDataSource()
-                    .createNewFolder({'folderName': data})
-                : await BookmarkFolderRemoteDataSource().updateFolderName(
+                ? await folderDs.createNewFolder({'folderName': data})
+                : await folderDs.updateFolderName(
                     folderId!,
                     folderData: {'folderName': data},
                   );
@@ -606,7 +616,11 @@ class DeleteModal extends StatelessWidget {
       try {
         switch (deleteMode) {
           case 0:
-            ReviewFormRemoteDataSource().deleteReview(id).then((_) {
+            final ReviewFormDataSourceRepository reviewDs =
+                kMockMode
+                    ? ReviewFormMockDataSource()
+                    : ReviewFormRemoteDataSource();
+            reviewDs.deleteReview(id).then((_) {
               if (!context.mounted) return;
               ToiletProvider()
                   .getToilet(getToiletId(reviewContext ?? context)!)
@@ -618,7 +632,11 @@ class DeleteModal extends StatelessWidget {
             });
             break;
           case 1:
-            BookmarkFolderRemoteDataSource().deleteFolder(id).then((_) {
+            final BookmarkFolderDataSourceRepository folderDs =
+                kMockMode
+                    ? BookmarkFolderMockDataSource()
+                    : BookmarkFolderRemoteDataSource();
+            folderDs.deleteFolder(id).then((_) {
               if (!context.mounted) return;
               changeRefresh(context);
             });
@@ -736,9 +754,17 @@ class _AddOrDeleteBookMarkModalState extends State<AddOrDeleteBookMarkModal> {
     };
   }
 
+  Future<FolderList> _getFolderList() {
+    final BookmarkFolderDataSourceRepository folderDs =
+        kMockMode ? BookmarkFolderMockDataSource() : BookmarkFolderRemoteDataSource();
+    return folderDs.getFolderList();
+  }
+
   void addOrDelete() {
     if (initialFolder != selectedFolder) {
-      BookmarkRemoteDataSource()
+      final BookmarkDataSourceRepository bookmarkDs =
+          kMockMode ? BookmarkMockDataSource() : BookmarkRemoteDataSource();
+      bookmarkDs
           .addOrDeleteToilet(
         addFolderIdList: (selectedFolder.difference(initialFolder)).toList(),
         delFolderIdList: (initialFolder.difference(selectedFolder)).toList(),
@@ -810,7 +836,7 @@ class _AddOrDeleteBookMarkModalState extends State<AddOrDeleteBookMarkModal> {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 5),
                   child: FutureBuilder(
-                    future: BookmarkFolderRemoteDataSource().getFolderList(),
+                    future: _getFolderList(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return Flexible(

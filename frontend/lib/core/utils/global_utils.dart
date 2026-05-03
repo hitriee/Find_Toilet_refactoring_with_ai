@@ -4,6 +4,7 @@ export 'package:find_toilet/core/utils/settings_utils.dart';
 export 'package:find_toilet/core/utils/scroll_utils.dart';
 export 'package:find_toilet/core/utils/map_utils.dart';
 export 'package:find_toilet/core/utils/review_utils.dart';
+export 'package:find_toilet/core/utils/bookmark_utils.dart';
 
 import 'package:find_toilet/core/config/state_provider.dart';
 import 'package:find_toilet/core/utils/map_utils.dart';

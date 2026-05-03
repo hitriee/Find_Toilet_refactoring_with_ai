@@ -1,15 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:find_toilet/core/domain/toilet_model.dart';
+import 'package:find_toilet/core/domain/toilet_query_result.dart';
 import 'package:find_toilet/core/network/api_provider.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/datasources/repositories/toilet_data_source_repository.dart';
 
-class ToiletQueryResult {
-  ToiletQueryResult({required this.toilets, this.totalPages});
-  final ToiletList toilets;
-  final int? totalPages;
-}
+export 'package:find_toilet/core/domain/toilet_query_result.dart';
 
-class ToiletRemoteDataSource extends ApiProvider {
+class ToiletRemoteDataSource extends ApiProvider
+    implements ToiletDataSourceRepository {
   Future<ToiletQueryResult> searchToilet(DynamicMap queryData) async {
     final response = await _getWithAuth(searchToiletUrl, queryData);
     final data = response.data['content'] as List<dynamic>? ?? [];

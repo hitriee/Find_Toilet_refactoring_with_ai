@@ -1,9 +1,10 @@
 import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/datasources/repositories/bookmark_folder_data_source_repository.dart';
 import 'package:find_toilet/pages/bookmark/domain/bookmark_model.dart';
 
 /// 백엔드 없이 UI 확인용 더미 데이터 소스.
 /// [BookmarkFolderRemoteDataSource]와 동일한 인터페이스를 제공합니다.
-class BookmarkFolderMockDataSource {
+class BookmarkFolderMockDataSource implements BookmarkFolderDataSourceRepository {
   static const _rawData = [
     {'folderId': 1, 'folderLen': 12, 'folderName': '자주 가는 곳'},
     {'folderId': 2, 'folderLen': 5, 'folderName': '회사 근처'},

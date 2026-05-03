@@ -1,10 +1,10 @@
-import 'package:find_toilet/datasources/remote/intro_remote_data_source.dart';
-import 'package:find_toilet/pages/intro/domain/intro_repository.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/datasources/repositories/intro_data_source_repository.dart';
+import 'package:find_toilet/pages/intro/domain/intro_repository.dart';
 import 'package:geolocator/geolocator.dart';
 
 class IntroRepositoryImpl extends IntroRepository {
-  final IntroRemoteDataSource remote;
+  final IntroDataSourceRepository remote;
 
   IntroRepositoryImpl({required this.remote});
 

@@ -2,4 +2,4 @@
 ///
 /// Mock 모드 활성화:
 ///   flutter run --dart-define=MOCK_MODE=true
-const bool kMockMode = bool.fromEnvironment('MOCK_MODE', defaultValue: false);
+const bool kMockMode = bool.fromEnvironment('MOCK_MODE', defaultValue: true);

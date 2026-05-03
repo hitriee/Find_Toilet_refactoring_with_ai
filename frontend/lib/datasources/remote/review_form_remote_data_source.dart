@@ -1,9 +1,12 @@
 import 'package:find_toilet/core/config/scroll_provider.dart';
 import 'package:find_toilet/core/network/api_provider.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/datasources/repositories/review_form_data_source_repository.dart';
 import 'package:find_toilet/pages/review_form/domain/review_model.dart';
 
-class ReviewFormRemoteDataSource extends ApiProvider {
+class ReviewFormRemoteDataSource extends ApiProvider
+    implements ReviewFormDataSourceRepository {
+  @override
   Future<ReviewList> getReviewList(int toiletId, int page) async {
     ReviewList reviewList = [];
     try {
@@ -35,23 +38,27 @@ class ReviewFormRemoteDataSource extends ApiProvider {
     }
   }
 
+  @override
   Future<ReviewModel> getReview(int reviewId) async {
     final response = await dioWithToken(url: reviewUrl(reviewId), method: 'GET')
         .get(reviewUrl(reviewId));
     return ReviewModel.fromJson(response.data['data']);
   }
 
+  @override
   FutureBool postNewReview({
     required int toiletId,
     required DynamicMap reviewData,
   }) =>
       createApi(postReviewUrl(toiletId), data: reviewData);
 
+  @override
   FutureDynamicMap updateReview(
     int reviewId, {
     required DynamicMap reviewData,
   }) =>
       updateApi(updateReviewUrl(reviewId), data: reviewData);
 
+  @override
   FutureBool deleteReview(int reviewId) => deleteApi(deleteReviewUrl(reviewId));
 }

@@ -1,7 +1,7 @@
 import 'package:find_toilet/core/config/app_config.dart';
-import 'package:find_toilet/core/data/toilet_mock_repository_impl.dart';
 import 'package:find_toilet/core/data/toilet_repository_impl.dart';
 import 'package:find_toilet/core/domain/toilet_repository.dart';
+import 'package:find_toilet/datasources/mock/toilet_mock_data_source.dart';
 import 'package:find_toilet/datasources/remote/toilet_remote_data_source.dart';
 import 'package:find_toilet/pages/search/presentation/search_view.dart';
 import 'package:find_toilet/pages/search/presentation/search_view_model.dart';
@@ -32,9 +32,9 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ToiletRepository repository = kMockMode
-        ? ToiletMockRepositoryImpl()
-        : ToiletRepositoryImpl(remote: ToiletRemoteDataSource());
+    final ToiletRepository repository = ToiletRepositoryImpl(
+      remote: kMockMode ? ToiletMockDataSource() : ToiletRemoteDataSource(),
+    );
 
     return ChangeNotifierProvider(
       create: (_) => SearchViewModel(

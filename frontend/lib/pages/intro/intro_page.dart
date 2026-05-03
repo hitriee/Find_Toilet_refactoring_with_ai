@@ -1,6 +1,7 @@
 import 'package:find_toilet/core/config/app_config.dart';
+import 'package:find_toilet/datasources/mock/intro_mock_data_source.dart';
 import 'package:find_toilet/datasources/remote/intro_remote_data_source.dart';
-import 'package:find_toilet/pages/intro/data/intro_mock_repository_impl.dart';
+import 'package:find_toilet/datasources/repositories/intro_data_source_repository.dart';
 import 'package:find_toilet/pages/intro/data/intro_repository_impl.dart';
 import 'package:find_toilet/pages/intro/domain/intro_repository.dart';
 import 'package:find_toilet/pages/intro/presentation/intro_view_model.dart';
@@ -15,11 +16,10 @@ class IntroPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final IntroRepository introRepository = kMockMode
-        ? IntroMockRepositoryImpl()
-        : IntroRepositoryImpl(
-            remote: IntroRemoteDataSource(),
-          );
+    final IntroDataSourceRepository introDataSource =
+        kMockMode ? IntroMockDataSource() : IntroRemoteDataSource();
+    final IntroRepository introRepository =
+        IntroRepositoryImpl(remote: introDataSource);
 
     return ChangeNotifierProvider(
       create: (_) => IntroViewModel(

@@ -1,6 +1,10 @@
+import 'package:find_toilet/core/config/app_config.dart';
 import 'package:find_toilet/core/config/state_provider.dart';
 import 'package:find_toilet/core/network/toilet_provider.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/datasources/mock/toilet_mock_data_source.dart';
+import 'package:find_toilet/datasources/remote/toilet_remote_data_source.dart';
+import 'package:find_toilet/datasources/repositories/toilet_data_source_repository.dart';
 import 'package:find_toilet/pages/settings/presentation/settings_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -70,9 +74,11 @@ FutureToiletList getMainToiletList(BuildContext context) async {
   final query = Map<String, dynamic>.from(MapStateProvider().mainToiletData);
   query['page'] = ScrollProvider().page;
   query['size'] = 20;
-  final list = await ToiletProvider().getNearToilet(query);
-  addToiletList(context, list);
-  return list;
+  final ToiletDataSourceRepository dataSource =
+      kMockMode ? ToiletMockDataSource() : ToiletRemoteDataSource();
+  final result = await dataSource.getNearToilet(query);
+  addToiletList(context, result.toilets);
+  return result.toilets;
 }
 
 void initToiletList(BuildContext context) =>

@@ -1,8 +1,8 @@
 import 'package:find_toilet/core/utils/type_enum.dart';
-import 'package:find_toilet/pages/intro/domain/intro_repository.dart';
+import 'package:find_toilet/datasources/repositories/intro_data_source_repository.dart';
 import 'package:geolocator/geolocator.dart';
 
-class IntroMockRepositoryImpl implements IntroRepository {
+class IntroMockDataSource implements IntroDataSourceRepository {
   @override
   FutureVoid getPermission() => Geolocator.requestPermission();
 
@@ -14,7 +14,7 @@ class IntroMockRepositoryImpl implements IntroRepository {
 
   @override
   FutureVoid autoLogin() {
-    Future.delayed(Duration(milliseconds: 500));
+    Future.delayed(const Duration(milliseconds: 500));
     return Future(() => true);
   }
 }

@@ -2,10 +2,10 @@ import 'package:find_toilet/core/config/state_provider.dart';
 import 'package:find_toilet/core/domain/toilet_model.dart';
 import 'package:find_toilet/core/domain/toilet_repository.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
-import 'package:find_toilet/datasources/remote/toilet_remote_data_source.dart';
+import 'package:find_toilet/datasources/repositories/toilet_data_source_repository.dart';
 
 class ToiletRepositoryImpl extends ToiletRepository {
-  final ToiletRemoteDataSource remote;
+  final ToiletDataSourceRepository remote;
   ToiletRepositoryImpl({required this.remote});
 
   @override

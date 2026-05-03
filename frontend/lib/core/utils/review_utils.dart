@@ -1,8 +1,10 @@
+import 'package:find_toilet/core/config/app_config.dart';
 import 'package:find_toilet/core/config/state_provider.dart';
 import 'package:find_toilet/core/domain/toilet_model.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
-import 'package:find_toilet/datasources/remote/bookmark_remote_data_source.dart';
+import 'package:find_toilet/datasources/mock/review_form_mock_data_source.dart';
 import 'package:find_toilet/datasources/remote/review_form_remote_data_source.dart';
+import 'package:find_toilet/datasources/repositories/review_form_data_source_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,8 +32,10 @@ int? getToiletId(BuildContext context) =>
 
 FutureReviewList getReviewList(BuildContext context) async {
   final toiletId = ReviewBookmarkStateProvider().toiletId!;
-  final reviewData = await ReviewFormRemoteDataSource()
-      .getReviewList(toiletId, ScrollProvider().page);
+  final ReviewFormDataSourceRepository dataSource =
+      kMockMode ? ReviewFormMockDataSource() : ReviewFormRemoteDataSource();
+  final reviewData =
+      await dataSource.getReviewList(toiletId, ScrollProvider().page);
   addReviewList(context, reviewData);
   return reviewData;
 }
@@ -52,23 +56,6 @@ void setHeight(BuildContext context, int i, double newHeight) =>
 
 void initHeightList(BuildContext context) =>
     context.read<ReviewBookmarkStateProvider>().initHeightList();
-
-//* bookmark list
-ToiletList bookmarkList(BuildContext context) =>
-    context.read<ReviewBookmarkStateProvider>().bookmarkList;
-
-FutureToiletList getBookmarkList(
-  BuildContext context, {
-  required int folderId,
-}) async {
-  final list = await BookmarkRemoteDataSource()
-      .getToiletList(folderId, ScrollProvider().page);
-  context.read<ReviewBookmarkStateProvider>().addBookmarkList(list);
-  return list;
-}
-
-void initBookmarkList(BuildContext context) =>
-    context.read<ReviewBookmarkStateProvider>().initBookmarkList();
 
 //* search list (SearchViewModel이 자체 상태를 관리하므로 전역 유틸은 no-op)
 ToiletList searchToiletList(BuildContext context) => const [];

@@ -1,9 +1,9 @@
 import 'package:find_toilet/core/utils/type_enum.dart';
-import 'package:find_toilet/datasources/remote/bookmark_remote_data_source.dart';
+import 'package:find_toilet/datasources/repositories/bookmark_data_source_repository.dart';
 import 'package:find_toilet/pages/bookmark/domain/bookmark_repository.dart';
 
 class BookmarkRepositoryImpl extends BookmarkRepository {
-  final BookmarkRemoteDataSource remote;
+  final BookmarkDataSourceRepository remote;
 
   BookmarkRepositoryImpl({required this.remote});
 

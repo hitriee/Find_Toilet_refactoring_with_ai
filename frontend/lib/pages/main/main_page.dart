@@ -1,13 +1,14 @@
 import 'package:find_toilet/core/config/app_config.dart';
-import 'package:find_toilet/core/data/toilet_mock_repository_impl.dart';
 import 'package:find_toilet/core/data/toilet_repository_impl.dart';
 import 'package:find_toilet/core/domain/toilet_repository.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
-import 'package:find_toilet/datasources/remote/toilet_remote_data_source.dart';
+import 'package:find_toilet/datasources/mock/review_form_mock_data_source.dart';
+import 'package:find_toilet/datasources/mock/toilet_mock_data_source.dart';
 import 'package:find_toilet/datasources/remote/review_form_remote_data_source.dart';
+import 'package:find_toilet/datasources/remote/toilet_remote_data_source.dart';
+import 'package:find_toilet/datasources/repositories/review_form_data_source_repository.dart';
 import 'package:find_toilet/pages/main/presentation/main_view.dart';
 import 'package:find_toilet/pages/main/presentation/main_view_model.dart';
-import 'package:find_toilet/pages/review_form/data/review_form_mock_repository_impl.dart';
 import 'package:find_toilet/pages/review_form/data/review_form_repository_impl.dart';
 import 'package:find_toilet/pages/review_form/domain/review_form_repository.dart';
 import 'package:flutter/material.dart';
@@ -28,13 +29,14 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ToiletRepository toiletRepository = kMockMode
-        ? ToiletMockRepositoryImpl()
-        : ToiletRepositoryImpl(remote: ToiletRemoteDataSource());
+    final ToiletRepository toiletRepository = ToiletRepositoryImpl(
+      remote: kMockMode ? ToiletMockDataSource() : ToiletRemoteDataSource(),
+    );
 
-    final ReviewFormRepository reviewRepository = kMockMode
-        ? ReviewFormMockRepositoryImpl()
-        : ReviewFormRepositoryImpl(remote: ReviewFormRemoteDataSource());
+    final ReviewFormDataSourceRepository reviewDataSource =
+        kMockMode ? ReviewFormMockDataSource() : ReviewFormRemoteDataSource();
+    final ReviewFormRepository reviewRepository =
+        ReviewFormRepositoryImpl(remote: reviewDataSource);
 
     return ChangeNotifierProvider(
       create: (_) => MainViewModel(

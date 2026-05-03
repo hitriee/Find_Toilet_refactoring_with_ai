@@ -1,7 +1,8 @@
 import 'package:find_toilet/core/config/app_config.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/datasources/mock/review_form_mock_data_source.dart';
 import 'package:find_toilet/datasources/remote/review_form_remote_data_source.dart';
-import 'package:find_toilet/pages/review_form/data/review_form_mock_repository_impl.dart';
+import 'package:find_toilet/datasources/repositories/review_form_data_source_repository.dart';
 import 'package:find_toilet/pages/review_form/data/review_form_repository_impl.dart';
 import 'package:find_toilet/pages/review_form/domain/review_form_repository.dart';
 import 'package:find_toilet/pages/review_form/presentation/review_form_view.dart';
@@ -31,9 +32,10 @@ class ReviewFormPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ReviewFormRepository repository = kMockMode
-        ? ReviewFormMockRepositoryImpl()
-        : ReviewFormRepositoryImpl(remote: ReviewFormRemoteDataSource());
+    final ReviewFormDataSourceRepository dataSource =
+        kMockMode ? ReviewFormMockDataSource() : ReviewFormRemoteDataSource();
+    final ReviewFormRepository repository =
+        ReviewFormRepositoryImpl(remote: dataSource);
 
     return ChangeNotifierProvider(
       create: (_) => ReviewFormViewModel(repository: repository)

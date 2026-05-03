@@ -1,8 +1,10 @@
 import 'package:find_toilet/core/network/api_provider.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/datasources/repositories/bookmark_folder_data_source_repository.dart';
 import 'package:find_toilet/pages/bookmark/domain/bookmark_model.dart';
 
-class BookmarkFolderRemoteDataSource extends ApiProvider {
+class BookmarkFolderRemoteDataSource extends ApiProvider
+    implements BookmarkFolderDataSourceRepository {
   Future<FolderList> getFolderList() async {
     final response = await dioWithToken(url: folderListUrl, method: 'GET')
         .get(folderListUrl);

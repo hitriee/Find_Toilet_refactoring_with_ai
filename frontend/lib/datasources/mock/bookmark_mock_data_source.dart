@@ -1,10 +1,11 @@
 import 'package:find_toilet/core/domain/toilet_model.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
 import 'package:find_toilet/datasources/mock/mock_toilet_db.dart';
+import 'package:find_toilet/datasources/repositories/bookmark_data_source_repository.dart';
 
-/// 백엔드 없이 UI 확인용 더미 데이터 소스.
+/// 백엔드 없이 UI 확인용 더미 ��이터 소스.
 /// 화장실 데이터는 [MockToiletDb]에서 folderId로 필터링하여 가져옵니다.
-class BookmarkMockDataSource {
+class BookmarkMockDataSource implements BookmarkDataSourceRepository {
   static const int _pageSize = 10;
 
   Future<ToiletList> getToiletList(int folderId, int page) async {

@@ -1,10 +1,10 @@
 import 'package:find_toilet/core/utils/type_enum.dart';
-import 'package:find_toilet/datasources/remote/review_form_remote_data_source.dart';
+import 'package:find_toilet/datasources/repositories/review_form_data_source_repository.dart';
 import 'package:find_toilet/pages/review_form/domain/review_form_repository.dart';
 import 'package:find_toilet/pages/review_form/domain/review_model.dart';
 
 class ReviewFormRepositoryImpl implements ReviewFormRepository {
-  final ReviewFormRemoteDataSource remote;
+  final ReviewFormDataSourceRepository remote;
 
   ReviewFormRepositoryImpl({required this.remote});
 

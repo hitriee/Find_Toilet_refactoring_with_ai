@@ -1,8 +1,10 @@
 import 'package:find_toilet/core/domain/toilet_model.dart';
 import 'package:find_toilet/core/network/api_provider.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
+import 'package:find_toilet/datasources/repositories/bookmark_data_source_repository.dart';
 
-class BookmarkRemoteDataSource extends ApiProvider {
+class BookmarkRemoteDataSource extends ApiProvider
+    implements BookmarkDataSourceRepository {
   FutureToiletList getToiletList(int folderId, int page) async {
     final response = await dioWithToken(
       url: bookmarkListUrl(folderId),
