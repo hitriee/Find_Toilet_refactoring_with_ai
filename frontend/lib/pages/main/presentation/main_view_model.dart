@@ -1,6 +1,8 @@
 import 'package:find_toilet/core/config/state_provider.dart';
 import 'package:find_toilet/core/domain/toilet_repository.dart';
+import 'package:find_toilet/core/utils/type_enum.dart';
 import 'package:find_toilet/pages/review_form/domain/review_form_repository.dart';
+import 'package:find_toilet/pages/review_form/domain/review_model.dart';
 import 'package:flutter/material.dart';
 
 class MainViewModel extends ChangeNotifier {
@@ -13,13 +15,29 @@ class MainViewModel extends ChangeNotifier {
   })  : _toiletRepository = toiletRepository,
         _reviewRepository = reviewRepository;
 
+  // ── 리뷰 목록 ─────────────────────────────────────────────────────────────
+
+  final List<ReviewModel> _reviewList = [];
+
+  ReviewList get reviewList => List.unmodifiable(_reviewList);
+
+  void addReviewList(ReviewList reviewData) {
+    _reviewList.addAll(reviewData);
+    notifyListeners();
+  }
+
+  void initReviewList() {
+    _reviewList.clear();
+    notifyListeners();
+  }
+
   Future<void> loadInitial(bool showReview) async {
     MapStateProvider().setMainPage(0);
     ScrollProvider().setLoading(true);
     ScrollProvider().initPage();
 
     if (!showReview) {
-      ReviewBookmarkStateProvider().initHeightList();
+      ToiletProvider().initHeightList();
       MapStateProvider().initToiletList();
       final query =
           Map<String, dynamic>.from(MapStateProvider().mainToiletData);
@@ -27,13 +45,13 @@ class MainViewModel extends ChangeNotifier {
       query['size'] = 20;
       final list = await _toiletRepository.getNearToilet(query);
       MapStateProvider().addToiletList(list);
-      ReviewBookmarkStateProvider().setHeightListSize();
+      ToiletProvider().setHeightListSize();
     } else {
-      ReviewBookmarkStateProvider().initReviewList();
-      final toiletId = ReviewBookmarkStateProvider().toiletId!;
-      final reviewData =
-          await _reviewRepository.getReviewList(toiletId, ScrollProvider().page);
-      ReviewBookmarkStateProvider().addReviewList(reviewData);
+      initReviewList();
+      final toiletId = ToiletProvider().toiletId!;
+      final reviewData = await _reviewRepository.getReviewList(
+          toiletId, ScrollProvider().page);
+      addReviewList(reviewData);
     }
 
     ScrollProvider().increasePage();
@@ -43,7 +61,7 @@ class MainViewModel extends ChangeNotifier {
   Future<void> refreshMain(int index, bool showReview) async {
     if (!ScrollProvider().loading) {
       ScrollProvider().initPage();
-      ReviewBookmarkStateProvider().initHeightList();
+      ToiletProvider().initHeightList();
 
       if (!showReview) {
         MapStateProvider().initToiletList();
@@ -53,13 +71,13 @@ class MainViewModel extends ChangeNotifier {
         query['size'] = 20;
         final list = await _toiletRepository.getNearToilet(query);
         MapStateProvider().addToiletList(list);
-        ReviewBookmarkStateProvider().setHeightListSize();
+        ToiletProvider().setHeightListSize();
       } else {
-        ReviewBookmarkStateProvider().initReviewList();
-        final toiletId = ReviewBookmarkStateProvider().toiletId!;
+        initReviewList();
+        final toiletId = ToiletProvider().toiletId!;
         final reviewData = await _reviewRepository.getReviewList(
             toiletId, ScrollProvider().page);
-        ReviewBookmarkStateProvider().addReviewList(reviewData);
+        addReviewList(reviewData);
       }
 
       ScrollProvider().increasePage();
@@ -69,7 +87,7 @@ class MainViewModel extends ChangeNotifier {
 
   Future<void> refreshToiletDetail(int toiletId) async {
     final data = await _toiletRepository.getToilet(toiletId);
-    ReviewBookmarkStateProvider().setToiletInfo(data);
+    ToiletProvider().setToiletInfo(data);
   }
 
   void setScaffoldKey(GlobalKey<ScaffoldState> key) {

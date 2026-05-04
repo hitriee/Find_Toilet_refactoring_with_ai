@@ -1,15 +1,14 @@
 import 'package:find_toilet/core/network/api_provider.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
-
+import 'package:find_toilet/datasources/repositories/user_data_source_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 /// 카카오 OAuth 로그인 및 회원 관련 DataSource.
 ///
-/// - 카카오 SDK에 직접 의존하므로 Mock DataSource를 별도로 만들지 않습니다.
 /// - 로그인 관련 상위 흐름은 [SettingsRemoteDataSource] / [IntroRemoteDataSource]가 담당합니다.
-class UserRemoteDataSource extends ApiProvider {
+class UserRemoteDataSource extends ApiProvider implements UserDataSourceRepository {
   FutureDynamicMap login() => _login();
 
   FutureDynamicMap autoLogin() async {

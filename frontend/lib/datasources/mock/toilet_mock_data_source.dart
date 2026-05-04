@@ -7,6 +7,7 @@ import 'package:find_toilet/datasources/repositories/toilet_data_source_reposito
 /// 백엔드 없이 UI 확인용 더미 데이터 소스.
 /// 화장실 데이터는 [MockToiletDb]에서 가져옵니다.
 class ToiletMockDataSource implements ToiletDataSourceRepository {
+  @override
   Future<ToiletQueryResult> getNearToilet(DynamicMap queryData) async {
     await Future.delayed(const Duration(milliseconds: 500));
     final page = MockToiletDb.getNearPage(queryData);
@@ -17,6 +18,7 @@ class ToiletMockDataSource implements ToiletDataSourceRepository {
     return ToiletQueryResult(toilets: toilets, totalPages: totalPages);
   }
 
+  @override
   Future<ToiletQueryResult> searchToilet(DynamicMap queryData) async {
     await Future.delayed(const Duration(milliseconds: 400));
     final page = MockToiletDb.searchPage(queryData);
@@ -33,6 +35,7 @@ class ToiletMockDataSource implements ToiletDataSourceRepository {
     return ToiletQueryResult(toilets: toilets, totalPages: totalPages);
   }
 
+  @override
   Future<ToiletModel> getToilet(int toiletId) async {
     await Future.delayed(const Duration(milliseconds: 300));
     final json = MockToiletDb.findById(toiletId);

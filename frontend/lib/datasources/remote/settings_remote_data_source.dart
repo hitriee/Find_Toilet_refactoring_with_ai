@@ -5,10 +5,13 @@ import 'package:find_toilet/pages/settings/domain/settings_constants.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 class SettingsRemoteDataSource implements SettingsDataSourceRepository {
+  @override
   FutureDynamicMap login() => UserRemoteDataSource().login();
 
+  @override
   Future<String> buildEmailBody() => body();
 
+  @override
   Future<void> sendEmail(String emailBody) async {
     final email = Email(
       subject: '[화장실을 찾아서] 문의사항',

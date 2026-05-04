@@ -9,6 +9,7 @@ export 'package:find_toilet/core/domain/toilet_query_result.dart';
 
 class ToiletRemoteDataSource extends ApiProvider
     implements ToiletDataSourceRepository {
+  @override
   Future<ToiletQueryResult> searchToilet(DynamicMap queryData) async {
     final response = await _getWithAuth(searchToiletUrl, queryData);
     final data = response.data['content'] as List<dynamic>? ?? [];
@@ -17,6 +18,7 @@ class ToiletRemoteDataSource extends ApiProvider
     return ToiletQueryResult(toilets: toilets, totalPages: totalPages);
   }
 
+  @override
   Future<ToiletQueryResult> getNearToilet(DynamicMap queryData) async {
     final response = await _getWithAuth(nearToiletUrl, queryData);
     final data = response.data['content'] as List<dynamic>? ?? [];
@@ -25,6 +27,7 @@ class ToiletRemoteDataSource extends ApiProvider
     return ToiletQueryResult(toilets: toilets, totalPages: totalPages);
   }
 
+  @override
   Future<ToiletModel> getToilet(int toiletId) async {
     final response = await _getWithAuth(eachToiletUrl(toiletId), null);
     final data = response.data['content'];

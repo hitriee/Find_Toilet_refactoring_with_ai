@@ -5,33 +5,34 @@ import 'package:find_toilet/core/utils/type_enum.dart';
 import 'package:find_toilet/datasources/mock/review_form_mock_data_source.dart';
 import 'package:find_toilet/datasources/remote/review_form_remote_data_source.dart';
 import 'package:find_toilet/datasources/repositories/review_form_data_source_repository.dart';
+import 'package:find_toilet/pages/main/presentation/main_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 //* review list
 void addReviewList(BuildContext context, ReviewList reviewData) =>
-    context.read<ReviewBookmarkStateProvider>().addReviewList(reviewData);
+    context.read<MainViewModel>().addReviewList(reviewData);
 
 ReviewList reviewList(BuildContext context) =>
-    context.read<ReviewBookmarkStateProvider>().reviewList;
+    context.read<MainViewModel>().reviewList;
 
 ToiletModel? getToilet(BuildContext context) =>
-    context.read<ReviewBookmarkStateProvider>().toiletInfo;
+    context.read<ToiletProvider>().toiletInfo;
 
 void setToilet(BuildContext context, ToiletModel toiletModel) =>
-    context.read<ReviewBookmarkStateProvider>().setToiletInfo(toiletModel);
+    context.read<ToiletProvider>().setToiletInfo(toiletModel);
 
 double? getItemHeight(BuildContext context) =>
-    context.read<ReviewBookmarkStateProvider>().itemHeight;
+    context.read<ToiletProvider>().itemHeight;
 
 void setItemHeight(BuildContext context, int i) =>
-    context.read<ReviewBookmarkStateProvider>().setItemHeight(i);
+    context.read<ToiletProvider>().setItemHeight(i);
 
 int? getToiletId(BuildContext context) =>
-    context.read<ReviewBookmarkStateProvider>().toiletId;
+    context.read<ToiletProvider>().toiletId;
 
 FutureReviewList getReviewList(BuildContext context) async {
-  final toiletId = ReviewBookmarkStateProvider().toiletId!;
+  final toiletId = ToiletProvider().toiletId!;
   final ReviewFormDataSourceRepository dataSource =
       kMockMode ? ReviewFormMockDataSource() : ReviewFormRemoteDataSource();
   final reviewData =
@@ -41,24 +42,18 @@ FutureReviewList getReviewList(BuildContext context) async {
 }
 
 void initReviewList(BuildContext context) =>
-    context.read<ReviewBookmarkStateProvider>().initReviewList();
+    context.read<MainViewModel>().initReviewList();
 
 double? getHeight(BuildContext context, int i) =>
-    context.read<ReviewBookmarkStateProvider>().heightList.length > i
-        ? context.read<ReviewBookmarkStateProvider>().heightList[i]
+    context.read<ToiletProvider>().heightList.length > i
+        ? context.read<ToiletProvider>().heightList[i]
         : null;
 
 void setHeightListSize(BuildContext context) =>
-    context.read<ReviewBookmarkStateProvider>().setHeightListSize();
+    context.read<ToiletProvider>().setHeightListSize();
 
 void setHeight(BuildContext context, int i, double newHeight) =>
-    context.read<ReviewBookmarkStateProvider>().setHeight(i, newHeight);
+    context.read<ToiletProvider>().setHeight(i, newHeight);
 
 void initHeightList(BuildContext context) =>
-    context.read<ReviewBookmarkStateProvider>().initHeightList();
-
-//* search list (SearchViewModel이 자체 상태를 관리하므로 전역 유틸은 no-op)
-ToiletList searchToiletList(BuildContext context) => const [];
-FutureToiletList getSearchList(BuildContext context) async => const [];
-void initSearchList(BuildContext context) {}
-void setSearchPage(BuildContext context, int newVal) {}
+    context.read<ToiletProvider>().initHeightList();

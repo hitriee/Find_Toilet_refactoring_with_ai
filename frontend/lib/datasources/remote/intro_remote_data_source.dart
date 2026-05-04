@@ -4,12 +4,15 @@ import 'package:find_toilet/datasources/repositories/intro_data_source_repositor
 import 'package:geolocator/geolocator.dart';
 
 class IntroRemoteDataSource implements IntroDataSourceRepository {
+  @override
   FutureVoid getPermission() => Geolocator.requestPermission();
 
+  @override
   Future<Position> getPosition({required LocationAccuracy locationAccuracy}) =>
       Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
 
+  @override
   FutureVoid autoLogin() => UserRemoteDataSource().autoLogin();
 }

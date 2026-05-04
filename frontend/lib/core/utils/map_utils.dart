@@ -1,6 +1,5 @@
 import 'package:find_toilet/core/config/app_config.dart';
 import 'package:find_toilet/core/config/state_provider.dart';
-import 'package:find_toilet/core/network/toilet_provider.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
 import 'package:find_toilet/datasources/mock/toilet_mock_data_source.dart';
 import 'package:find_toilet/datasources/remote/toilet_remote_data_source.dart';
@@ -99,6 +98,3 @@ void setMarker(BuildContext context, int i) =>
 
 void removeMarker(BuildContext context) =>
     context.read<MapStateProvider>().removeMarker();
-
-int? getSelectedMarker(BuildContext context) =>
-    context.read<MapStateProvider>().selectedMarker;

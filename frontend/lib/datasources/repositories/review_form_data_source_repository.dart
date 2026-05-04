@@ -1,4 +1,3 @@
-import 'package:find_toilet/core/network/api_provider.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
 import 'package:find_toilet/pages/review_form/domain/review_model.dart';
 

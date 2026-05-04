@@ -5,6 +5,7 @@ import 'package:find_toilet/pages/bookmark/domain/bookmark_model.dart';
 
 class BookmarkFolderRemoteDataSource extends ApiProvider
     implements BookmarkFolderDataSourceRepository {
+  @override
   Future<FolderList> getFolderList() async {
     final response = await dioWithToken(url: folderListUrl, method: 'GET')
         .get(folderListUrl);
@@ -12,12 +13,14 @@ class BookmarkFolderRemoteDataSource extends ApiProvider
     return data.map<FolderModel>((json) => FolderModel.fromJson(json)).toList();
   }
 
+  @override
   FutureBool createNewFolder(StringMap folderData) =>
       createApi(createFolderUrl, data: folderData);
 
-  FutureVoid updateFolderName(int folderId,
-          {required StringMap folderData}) =>
+  @override
+  FutureVoid updateFolderName(int folderId, {required StringMap folderData}) =>
       updateApi(updateFolderUrl(folderId), data: folderData);
 
+  @override
   FutureBool deleteFolder(int folderId) => deleteApi(deleteFolderUrl(folderId));
 }

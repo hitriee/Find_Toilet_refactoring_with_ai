@@ -28,30 +28,6 @@ typedef ToiletList = List<ToiletModel>;
 typedef FutureToiletList = Future<ToiletList>;
 typedef FutureReviewList = Future<ReviewList>;
 
-enum MapRadius { three, five, seven }
-
 enum Space { empty, one }
-
-int convertedRadius(MapRadius radius) {
-  switch (radius) {
-    case MapRadius.three:
-      return 0;
-    case MapRadius.five:
-      return 1;
-    default:
-      return 2;
-  }
-}
-
-MapRadius toMapRadius(int index) {
-  switch (index) {
-    case 0:
-      return MapRadius.three;
-    case 1:
-      return MapRadius.five;
-    default:
-      return MapRadius.seven;
-  }
-}
 
 String convertedSpace(Space space) => space == Space.empty ? '' : ' ';

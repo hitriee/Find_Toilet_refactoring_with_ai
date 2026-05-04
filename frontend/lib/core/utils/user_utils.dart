@@ -1,8 +1,11 @@
 //* 토큰 받아오기
+import 'package:find_toilet/core/config/app_config.dart';
 import 'package:find_toilet/core/config/state_provider.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
 import 'package:find_toilet/core/widgets/modal.dart';
+import 'package:find_toilet/datasources/mock/user_mock_data_source.dart';
 import 'package:find_toilet/datasources/remote/user_remote_data_source.dart';
+import 'package:find_toilet/datasources/repositories/user_data_source_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +31,9 @@ String? getName(BuildContext context) =>
 
 //* 로그인
 FutureDynamicMap login(BuildContext context) async {
-  final DynamicMap result = await UserRemoteDataSource().login();
+  final UserDataSourceRepository dataSource =
+      kMockMode ? UserMockDataSource() : UserRemoteDataSource();
+  final DynamicMap result = await dataSource.login();
   if (result['result'] != false) {
     // ignore: use_build_context_synchronously
     changeToken(context, token: result['token'], refresh: result['refresh']);

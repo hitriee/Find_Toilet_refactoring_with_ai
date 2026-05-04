@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 export 'map_state_provider.dart';
-export 'review_bookmark_state_provider.dart';
+export 'toilet_provider.dart';
 export 'scroll_provider.dart';
 
 //* user info

@@ -9,6 +9,7 @@ import 'package:find_toilet/datasources/repositories/settings_data_source_reposi
 ///   하드코딩된 샘플 기기 정보 문자열을 반환합니다.
 /// - [sendEmail] : 실제 이메일을 전송하지 않고 no-op으로 처리합니다.
 class SettingsMockDataSource implements SettingsDataSourceRepository {
+  @override
   FutureDynamicMap login() async {
     await Future.delayed(const Duration(milliseconds: 300));
     return {
@@ -19,6 +20,7 @@ class SettingsMockDataSource implements SettingsDataSourceRepository {
     };
   }
 
+  @override
   Future<String> buildEmailBody() async {
     await Future.delayed(const Duration(milliseconds: 200));
     return '''
@@ -36,6 +38,7 @@ OS 버전: Android 13 (SDK 33)
 ''';
   }
 
+  @override
   Future<void> sendEmail(String emailBody) async {
     await Future.delayed(const Duration(milliseconds: 200));
     // Mock: 실제 이메일을 전송하지 않습니다.

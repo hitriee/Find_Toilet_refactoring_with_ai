@@ -24,7 +24,7 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ApplyChangeProvider()),
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
         ChangeNotifierProvider(create: (_) => ScrollProvider()),
-        ChangeNotifierProvider(create: (_) => ReviewBookmarkStateProvider()),
+        ChangeNotifierProvider(create: (_) => ToiletProvider()),
         ChangeNotifierProvider(create: (_) => MapStateProvider()),
       ],
       child: MaterialApp(

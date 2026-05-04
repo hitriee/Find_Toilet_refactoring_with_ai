@@ -8,6 +8,7 @@ import 'package:find_toilet/datasources/repositories/bookmark_data_source_reposi
 class BookmarkMockDataSource implements BookmarkDataSourceRepository {
   static const int _pageSize = 10;
 
+  @override
   Future<ToiletList> getToiletList(int folderId, int page) async {
     await Future.delayed(const Duration(milliseconds: 400));
     final all = MockToiletDb.getByFolderId(folderId);
@@ -15,10 +16,11 @@ class BookmarkMockDataSource implements BookmarkDataSourceRepository {
     if (start >= all.length) return [];
     return all
         .sublist(start, (start + _pageSize).clamp(0, all.length))
-        .map((json) => ToiletModel.fromJson(json as DynamicMap))
+        .map((json) => ToiletModel.fromJson(json))
         .toList();
   }
 
+  @override
   Future<void> addOrDeleteToilet({
     required List addFolderIdList,
     required List delFolderIdList,

@@ -4,7 +4,8 @@ import 'package:find_toilet/pages/bookmark/domain/bookmark_model.dart';
 
 /// 백엔드 없이 UI 확인용 더미 데이터 소스.
 /// [BookmarkFolderRemoteDataSource]와 동일한 인터페이스를 제공합니다.
-class BookmarkFolderMockDataSource implements BookmarkFolderDataSourceRepository {
+class BookmarkFolderMockDataSource
+    implements BookmarkFolderDataSourceRepository {
   static const _rawData = [
     {'folderId': 1, 'folderLen': 12, 'folderName': '자주 가는 곳'},
     {'folderId': 2, 'folderLen': 5, 'folderName': '회사 근처'},
@@ -13,6 +14,7 @@ class BookmarkFolderMockDataSource implements BookmarkFolderDataSourceRepository
     {'folderId': 5, 'folderLen': 3, 'folderName': '공원'},
   ];
 
+  @override
   Future<FolderList> getFolderList() async {
     await Future.delayed(const Duration(milliseconds: 500));
     return _rawData
@@ -20,16 +22,19 @@ class BookmarkFolderMockDataSource implements BookmarkFolderDataSourceRepository
         .toList();
   }
 
+  @override
   Future<bool> createNewFolder(StringMap folderData) async {
     await Future.delayed(const Duration(milliseconds: 300));
     return true;
   }
 
+  @override
   Future<void> updateFolderName(int folderId,
       {required StringMap folderData}) async {
     await Future.delayed(const Duration(milliseconds: 300));
   }
 
+  @override
   Future<bool> deleteFolder(int folderId) async {
     await Future.delayed(const Duration(milliseconds: 300));
     return true;

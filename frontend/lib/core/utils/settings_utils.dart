@@ -39,9 +39,6 @@ String watchMagnify(BuildContext context) =>
 String getRadius(BuildContext context) =>
     context.watch<SettingsProvider>().radiusState;
 
-int getIntRadius(BuildContext context) =>
-    context.read<SettingsProvider>().radius;
-
 //* 메뉴 옵션 변경
 void changeOptions(BuildContext context, int menuIdx) {
   context.read<SettingsProvider>().applyOption(menuIdx);
