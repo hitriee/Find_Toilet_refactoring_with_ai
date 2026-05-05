@@ -6,7 +6,7 @@ import 'package:geolocator/geolocator.dart';
 /// lat: 37.5547, lon: 126.9707
 class IntroMockDataSource implements IntroDataSourceRepository {
   @override
-  FutureVoid getPermission() => Future(() => {});
+  FutureVoid getPermission() async {}
 
   @override
   Future<Position> getPosition(

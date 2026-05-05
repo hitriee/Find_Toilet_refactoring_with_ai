@@ -1,3 +1,4 @@
+import 'package:find_toilet/core/config/app_config.dart';
 import 'package:find_toilet/core/config/state_provider.dart';
 import 'package:find_toilet/pages/intro/intro_page.dart';
 import 'package:find_toilet/pages/settings/presentation/settings_view_model.dart';
@@ -9,7 +10,9 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
-  await KakaoSdk.init(nativeAppKey: dotenv.env['nativeAppKey']);
+  if (!kMockMode) {
+    await KakaoSdk.init(nativeAppKey: dotenv.env['nativeAppKey']);
+  }
   runApp(const App());
 }
 
