@@ -12,7 +12,7 @@ bool isDefaultTheme(BuildContext context) =>
     context.watch<SettingsProvider>().fontState == '기본';
 
 String getThemeState(BuildContext context) =>
-    context.watch<SettingsProvider>().fontState;
+    context.watch<SettingsProvider>().fontState ?? '';
 
 FontSize applyDefaultTheme(BuildContext context, FontSize defaultFont) {
   if (isDefaultTheme(context)) {

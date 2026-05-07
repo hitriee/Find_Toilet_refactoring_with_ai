@@ -18,11 +18,11 @@ class SettingsProvider extends ChangeNotifier {
   ];
   final _valueList = [500, 1000, 1500];
 
-  get fontState => _fontState;
-  get magnigyState => _magnigyState;
-  get radiusState => _radiusState;
-  get radius => _valueList[_radiusIdx];
-  get hideModal => _hideModal;
+  String? get fontState => _fontState;
+  String get magnigyState => _magnigyState;
+  String get radiusState => _radiusState;
+  int get radius => _valueList[_radiusIdx];
+  bool get hideModal => _hideModal;
 
   FutureBool initSettings() async {
     final prefs = await SharedPreferences.getInstance();

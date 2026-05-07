@@ -17,7 +17,13 @@ class SelectThemeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: exitApp(context),
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        final shouldExit = exitApp(context);
+        if (shouldExit) {
+          routerPop(context)();
+        }
+      },
       child: Scaffold(
         backgroundColor: mainColor,
         body: Stack(
