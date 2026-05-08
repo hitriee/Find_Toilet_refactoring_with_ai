@@ -65,17 +65,12 @@ class _MainViewState extends State<MainView> {
       );
     }
     return PopScope(
-        canPop: widget.showReview,
+        canPop: widget.showReview || watchPressed(context),
         onPopInvokedWithResult: (bool didPop, Object? result) {
-          if (widget.showReview) {
-            if (didPop) {
-              removeMarker(context);
-            }
-          } else if (!didPop) {
-            final shouldExit = exitApp(context);
-            if (shouldExit) {
-              routerPop(context)();
-            }
+          if (didPop && widget.showReview) {
+            removeMarker(context);
+          } else if (!didPop && !widget.showReview) {
+            exitApp(context);
           }
         },
         child: GestureDetector(

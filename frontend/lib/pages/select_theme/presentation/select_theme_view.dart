@@ -17,11 +17,11 @@ class SelectThemeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
-        final shouldExit = exitApp(context);
-        if (shouldExit) {
-          routerPop(context)();
+      canPop: watchPressed(context),
+      onPopInvokedWithResult: (bool didPop, Object? result) {
+        print('----didPop: $didPop---------select theme');
+        if (!didPop) {
+          exitApp(context);
         }
       },
       child: Scaffold(

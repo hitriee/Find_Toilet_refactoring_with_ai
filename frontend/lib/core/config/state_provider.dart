@@ -62,9 +62,9 @@ class UserInfoProvider with ChangeNotifier {
 
 //* refresh
 class ApplyChangeProvider with ChangeNotifier {
-  static Space _refresh = Space.empty;
-  static String _convertedVar = '';
-  static bool _pressedOnce = false;
+  Space _refresh = Space.empty;
+  String _convertedVar = '';
+  bool _pressedOnce = false;
   String get refresh => _convertedVar;
   bool get pressedOnce => _pressedOnce;
 

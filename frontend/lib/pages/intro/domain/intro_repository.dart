@@ -4,7 +4,7 @@ import 'package:geolocator/geolocator.dart';
 abstract class IntroRepository {
   FutureVoid getPermission();
 
-  Future<Position> getPosition({required LocationAccuracy locationAccuracy});
+  Future<Position> getPosition();
 
   FutureVoid autoLogin();
 }

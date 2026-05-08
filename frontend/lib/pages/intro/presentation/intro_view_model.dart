@@ -24,9 +24,7 @@ class IntroViewModel extends ChangeNotifier {
   Future<Position> userLocation() async {
     try {
       await _introRepository.getPermission();
-      return await _introRepository.getPosition(
-        locationAccuracy: LocationAccuracy.high,
-      );
+      return await _introRepository.getPosition();
     } catch (error) {
       throw Exception('위치 정보를 가져오는 데 실패했습니다: $error');
     }

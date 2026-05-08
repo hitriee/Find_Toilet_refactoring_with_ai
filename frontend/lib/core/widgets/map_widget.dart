@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:find_toilet/core/config/app_config.dart';
 import 'package:find_toilet/core/config/state_provider.dart';
 import 'package:find_toilet/core/theme/style.dart';
 import 'package:find_toilet/core/utils/global_utils.dart';
@@ -7,6 +8,10 @@ import 'package:find_toilet/core/utils/icon_image.dart';
 import 'package:find_toilet/core/widgets/tile_servers.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
 import 'package:find_toilet/core/widgets/viewport_painter.dart';
+import 'package:find_toilet/datasources/mock/intro_mock_data_source.dart';
+import 'package:find_toilet/datasources/remote/intro_remote_data_source.dart';
+import 'package:find_toilet/pages/intro/data/intro_repository_impl.dart';
+import 'package:find_toilet/pages/intro/domain/intro_repository.dart';
 import 'package:find_toilet/pages/main/main_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -84,8 +89,12 @@ class MapScreenState extends State<MapScreen> {
 
   void getLocation([bool mode = true]) async {
     try {
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
+      final IntroRepository introRepository = IntroRepositoryImpl(
+        remote: kMockMode ? IntroMockDataSource() : IntroRemoteDataSource(),
+      );
+
+      Position position = await introRepository.getPosition();
+
       if (!mounted) return;
       if (widget.showReview && mode == true) {
         final toilet = getToilet(context)!;
@@ -111,12 +120,12 @@ class MapScreenState extends State<MapScreen> {
       toiletMarkers.clear();
       length = toiletList.length;
       for (int i = 0; i < length!; i++) {
-        toiletMarkers
-            .add(LatLng(Angle.degree(toiletList[i].lat), Angle.degree(toiletList[i].lng)));
+        toiletMarkers.add(LatLng(
+            Angle.degree(toiletList[i].lat), Angle.degree(toiletList[i].lng)));
       }
       setState(() {});
     } catch (error) {
-      SystemNavigator.pop();
+      if (mounted) setState(() {});
     }
   }
 
@@ -242,9 +251,10 @@ class MapScreenState extends State<MapScreen> {
                 (pos) => _buildMarkerWidget(pos, Colors.red, 48, null, false),
               );
             } else {
-              final markerPositions = [LatLng(Angle.degree(lat ?? 35.203), Angle.degree(lng ?? 126.809))]
-                  .map(transformer.toOffset)
-                  .toList();
+              final markerPositions = [
+                LatLng(
+                    Angle.degree(lat ?? 35.203), Angle.degree(lng ?? 126.809))
+              ].map(transformer.toOffset).toList();
               markerWidgets = markerPositions.map(
                 (pos) => _buildMarkerWidget(
                     pos, const Color(0x00000000), 48, null, false),

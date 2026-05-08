@@ -8,8 +8,7 @@ class IntroRemoteDataSource implements IntroDataSourceRepository {
   FutureVoid getPermission() => Geolocator.requestPermission();
 
   @override
-  Future<Position> getPosition({required LocationAccuracy locationAccuracy}) =>
-      Geolocator.getCurrentPosition(
+  Future<Position> getPosition() => Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
 

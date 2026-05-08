@@ -9,8 +9,7 @@ class IntroMockDataSource implements IntroDataSourceRepository {
   FutureVoid getPermission() async {}
 
   @override
-  Future<Position> getPosition(
-      {required LocationAccuracy locationAccuracy}) async {
+  Future<Position> getPosition() async {
     await Future.delayed(const Duration(milliseconds: 500));
     return Position(
       latitude: 37.5547,

@@ -18,10 +18,9 @@ class IntroRepositoryImpl extends IntroRepository {
   }
 
   @override
-  Future<Position> getPosition(
-      {required LocationAccuracy locationAccuracy}) async {
+  Future<Position> getPosition() async {
     try {
-      return await remote.getPosition(locationAccuracy: locationAccuracy);
+      return await remote.getPosition();
     } catch (error) {
       throw Exception('현재 위치를 가져오는 데 실패했습니다: $error');
     }
