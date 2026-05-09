@@ -271,6 +271,42 @@ class MockReviewDb {
       for (final r in reviews) (r['reviewId'] as int): r,
   };
 
+  // ── 런타임 조작 ───────────────────────────────────────────────────────────
+
+  static int _nextId = 2000;
+
+  /// 새 리뷰를 추가합니다 (postNewReview Mock용).
+  static void addReview(int toiletId, DynamicMap reviewData) {
+    final newReview = {
+      'reviewId': _nextId++,
+      'score': (reviewData['score'] as num?)?.toDouble() ?? 0.0,
+      'comment': (reviewData['comment'] as String?) ?? '',
+      'nickname': '나',
+    };
+    _byToilet.putIfAbsent(toiletId, () => []);
+    _byToilet[toiletId]!.add(newReview);
+    _byReviewId[newReview['reviewId'] as int] = newReview;
+  }
+
+  /// 기존 리뷰의 comment·score를 수정합니다 (updateReview Mock용).
+  static void updateReview(int reviewId, DynamicMap reviewData) {
+    final existing = _byReviewId[reviewId];
+    if (existing == null) return;
+    // _byToilet과 _byReviewId는 동일 DynamicMap 참조를 공유하므로
+    // 여기서 수정하면 양쪽 모두 반영됩니다.
+    if (reviewData['comment'] != null) existing['comment'] = reviewData['comment'];
+    if (reviewData['score'] != null) existing['score'] = reviewData['score'];
+  }
+
+  /// 리뷰를 삭제합니다 (deleteReview Mock용).
+  static void removeReview(int reviewId) {
+    final removed = _byReviewId.remove(reviewId);
+    if (removed == null) return;
+    for (final list in _byToilet.values) {
+      list.removeWhere((r) => r['reviewId'] == reviewId);
+    }
+  }
+
   // ── public API ────────────────────────────────────────────────────────────
 
   /// toiletId에 속한 리뷰를 페이지네이션하여 반환합니다.

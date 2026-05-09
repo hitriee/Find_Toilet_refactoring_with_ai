@@ -14,4 +14,10 @@ class UserMockDataSource implements UserDataSourceRepository {
       'nickname': 'Mock User',
     };
   }
+
+  @override
+  FutureDynamicMap changeName(String newName) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    return {'success': newName};
+  }
 }

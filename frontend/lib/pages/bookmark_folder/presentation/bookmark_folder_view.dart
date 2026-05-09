@@ -5,6 +5,7 @@ import 'package:find_toilet/core/utils/type_enum.dart';
 import 'package:find_toilet/core/widgets/box_container.dart';
 import 'package:find_toilet/core/widgets/button.dart';
 import 'package:find_toilet/core/widgets/text_widget.dart';
+import 'package:find_toilet/pages/bookmark/domain/bookmark_model.dart';
 import 'package:find_toilet/pages/bookmark_folder/presentation/bookmark_folder_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,8 +43,7 @@ class BookmarkFolderView extends StatelessWidget {
                   children: [
                     const SizedBox(width: 5),
                     CustomText(
-                      title:
-                          '${getName(context)}님의\n즐겨 찾기 폴더${onRefresh(context)}',
+                      title: '${getName(context)}님의\n즐겨 찾기 폴더',
                       fontSize: FontSize.largeSize,
                       color: CustomColors.whiteColor,
                       font: kimm,
@@ -60,31 +60,38 @@ class BookmarkFolderView extends StatelessWidget {
       backgroundColor: mainColor,
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-        child: SingleChildScrollView(
-          child: FutureBuilder<FolderList>(
-            future: vm.foldersFuture,
-            builder: (context, snapshot) {
-              return snapshot.hasData
-                  ? _folderListView(snapshot)
-                  : const Center(child: CircularProgressIndicator());
-            },
-          ),
-        ),
+        child: vm.isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : vm.error != null
+                ? Center(
+                    child: CustomText(
+                      title: vm.error!,
+                      color: CustomColors.whiteColor,
+                    ),
+                  )
+                : SingleChildScrollView(
+                    child: _folderListView(vm.folders, vm),
+                  ),
       ),
     );
   }
 
-  ListView _folderListView(AsyncSnapshot<FolderList> snapshot) {
-    final length = snapshot.data!.length;
+  ListView _folderListView(FolderList folders, BookmarkFolderViewModel vm) {
+    final length = folders.length;
     final quot = length ~/ 2;
     final remain = length % 2;
+
+    Widget folderBox(FolderModel folder) => FolderBox(
+          folderInfo: folder,
+          onEdit: (newName) => vm.renameFolder(folder.folderId, newName),
+          onDelete: () => vm.deleteFolder(folder.folderId),
+        );
 
     Row folderRow(int index) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          for (int di = 0; di < 2; di += 1)
-            FolderBox(folderInfo: snapshot.data![2 * index + di]),
+          for (int di = 0; di < 2; di += 1) folderBox(folders[2 * index + di]),
         ],
       );
     }
@@ -97,21 +104,21 @@ class BookmarkFolderView extends StatelessWidget {
           return const SizedBox();
         }
         children = [
-          for (int di = 0; di < 2; di += 1)
-            FolderBox(
-              folderInfo: snapshot.data![2 * index + di],
-            ),
+          for (int di = 0; di < 2; di += 1) folderBox(folders[2 * index + di]),
         ];
       } else if (remain == 0) {
         mainAxisAlignment = MainAxisAlignment.start;
-        children = [const AddBox()];
+        children = [AddBox(onCreate: vm.createFolder)];
       } else {
         children = [
           FolderBox(
-            folderInfo: snapshot.data![2 * index],
+            folderInfo: folders[2 * index],
             onlyOne: length == 1,
+            onEdit: (newName) =>
+                vm.renameFolder(folders[2 * index].folderId, newName),
+            onDelete: () => vm.deleteFolder(folders[2 * index].folderId),
           ),
-          const AddBox(),
+          AddBox(onCreate: vm.createFolder),
         ];
       }
 

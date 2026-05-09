@@ -9,7 +9,9 @@ class IntroRemoteDataSource implements IntroDataSourceRepository {
 
   @override
   Future<Position> getPosition() => Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
       );
 
   @override

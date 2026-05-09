@@ -30,6 +30,7 @@ class ReviewFormMockDataSource implements ReviewFormDataSourceRepository {
     required DynamicMap reviewData,
   }) async {
     await Future.delayed(const Duration(milliseconds: 400));
+    MockReviewDb.addReview(toiletId, reviewData);
     return true;
   }
 
@@ -39,12 +40,14 @@ class ReviewFormMockDataSource implements ReviewFormDataSourceRepository {
     required DynamicMap reviewData,
   }) async {
     await Future.delayed(const Duration(milliseconds: 400));
+    MockReviewDb.updateReview(reviewId, reviewData);
     return reviewData;
   }
 
   @override
   Future<bool> deleteReview(int reviewId) async {
     await Future.delayed(const Duration(milliseconds: 300));
+    MockReviewDb.removeReview(reviewId);
     return true;
   }
 }

@@ -27,5 +27,18 @@ class BookmarkMockDataSource implements BookmarkDataSourceRepository {
     required int toiletId,
   }) async {
     await Future.delayed(const Duration(milliseconds: 300));
+
+    final toilet = MockToiletDb.all.firstWhere(
+      (t) => t['toiletId'] == toiletId,
+      orElse: () => {},
+    );
+    if (toilet.isEmpty) return;
+
+    final currentIds = List<int>.from(toilet['folderId'] as List);
+    for (final id in addFolderIdList) {
+      if (!currentIds.contains(id)) currentIds.add(id as int);
+    }
+    currentIds.removeWhere((id) => delFolderIdList.contains(id));
+    toilet['folderId'] = currentIds;
   }
 }

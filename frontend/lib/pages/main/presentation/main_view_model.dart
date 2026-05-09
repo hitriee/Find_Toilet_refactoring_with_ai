@@ -59,30 +59,28 @@ class MainViewModel extends ChangeNotifier {
   }
 
   Future<void> refreshMain(int index, bool showReview) async {
-    if (!ScrollProvider().loading) {
-      ScrollProvider().initPage();
-      ToiletProvider().initHeightList();
+    ScrollProvider().initPage();
+    ToiletProvider().initHeightList();
 
-      if (!showReview) {
-        MapStateProvider().initToiletList();
-        final query =
-            Map<String, dynamic>.from(MapStateProvider().mainToiletData);
-        query['page'] = ScrollProvider().page;
-        query['size'] = 20;
-        final list = await _toiletRepository.getNearToilet(query);
-        MapStateProvider().addToiletList(list);
-        ToiletProvider().setHeightListSize();
-      } else {
-        initReviewList();
-        final toiletId = ToiletProvider().toiletId!;
-        final reviewData = await _reviewRepository.getReviewList(
-            toiletId, ScrollProvider().page);
-        addReviewList(reviewData);
-      }
-
-      ScrollProvider().increasePage();
-      ScrollProvider().setLoading(false);
+    if (!showReview) {
+      MapStateProvider().initToiletList();
+      final query =
+          Map<String, dynamic>.from(MapStateProvider().mainToiletData);
+      query['page'] = ScrollProvider().page;
+      query['size'] = 20;
+      final list = await _toiletRepository.getNearToilet(query);
+      MapStateProvider().addToiletList(list);
+      ToiletProvider().setHeightListSize();
+    } else {
+      initReviewList();
+      final toiletId = ToiletProvider().toiletId!;
+      final reviewData = await _reviewRepository.getReviewList(
+          toiletId, ScrollProvider().page);
+      addReviewList(reviewData);
     }
+
+    ScrollProvider().increasePage();
+    ScrollProvider().setLoading(false);
   }
 
   Future<void> refreshToiletDetail(int toiletId) async {

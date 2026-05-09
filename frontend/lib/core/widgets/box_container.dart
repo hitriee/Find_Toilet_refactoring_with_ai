@@ -100,12 +100,16 @@ class ThemeBox extends StatelessWidget {
 class FolderBox extends StatelessWidget {
   final FolderModel folderInfo;
   final bool add, onlyOne;
+  final Future<void> Function(String newName)? onEdit;
+  final Future<void> Function()? onDelete;
 
   const FolderBox({
     super.key,
     required this.folderInfo,
     this.add = false,
     this.onlyOne = false,
+    this.onEdit,
+    this.onDelete,
   });
 
   @override
@@ -165,9 +169,9 @@ class FolderBox extends StatelessWidget {
                           page: CreateOrEditFolderModal(
                             folderId: folderId,
                             folderName: folderName,
+                            onConfirm: onEdit,
                           ),
                         ),
-                        // iconSize: 30,
                       ),
                       onlyOne
                           ? const SizedBox()
@@ -179,9 +183,9 @@ class FolderBox extends StatelessWidget {
                                 page: DeleteModal(
                                   deleteMode: 1,
                                   id: folderId,
+                                  onDeleteFolder: onDelete,
                                 ),
                               ),
-                              // iconSize: 30,
                             ),
                     ],
                   ),
@@ -196,22 +200,20 @@ class FolderBox extends StatelessWidget {
 }
 
 //* 즐겨찾기 폴더 생성
-class AddBox extends StatefulWidget {
+class AddBox extends StatelessWidget {
+  final Future<void> Function(String name)? onCreate;
+
   const AddBox({
     super.key,
+    this.onCreate,
   });
 
   @override
-  State<AddBox> createState() => _AddBoxState();
-}
-
-class _AddBoxState extends State<AddBox> {
-  @override
   Widget build(BuildContext context) {
     return CustomBox(
-      onTap: () => showDialog(
-        context: context,
-        builder: (context) => const CreateOrEditFolderModal(),
+      onTap: () => showModal(
+        context,
+        page: CreateOrEditFolderModal(onConfirm: onCreate),
       ),
       height: screenWidth(context) * 0.42,
       width: screenWidth(context) * 0.42,

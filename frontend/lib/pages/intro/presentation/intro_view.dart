@@ -9,7 +9,6 @@ import 'package:find_toilet/pages/select_theme/select_theme_page.dart';
 import 'package:find_toilet/core/utils/global_utils.dart';
 import 'package:find_toilet/core/utils/icon_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class IntroView extends StatefulWidget {
@@ -36,7 +35,17 @@ class _IntroViewState extends State<IntroView> {
         );
       });
     }).catchError((_) {
-      SystemNavigator.pop();
+      if (!mounted) return;
+
+      Future.delayed(const Duration(seconds: 2), () {
+        setRadius(context);
+        removedRouterPush(
+          context,
+          page: getFontSize(context) == null
+              ? const SelectThemePage()
+              : const MainPage(),
+        );
+      });
     });
   }
 

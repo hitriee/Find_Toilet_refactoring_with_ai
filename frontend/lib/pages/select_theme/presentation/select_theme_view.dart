@@ -19,7 +19,6 @@ class SelectThemeView extends StatelessWidget {
     return PopScope(
       canPop: watchPressed(context),
       onPopInvokedWithResult: (bool didPop, Object? result) {
-        print('----didPop: $didPop---------select theme');
         if (!didPop) {
           exitApp(context);
         }

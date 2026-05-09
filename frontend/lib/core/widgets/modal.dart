@@ -5,6 +5,7 @@ import 'package:find_toilet/datasources/mock/bookmark_folder_mock_data_source.da
 import 'package:find_toilet/datasources/mock/bookmark_mock_data_source.dart';
 import 'package:find_toilet/datasources/mock/review_form_mock_data_source.dart';
 import 'package:find_toilet/datasources/mock/toilet_mock_data_source.dart';
+import 'package:find_toilet/datasources/mock/user_mock_data_source.dart';
 import 'package:find_toilet/datasources/remote/bookmark_folder_remote_data_source.dart';
 import 'package:find_toilet/datasources/remote/bookmark_remote_data_source.dart';
 import 'package:find_toilet/datasources/remote/review_form_remote_data_source.dart';
@@ -13,6 +14,7 @@ import 'package:find_toilet/datasources/remote/user_remote_data_source.dart';
 import 'package:find_toilet/datasources/repositories/bookmark_data_source_repository.dart';
 import 'package:find_toilet/datasources/repositories/bookmark_folder_data_source_repository.dart';
 import 'package:find_toilet/datasources/repositories/review_form_data_source_repository.dart';
+import 'package:find_toilet/datasources/repositories/user_data_source_repository.dart';
 import 'package:find_toilet/core/utils/global_utils.dart';
 import 'package:find_toilet/core/utils/icon_image.dart';
 import 'package:find_toilet/core/utils/type_enum.dart';
@@ -208,7 +210,9 @@ class NicknameInputModal extends StatelessWidget {
             ),
           );
         } else {
-          UserRemoteDataSource().changeName(data).then((result) {
+          final UserDataSourceRepository userDs =
+              kMockMode ? UserMockDataSource() : UserRemoteDataSource();
+          userDs.changeName(data).then((result) {
             if (!context.mounted) return;
             if (result['success'] != null) {
               changeName(context, result['success']);
@@ -261,28 +265,23 @@ class NicknameInputModal extends StatelessWidget {
 class CreateOrEditFolderModal extends StatelessWidget {
   final int? folderId;
   final String? folderName;
+  final Future<void> Function(String name)? onConfirm;
+
   const CreateOrEditFolderModal({
     super.key,
     this.folderId,
     this.folderName,
+    this.onConfirm,
   });
 
   @override
   Widget build(BuildContext context) {
     final work = folderId == null ? '생성' : '수정';
-    void Function(String) createFolder(BuildContext context) {
+    void Function(String) handleConfirm(BuildContext context) {
       return (String? data) async {
         try {
           if (data != null && data != '') {
-            final BookmarkFolderDataSourceRepository folderDs = kMockMode
-                ? BookmarkFolderMockDataSource()
-                : BookmarkFolderRemoteDataSource();
-            folderId == null
-                ? await folderDs.createNewFolder({'folderName': data})
-                : await folderDs.updateFolderName(
-                    folderId!,
-                    folderData: {'folderName': data},
-                  );
+            await onConfirm?.call(data);
             if (!context.mounted) return;
             routerPop(context)();
             showModal(
@@ -302,6 +301,7 @@ class CreateOrEditFolderModal extends StatelessWidget {
             );
           }
         } catch (error) {
+          if (!context.mounted) return;
           showModal(
             context,
             page: AlertModal(
@@ -319,7 +319,7 @@ class CreateOrEditFolderModal extends StatelessWidget {
       title: folderId == null ? '즐겨찾기 폴더 $work' : '즐겨찾기 폴더명 $work',
       buttonText: work,
       isAlert: false,
-      onPressed: createFolder(context),
+      onPressed: handleConfirm(context),
       initialValue: folderName,
     );
   }
@@ -585,12 +585,14 @@ class DeleteModal extends StatelessWidget {
   final int deleteMode, id;
   final ReturnVoid? refreshPage;
   final BuildContext? reviewContext;
+  final Future<void> Function()? onDeleteFolder;
   const DeleteModal({
     super.key,
     required this.deleteMode,
     required this.id,
     this.refreshPage,
     this.reviewContext,
+    this.onDeleteFolder,
   });
 
   @override
@@ -635,13 +637,7 @@ class DeleteModal extends StatelessWidget {
             });
             break;
           case 1:
-            final BookmarkFolderDataSourceRepository folderDs = kMockMode
-                ? BookmarkFolderMockDataSource()
-                : BookmarkFolderRemoteDataSource();
-            folderDs.deleteFolder(id).then((_) {
-              if (!context.mounted) return;
-              changeRefresh(context);
-            });
+            onDeleteFolder?.call();
             break;
           default:
             UserRemoteDataSource().deleteUser().then((_) async {
@@ -774,7 +770,8 @@ class _AddOrDeleteBookMarkModalState extends State<AddOrDeleteBookMarkModal> {
         toiletId: widget.toiletId,
       )
           .then((_) {
-        changeRefresh(context);
+        if (!mounted) return;
+
         routerPop(context)();
         showModal(
           context,
